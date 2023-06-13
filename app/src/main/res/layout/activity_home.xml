@@ -1,9 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:orientation="vertical"
     tools:context=".activities.HomeActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_25sdp">
+
+            <LinearLayout
+                android:id="@+id/llSearch"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/rectangle_background"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_3sdp"
+                    android:adjustViewBounds="false"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/search_icon" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/home_boozz" />
+
+            <LinearLayout
+                android:id="@+id/llSetting"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="end|center"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/rectangle_background"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_3sdp"
+                    android:adjustViewBounds="false"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/setting_icon" />
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_25sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="25"
+            tools:listitem="@layout/row_category" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_25sdp"
+            android:orientation="horizontal">
+
+            <com.example.boozzapp.controls.CTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/videos"
+                android:textColor="@color/blue_text"
+                android:textSize="@dimen/_20sdp"
+                android:textStyle="bold" />
+
+            <com.example.boozzapp.controls.CTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/quotes"
+                android:textColor="@color/light_blue_text"
+                android:textSize="@dimen/_20sdp"
+                android:textStyle="bold" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHomeList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/row_home_list" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_30sdp"
+
+        android:paddingHorizontal="@dimen/_25sdp">
+
+        <LinearLayout
+            android:id="@+id/llFilter"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/rectangle_blue"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:adjustViewBounds="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/filter_icon" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llWtsApp"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_gravity="end|center"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/rectangle_blue"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:adjustViewBounds="false"
+                android:scaleType="centerCrop"
+                android:src="@drawable/wtsapp_icon" />
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+</FrameLayout>

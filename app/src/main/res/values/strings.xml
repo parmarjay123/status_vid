@@ -12,4 +12,6 @@
     <string name="allow_access">Allow Access</string>
     <string name="label_photos">Photos</string>
     <string name="gallery_all_photos">All Photos</string>
+    <string name="videos">Videos</string>
+    <string name="quotes">Quotes</string>
 </resources>
