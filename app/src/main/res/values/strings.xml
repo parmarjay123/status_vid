@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Boozz_Status_Maker</string>
+    <string name="Ok">ok</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_api_key" translatable="false">AIzaSyCt_4WDUJ5ccPzEvf4T39_oGdrRRDhUhdE</string>
+
+
+    <string name="label_done">Done</string>
+    <string name="permission_title">Uh oh!</string>
+    <string name="require_permission">This app needs storage permission.</string>
+    <string name="allow_access">Allow Access</string>
+    <string name="label_photos">Photos</string>
+    <string name="gallery_all_photos">All Photos</string>
+</resources>
