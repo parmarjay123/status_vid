@@ -14,4 +14,16 @@
     <string name="gallery_all_photos">All Photos</string>
     <string name="videos">Videos</string>
     <string name="quotes">Quotes</string>
+    <string name="setting">Settings</string>
+    <string name="my_videos">My videos</string>
+    <string name="favorites">favorites</string>
+    <string name="share_app">share App</string>
+    <string name="privacy_policy">privacy policy</string>
+    <string name="follow_us_on">follow us on</string>
+    <string name="sort_videos_by">sort videos by</string>
+    <string name="random">Random</string>
+    <string name="new_text">New</string>
+    <string name="popular">Popular</string>
+    <string name="oldest">Oldest</string>
+    <string name="search">Search</string>
 </resources>
