@@ -9,6 +9,13 @@ import retrofit2.http.*
 
 
 interface API {
+
+    @GET("/api/v1/categories")
+    fun homeCategories(
+        @Header("Authorization") Authorization: String,
+        ): Call<ResponseBody>
+
+
     @FormUrlEncoded
     @POST("tokenSignature")
     fun tokenSignature(

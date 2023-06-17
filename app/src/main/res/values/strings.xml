@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">Boozz_Status_Maker</string>
-    <string name="Ok">ok</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="google_api_key" translatable="false">AIzaSyCt_4WDUJ5ccPzEvf4T39_oGdrRRDhUhdE</string>
 
 
     <string name="label_done">Done</string>
@@ -26,4 +25,5 @@
     <string name="popular">Popular</string>
     <string name="oldest">Oldest</string>
     <string name="search">Search</string>
+    <string name="Ok" />
 </resources>

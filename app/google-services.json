@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "366476869925",
+    "project_id": "boozz-4a3a4",
+    "storage_bucket": "boozz-4a3a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366476869925:android:60beb6e62ec33f33785acc",
+        "android_client_info": {
+          "package_name": "boozz.lyrical.ly.video.status.maker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366476869925-l89q1bvmu4cm5maqjhsfa2o2s4r40bpu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCqsQ366PmuEGH3VNWRvZ1uleWnbURp2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366476869925-l89q1bvmu4cm5maqjhsfa2o2s4r40bpu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-4706162076647622~3543975526"
+    }
+  ],
+  "configuration_version": "1"
+}
