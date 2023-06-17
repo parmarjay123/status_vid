@@ -8,11 +8,11 @@ import kotlinx.android.parcel.Parcelize
 data class HomeCategoryPojo(
 
     @field:SerializedName("data")
-    val data: List<DataItem?>? = emptyList()
+    val data: List<CategoryList?>? = emptyList()
 ) : Parcelable
 
 @Parcelize
-data class DataItem(
+data class CategoryList(
 
     @field:SerializedName("image_url")
     val imageUrl: String? = "",

@@ -17,53 +17,46 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_20sdp"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/_25sdp">
 
             <LinearLayout
                 android:id="@+id/llSearch"
-                android:layout_width="@dimen/_60sdp"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/rectangle_background"
-                android:gravity="center"
-                android:padding="@dimen/_10sdp">
+                android:background="@drawable/bg_rounded_white"
+                android:gravity="start"
+                android:paddingVertical="@dimen/_5sdp"
+                android:paddingHorizontal="@dimen/_18sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_14sdp"
+                    android:layout_height="@dimen/_14sdp"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/_3sdp"
-                    android:adjustViewBounds="false"
-                    android:scaleType="centerCrop"
                     android:src="@drawable/search_icon" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/home_boozz" />
 
             <LinearLayout
                 android:id="@+id/llSetting"
-                android:layout_width="@dimen/_60sdp"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="end|center"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/rectangle_background"
+                android:background="@drawable/bg_rounded_white"
                 android:gravity="center"
-                android:padding="@dimen/_10sdp">
+                android:paddingVertical="@dimen/_5sdp"
+                android:paddingHorizontal="@dimen/_18sdp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_14sdp"
+                    android:layout_height="@dimen/_14sdp"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/_3sdp"
-                    android:adjustViewBounds="false"
-                    android:scaleType="centerCrop"
                     android:src="@drawable/setting_icon" />
             </LinearLayout>
 
@@ -84,6 +77,7 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginHorizontal="@dimen/_25sdp"
             android:orientation="horizontal">
 
@@ -111,7 +105,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHomeList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:orientation="vertical"
@@ -133,41 +127,35 @@
 
         <LinearLayout
             android:id="@+id/llFilter"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_45sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:background="@drawable/rectangle_blue"
+            android:background="@drawable/bg_rounded_blue"
             android:gravity="center"
-            android:padding="@dimen/_10sdp">
+            android:paddingVertical="@dimen/_7sdp"
+            android:paddingHorizontal="@dimen/_25sdp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_3sdp"
-                android:adjustViewBounds="false"
-                android:scaleType="centerCrop"
                 android:src="@drawable/filter_icon" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llWtsApp"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_45sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end|center"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:background="@drawable/rectangle_blue"
+            android:background="@drawable/bg_rounded_blue"
             android:gravity="center"
-            android:padding="@dimen/_10sdp">
+            android:paddingVertical="@dimen/_7sdp"
+            android:paddingHorizontal="@dimen/_25sdp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_3sdp"
-                android:adjustViewBounds="false"
-                android:scaleType="centerCrop"
                 android:src="@drawable/wtsapp_icon" />
         </LinearLayout>
 

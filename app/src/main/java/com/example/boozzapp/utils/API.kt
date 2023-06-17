@@ -17,12 +17,10 @@ interface API {
 
 
     @FormUrlEncoded
-    @POST("tokenSignature")
-    fun tokenSignature(
-        @Header("Authorization") Authorization: String,
-        @Query("total_amount") total_amount: String,
-        @Field("service_charge") service_charge: String,
-        @Field("device_id") device_id: String
+    @POST("/api/v1/templates")
+    fun homeTemplates(
+        @Field("sort_by") sort_by: String,
+        @Field("page") page: Int
     ): Call<ResponseBody>
 
     @FormUrlEncoded
