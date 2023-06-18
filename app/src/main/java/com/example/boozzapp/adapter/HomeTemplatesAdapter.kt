@@ -1,6 +1,7 @@
 package com.example.boozzapp.adapter
 
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
+import com.example.boozzapp.activities.PreviewActivity
 import com.example.boozzapp.pojo.TemplatesItem
 import kotlinx.android.synthetic.main.row_home_list.view.*
 
@@ -76,6 +78,12 @@ class HomeTemplatesAdapter(
             val data = items[position]
 
             Glide.with(activity).load(data!!.thumbnailUrl).into(holder.itemView.ivItem)
+
+            holder.itemView.setOnClickListener {
+                activity.startActivity(Intent(activity, PreviewActivity::class.java)
+                    .putExtra("videoURL",data.videoUrl.toString())
+                    .putExtra("songName",data.title.toString()));
+            }
         }
     }
 
