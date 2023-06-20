@@ -27,6 +27,7 @@ class HomeActivity : BaseActivity() {
     var page = 1
     lateinit var adapter: HomeTemplatesAdapter
     var list = ArrayList<TemplatesItem?>()
+    var sort_by = "newest"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -48,24 +49,28 @@ class HomeActivity : BaseActivity() {
         }
 
         llRandom.setOnClickListener {
-            homeTemplateList("random")
+            sort_by = "random"
+            homeTemplateList(sort_by)
             ivClose.performClick()
 
         }
 
         llNew.setOnClickListener {
-            homeTemplateList("newest")
+            sort_by = "newest"
+            homeTemplateList(sort_by)
             ivClose.performClick()
 
         }
 
         llOldest.setOnClickListener {
-            homeTemplateList("oldest")
+            sort_by = "oldest"
+            homeTemplateList(sort_by)
             ivClose.performClick()
 
         }
         llPopular.setOnClickListener {
-            homeTemplateList("newest")
+            sort_by = "newest"
+            homeTemplateList(sort_by)
             ivClose.performClick()
 
         }
@@ -93,7 +98,9 @@ class HomeActivity : BaseActivity() {
 
                 var categoryAdapter = HomeCategoryAdapter(
                     activity,
-                    categoryPojo.data as ArrayList<CategoryList>
+                    categoryPojo.data as ArrayList<CategoryList>,
+                    sort_by
+
                 )
 
                 rvCategories.adapter = categoryAdapter

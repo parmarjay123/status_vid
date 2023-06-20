@@ -27,8 +27,8 @@
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/bg_rounded_white"
                 android:gravity="start"
-                android:paddingVertical="@dimen/_5sdp"
-                android:paddingHorizontal="@dimen/_18sdp">
+                android:paddingHorizontal="@dimen/_18sdp"
+                android:paddingVertical="@dimen/_5sdp">
 
                 <ImageView
                     android:layout_width="@dimen/_14sdp"
@@ -38,10 +38,10 @@
             </LinearLayout>
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_80sdp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/home_boozz" />
+                android:src="@drawable/boozz_title" />
 
             <LinearLayout
                 android:id="@+id/llSetting"
@@ -50,8 +50,8 @@
                 android:layout_gravity="end|center"
                 android:background="@drawable/bg_rounded_white"
                 android:gravity="center"
-                android:paddingVertical="@dimen/_5sdp"
-                android:paddingHorizontal="@dimen/_18sdp">
+                android:paddingHorizontal="@dimen/_18sdp"
+                android:paddingVertical="@dimen/_5sdp">
 
                 <ImageView
                     android:layout_width="@dimen/_14sdp"
@@ -77,8 +77,8 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginHorizontal="@dimen/_25sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:orientation="horizontal">
 
             <com.example.boozzapp.controls.CTextView
@@ -132,12 +132,12 @@
             android:layout_gravity="center_vertical"
             android:background="@drawable/bg_rounded_blue"
             android:gravity="center"
-            android:paddingVertical="@dimen/_7sdp"
-            android:paddingHorizontal="@dimen/_25sdp">
+            android:paddingHorizontal="@dimen/_25sdp"
+            android:paddingVertical="@dimen/_7sdp">
 
             <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
                 android:layout_gravity="center"
                 android:src="@drawable/filter_icon" />
         </LinearLayout>
@@ -149,12 +149,12 @@
             android:layout_gravity="end|center"
             android:background="@drawable/bg_rounded_blue"
             android:gravity="center"
-            android:paddingVertical="@dimen/_7sdp"
-            android:paddingHorizontal="@dimen/_25sdp">
+            android:paddingHorizontal="@dimen/_25sdp"
+            android:paddingVertical="@dimen/_7sdp">
 
             <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
                 android:layout_gravity="center"
                 android:src="@drawable/wtsapp_icon" />
         </LinearLayout>

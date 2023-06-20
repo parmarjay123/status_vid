@@ -11,6 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <ProgressBar
+        android:id="@+id/progressLoader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,36 +53,36 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_50sdp"
         android:layout_gravity="bottom"
-        android:gravity="center"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginBottom="@dimen/_50sdp"
         android:background="@drawable/bg_rounded_transparent"
+        android:gravity="center"
         android:orientation="horizontal"
         android:paddingVertical="@dimen/_10sdp">
 
         <ImageView
             android:id="@+id/previewShare"
-            android:layout_width="@dimen/_26sdp"
-            android:layout_height="@dimen/_26sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/_10sdp"
             android:src="@drawable/share_white_icon" />
 
         <ImageView
             android:id="@+id/previewEdit"
-            android:layout_width="@dimen/_26sdp"
-            android:layout_height="@dimen/_26sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/_30sdp"
             android:src="@drawable/edit_white_icon" />
 
-
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_gravity="bottom" />
 
 
 </FrameLayout>

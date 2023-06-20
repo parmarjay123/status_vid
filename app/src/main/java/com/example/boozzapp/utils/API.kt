@@ -23,6 +23,15 @@ interface API {
         @Field("page") page: Int
     ): Call<ResponseBody>
 
+
+    @FormUrlEncoded
+    @POST("/api/v1/categoryWiseVideos")
+    fun categoryWiseVideo(
+        @Field("sort_by") sort_by: String,
+        @Field("category_id") category_id: String,
+        @Field("page") page: Int
+    ): Call<ResponseBody>
+
     @FormUrlEncoded
     @POST
     fun paymentAPI(
