@@ -110,7 +110,7 @@ class HomeActivity : BaseActivity() {
 
                 rvCategories.adapter = categoryAdapter
 
-                homeTemplateList("newest")
+                homeTemplateList(sort_by)
 
 
             }
@@ -160,7 +160,7 @@ class HomeActivity : BaseActivity() {
                                     adapter.notifyItemInserted(list.size - 1)
                                     adapter.notifyItemRangeChanged(list.size - 1, list.size)
                                     page += 1
-                                    homeTemplateList("newest")
+                                    homeTemplateList(sort_by)
 
                                 }, 1000)
                             }

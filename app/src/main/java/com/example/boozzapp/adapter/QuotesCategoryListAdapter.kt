@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
 import com.example.boozzapp.activities.QuotesCategoryListActivity
 import com.example.boozzapp.pojo.CategoryList
-import kotlinx.android.synthetic.main.activity_qutoes.*
+import kotlinx.android.synthetic.main.row_quotes_cat_list.view.*
 import kotlinx.android.synthetic.main.row_quotes_category.view.*
 
 
-class QuotesCategoryAdapter(
+class QuotesCategoryListAdapter(
     val activity: AppCompatActivity,
     var data: ArrayList<CategoryList>,
 
-    ) : RecyclerView.Adapter<QuotesCategoryAdapter.ViewHolder>() {
+    ) : RecyclerView.Adapter<QuotesCategoryListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -25,25 +25,18 @@ class QuotesCategoryAdapter(
     ): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(activity).inflate(
-                R.layout.row_quotes_category,
+                R.layout.row_quotes_cat_list,
                 parent,
                 false
             )
         )
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position == 0) {
-            holder.itemView.tvQuotesCatTitle.text = "Explorer"
-        } else {
-            val pojo = data[position]
-            holder.itemView.tvQuotesCatTitle.text = pojo.name
-        }
+        val pojo = data[position]
+            holder.itemView.tvCatName.text = pojo.name
 
-        holder.itemView.setOnClickListener {
-            if (position==0){
-                activity.startActivity(Intent(activity,QuotesCategoryListActivity::class.java))
-            }
-        }
+
+
 
 
         /*holder.itemView.setOnClickListener {

@@ -36,13 +36,25 @@ class PreviewActivity : BaseActivity() {
 
         }
 
+
+        player.setOnClickListener {
+            if (player.isPlaying) {
+                player.pause()
+                pauseBtn.isVisible = true
+            } else {
+                player.start()
+                pauseBtn.isVisible = false
+            }
+        }
+
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun playVideo(videoUrl: String?) {
         videoUrl?.let {
             player.setVideoPath(videoUrl)
             player.setOnPreparedListener { mediaPlayer ->
-              progressLoader.isVisible=false
+                progressLoader.isVisible = false
                 mediaPlayer.start()
             }
         }

@@ -15,7 +15,6 @@ import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_qutoes.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -63,7 +62,7 @@ class QuotesActivity : BaseActivity() {
 
                 rvQuotesCategory.adapter = categoryAdapter
 
-                categoryQuotesList(sort_by)
+                quotesList(sort_by)
             }
 
             override fun onError(code: Int, error: String) {
@@ -75,7 +74,7 @@ class QuotesActivity : BaseActivity() {
         })
     }
 
-    private fun categoryQuotesList(sort_by: String) {
+    private fun quotesList(sort_by: String) {
         if (page == 1)
             showProgress()
         val retrofitHelper = RetrofitHelper(activity)
@@ -111,7 +110,7 @@ class QuotesActivity : BaseActivity() {
                                     adapter.notifyItemInserted(list.size - 1)
                                     adapter.notifyItemRangeChanged(list.size - 1, list.size)
                                     page += 1
-                                    categoryQuotesList("newest")
+                                    quotesList("newest")
 
                                 }, 1000)
                             }

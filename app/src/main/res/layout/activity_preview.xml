@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.PreviewActivity">
 
-    <VideoView
-        android:id="@+id/player"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <VideoView
+            android:id="@+id/player"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/progressLoader"
@@ -18,33 +29,40 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/pauseBtn"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_gravity="center"
+        android:src="@drawable/exo_icon_play"
+        android:visibility="gone" />
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="7dp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:background="@drawable/bg_rounded_transparent"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@color/light_black"
         android:orientation="horizontal"
         android:paddingVertical="@dimen/_10sdp">
 
         <ImageView
             android:id="@+id/previewBack"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/_10sdp"
-            android:src="@drawable/back_icon" />
+            android:src="@drawable/back_icon"
+            android:background="@android:color/transparent"
+            app:tint="@color/white" />
 
         <com.example.boozzapp.controls.CTextView
             android:id="@+id/tvSongName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_15sdp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="song name"
-            android:textColor="@color/blue_text"
+            android:textColor="@color/white"
             android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 
@@ -61,21 +79,34 @@
         android:orientation="horizontal"
         android:paddingVertical="@dimen/_10sdp">
 
-        <ImageView
-            android:id="@+id/previewShare"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:src="@drawable/share_white_icon" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
 
-        <ImageView
-            android:id="@+id/previewEdit"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_30sdp"
-            android:src="@drawable/edit_white_icon" />
+            <ImageView
+                android:id="@+id/previewShare"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:src="@drawable/share_white_icon" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/previewEdit"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/edit_white_icon" />
+        </LinearLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -83,6 +114,5 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
         android:layout_gravity="bottom" />
-
 
 </FrameLayout>

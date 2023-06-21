@@ -12,27 +12,33 @@ import com.example.boozzapp.utils.StoreUserData
 import com.google.firebase.iid.FirebaseInstanceId
 
 class SplashActivity : BaseActivity() {
+    private var isActivityFinishing = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        activity=this
-        storeUserData= StoreUserData(activity)
+        activity = this
+        storeUserData = StoreUserData(activity)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-
-        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(
-            activity
-        ) { instanceIdResult ->
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(activity) { instanceIdResult ->
             val newToken = instanceIdResult.token
             Log.e("newToken", newToken)
             storeUserData.setString(Constants.USER_FCM, newToken)
         }
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(activity, HomeActivity::class.java))
-            finish()
+            if (!isActivityFinishing) {
+                startActivity(Intent(activity, HomeActivity::class.java))
+                finish()
+            }
         }, 1500)
+    }
 
+    override fun onDestroy() {
+        isActivityFinishing = true
+        super.onDestroy()
     }
 }
