@@ -67,7 +67,6 @@
             android:id="@+id/rvCategories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_25sdp"
             android:layout_marginTop="@dimen/_20sdp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -82,6 +81,7 @@
             android:orientation="horizontal">
 
             <com.example.boozzapp.controls.CTextView
+                android:id="@+id/tvVideos"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -91,6 +91,7 @@
                 android:textStyle="bold" />
 
             <com.example.boozzapp.controls.CTextView
+                android:id="@+id/tvQuotes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"

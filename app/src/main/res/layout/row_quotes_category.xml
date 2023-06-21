@@ -14,26 +14,20 @@
         android:gravity="center">
 
 
-
-        <ImageView
-            android:id="@+id/ivCategoryImage"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+        <com.example.boozzapp.controls.CTextView
+            android:id="@+id/tvQuotesCatTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/explore_icon" />
+            android:text="love"
+            android:textStyle="bold"
+            android:textColor="@color/blue_text"
+            android:textSize="@dimen/_10sdp" />
+
+
 
 
     </LinearLayout>
 
-    <com.example.boozzapp.controls.CTextView
-        android:id="@+id/tvCategoryTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_gravity="center"
-        android:text="love"
-        android:textStyle="bold"
-        android:textColor="@color/blue_text"
-        android:textSize="@dimen/_10sdp" />
 
 </LinearLayout>

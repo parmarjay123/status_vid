@@ -1,14 +1,12 @@
 package com.example.boozzapp.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.core.view.isVisible
 import com.example.boozzapp.R
-import com.example.boozzapp.adapter.HomeCategoryAdapter
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
+import com.example.boozzapp.adapter.QuotesCategoryAdapter
 import com.example.boozzapp.pojo.CategoryList
 import com.example.boozzapp.pojo.HomeCategoryPojo
 import com.example.boozzapp.pojo.HomeTemplate
@@ -18,11 +16,12 @@ import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_qutoes.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
-class HomeActivity : BaseActivity() {
+class QuotesActivity : BaseActivity() {
     var totalPage = 1
     var page = 1
     lateinit var adapter: HomeTemplatesAdapter
@@ -30,63 +29,19 @@ class HomeActivity : BaseActivity() {
     var sort_by = "newest"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_qutoes)
         activity = this
         storeUserData = StoreUserData(activity)
 
 
-        tvQuotes.setOnClickListener {
-            activity.startActivity(Intent(activity, QuotesActivity::class.java))
-        }
+        ivQuotesBack.setOnClickListener { finish() }
 
-        llFilter.setOnClickListener {
-            flBottom.isVisible = false
-            llBottom.isVisible = true
-        }
-
-        ivClose.setOnClickListener {
-            flBottom.isVisible = true
-            llBottom.isVisible = false
-        }
-
-        llSetting.setOnClickListener {
-            startActivity(Intent(activity, SettingActivity::class.java))
-        }
-
-        llRandom.setOnClickListener {
-            sort_by = "random"
-            homeTemplateList(sort_by)
-            ivClose.performClick()
-
-        }
-
-        llNew.setOnClickListener {
-            sort_by = "newest"
-            homeTemplateList(sort_by)
-            ivClose.performClick()
-
-        }
-
-        llOldest.setOnClickListener {
-            sort_by = "oldest"
-            homeTemplateList(sort_by)
-            ivClose.performClick()
-
-        }
-        llPopular.setOnClickListener {
-            sort_by = "newest"
-            homeTemplateList(sort_by)
-            ivClose.performClick()
-
-        }
-
-
-        homeCategories()
-
+        quotesCategory()
     }
 
 
-    private fun homeCategories() {
+    private fun quotesCategory() {
+        showProgress()
         val retrofitHelper = RetrofitHelper(activity)
         var call: Call<ResponseBody> =
             retrofitHelper.api().homeCategories(
@@ -95,28 +50,24 @@ class HomeActivity : BaseActivity() {
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
             override fun onSuccess(body: Response<ResponseBody>) {
-
+                dismissProgress()
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
                 var categoryPojo = Gson().fromJson(responseString, HomeCategoryPojo::class.java)
 
 
-                var categoryAdapter = HomeCategoryAdapter(
+                var categoryAdapter = QuotesCategoryAdapter(
                     activity,
                     categoryPojo.data as ArrayList<CategoryList>,
-                    sort_by
-
                 )
 
-                rvCategories.adapter = categoryAdapter
+                rvQuotesCategory.adapter = categoryAdapter
 
-                homeTemplateList("newest")
-
-
+                categoryQuotesList(sort_by)
             }
 
             override fun onError(code: Int, error: String) {
-
+                dismissProgress()
                 Log.i("Error", error.toString())
             }
 
@@ -124,7 +75,7 @@ class HomeActivity : BaseActivity() {
         })
     }
 
-    private fun homeTemplateList(sort_by: String) {
+    private fun categoryQuotesList(sort_by: String) {
         if (page == 1)
             showProgress()
         val retrofitHelper = RetrofitHelper(activity)
@@ -149,8 +100,8 @@ class HomeActivity : BaseActivity() {
                     list.addAll(pojo.data.templates!!)
 
                     adapter =
-                        HomeTemplatesAdapter(activity, list, rvHomeList)
-                    activity.rvHomeList.adapter = adapter
+                        HomeTemplatesAdapter(activity, list, rvQuotesList)
+                    activity.rvQuotesList.adapter = adapter
                     adapter!!.setOnLoadMoreListener(object :
                         HomeTemplatesAdapter.OnLoadMoreListener {
                         override fun onLoadMore() {
@@ -160,7 +111,7 @@ class HomeActivity : BaseActivity() {
                                     adapter.notifyItemInserted(list.size - 1)
                                     adapter.notifyItemRangeChanged(list.size - 1, list.size)
                                     page += 1
-                                    homeTemplateList("newest")
+                                    categoryQuotesList("newest")
 
                                 }, 1000)
                             }
