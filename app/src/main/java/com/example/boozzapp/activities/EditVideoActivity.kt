@@ -24,6 +24,9 @@ class EditVideoActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
 
 
+        editBack.setOnClickListener { finish() }
+
+
         if (intent.getStringExtra("songName") != null || intent.getStringExtra("songName") != "") {
             tvEditSongName.text = intent.getStringExtra("songName")
 

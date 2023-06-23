@@ -1,58 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_250sdp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_200sdp"
+    android:layout_gravity="center"
+    android:layout_marginHorizontal="@dimen/_30sdp"
+    android:background="@drawable/bg_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_20sdp">
+
+    <com.example.boozzapp.controls.CTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginHorizontal="40dp"
-        android:background="@drawable/bg_rounded_transparent"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/_20sdp">
+        android:text="Remove Watermark by"
+        android:textColor="@color/blue_text"
+        android:textSize="@dimen/_16sdp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/llRemoveWaterMark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/bg_rounded_blue_sixteen"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/_10sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_12sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_gravity="center"
+            android:src="@drawable/play_icon" />
+
 
         <com.example.boozzapp.controls.CTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="Remove Watermark by"
-            android:textColor="@color/blue_text"
-            android:textSize="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:text="Watch Video"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp"
             android:textStyle="bold" />
-
-        <LinearLayout
-            android:id="@+id/llRemoveWaterMark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="26dp"
-            android:background="@drawable/bg_rounded_blue_sixteen"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingVertical="@dimen/_10sdp">
-
-            <ImageView
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/play_icon" />
-
-
-            <com.example.boozzapp.controls.CTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:text="Watch Video"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
 
 
     </LinearLayout>
+
+
+</LinearLayout>
 
 
 
