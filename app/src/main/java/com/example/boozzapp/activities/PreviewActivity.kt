@@ -1,6 +1,7 @@
 package com.example.boozzapp.activities
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
@@ -21,17 +22,25 @@ class PreviewActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
         var loader: ProgressBar = findViewById(id.progressLoader)
         loader.isVisible = true
+        var songName=""
+        var videoUrl=""
 
 
         previewBack.setOnClickListener { finish() }
 
+        previewEdit.setOnClickListener {
+            activity.startActivity(
+                Intent(activity, EditVideoActivity::class.java).putExtra("songName", songName).putExtra("videoURL", videoUrl))
+        }
+
         if (intent.getStringExtra("songName") != null || intent.getStringExtra("songName") != "") {
-            tvSongName.text = intent.getStringExtra("songName")
+            songName=intent.getStringExtra("songName").toString()
+            tvSongName.text = songName
 
         }
         if (intent.getStringExtra("videoURL") != null && intent.getStringExtra("videoURL") != "") {
-            var videoUrl =
-                intent.getStringExtra("videoURL") // Retrieve the video URL from intent extras or any other data source
+             videoUrl =
+                intent.getStringExtra("videoURL").toString() // Retrieve the video URL from intent extras or any other data source
             playVideo(videoUrl)
 
         }
