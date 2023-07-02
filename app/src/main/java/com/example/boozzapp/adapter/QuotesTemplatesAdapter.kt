@@ -6,19 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
-import com.example.boozzapp.activities.PreviewActivity
-import com.example.boozzapp.pojo.TemplatesItem
+import com.example.boozzapp.activities.PreviewQuotesActivity
+import com.example.boozzapp.pojo.QuotesTemplatesItem
 import kotlinx.android.synthetic.main.row_home_list.view.*
 
 
-class HomeTemplatesAdapter(
+class QuotesTemplatesAdapter(
     val activity: AppCompatActivity,
-    var items: ArrayList<TemplatesItem?>,
+    var items: ArrayList<QuotesTemplatesItem?>,
     recyclerView: RecyclerView,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -78,19 +77,14 @@ class HomeTemplatesAdapter(
         if (holder is ViewHolder) {
             val data = items[position]
 
-            Glide.with(activity).load(data!!.thumbnailUrl).into(holder.itemView.ivItem)
-
-            holder.itemView.ivHot.isVisible = data.isHot == true
-            holder.itemView.ivNew.isVisible = data.isNew == true
-            holder.itemView.ivPremium.isVisible = data.isPremium == 1
-
+            Glide.with(activity).load(data!!.imageUrl).into(holder.itemView.ivItem)
             holder.itemView.setOnClickListener {
                 activity.startActivity(
-                    Intent(activity, PreviewActivity::class.java)
-                        .putExtra("videoURL", data.videoUrl.toString())
-                        .putExtra("songName", data.title.toString())
-                );
+                    Intent(activity, PreviewQuotesActivity::class.java)
+                        .putExtra("id", data.id).putExtra("imageURL", data.imageUrl)
+                )
             }
+
         }
     }
 

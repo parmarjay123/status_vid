@@ -5,35 +5,35 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.example.boozzapp.R
-import com.example.boozzapp.adapter.CategoryWiseVideoAdapter
-import com.example.boozzapp.pojo.HomeTemplate
-import com.example.boozzapp.pojo.TemplatesItem
+import com.example.boozzapp.adapter.QuotesTemplatesAdapter
+import com.example.boozzapp.pojo.QuotesTemplate
+import com.example.boozzapp.pojo.QuotesTemplatesItem
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_categorywise_video.*
+import kotlinx.android.synthetic.main.activity_categorywise_quotes.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
-class CategoryWiseVideoActivity : BaseActivity() {
+class CategoryWiseQuotesActivity : BaseActivity() {
     var totalPage = 1
     var page = 1
-    lateinit var adapter: CategoryWiseVideoAdapter
-    var list = ArrayList<TemplatesItem?>()
+    lateinit var adapter: QuotesTemplatesAdapter
+    var list = ArrayList<QuotesTemplatesItem?>()
     var sortby = ""
     var categoryID = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_categorywise_video)
+        setContentView(R.layout.activity_categorywise_quotes)
         activity = this
         storeUserData = StoreUserData(activity)
 
-        ivCategoryBack.setOnClickListener { finish() }
+        ivQuotesCategoryBack.setOnClickListener { finish() }
 
         if (intent.getStringExtra("categoryTitle") != null && intent.getStringExtra("categoryTitle") != "") {
-            tvCategoryName.text = intent.getStringExtra("categoryTitle").toString()
+            tvQuotesCategoryName.text = intent.getStringExtra("categoryTitle").toString()
         }
 
         if (intent.getStringExtra("sortBy") != null && intent.getStringExtra("sortBy") != "") {
@@ -47,18 +47,19 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
         Log.i("TAG", "onCreate:$sortby ")
         Log.i("TAG", "onCreate:$categoryID ")
-        categoryWiseVideo()
+
+        quotesTemplateList()
 
 
     }
 
-    private fun categoryWiseVideo() {
+    private fun quotesTemplateList() {
         if (page == 1)
             showProgress()
         val retrofitHelper = RetrofitHelper(activity)
         var call: Call<ResponseBody> =
-            retrofitHelper.api().categoryWiseVideo(
-                sortby, categoryID, page
+            retrofitHelper.api().categoryWiseQuotes(
+                sortby,categoryID, page,
             )
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
@@ -66,27 +67,27 @@ class CategoryWiseVideoActivity : BaseActivity() {
                 if (page == 1)
                     dismissProgress()
                 val responseString = body.body()!!.string()
-                Log.i("TAG", "categoryWiseVideo$responseString")
+                Log.i("TAG", "homeTemplateList$responseString")
 
                 val pojo =
-                    Gson().fromJson(responseString, HomeTemplate::class.java)
-                if (pojo.data?.pageSize.isNullOrEmpty()){
-                    return
-                }
-                totalPage = pojo.data!!.pageSize!!.toInt()
+                    Gson().fromJson(responseString, QuotesTemplate::class.java)
                 if (pojo.data?.templates.isNullOrEmpty()) {
                     // Return if the templates list is null or empty
                     return
                 }
+
+
                 if (page == 1) {
+
+
                     list.clear()
-                    list.addAll(pojo.data.templates!!)
+                    list.addAll(pojo.data!!.templates!!)
 
                     adapter =
-                        CategoryWiseVideoAdapter(activity, list, rvCategoriesWiseVideo)
-                    activity.rvCategoriesWiseVideo.adapter = adapter
+                        QuotesTemplatesAdapter(activity, list, rvQuotesCategoriesWiseVideo)
+                    activity.rvQuotesCategoriesWiseVideo.adapter = adapter
                     adapter!!.setOnLoadMoreListener(object :
-                        CategoryWiseVideoAdapter.OnLoadMoreListener {
+                        QuotesTemplatesAdapter.OnLoadMoreListener {
                         override fun onLoadMore() {
                             if (page < totalPage) {
                                 list.add(null)
@@ -94,7 +95,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
                                     adapter.notifyItemInserted(list.size - 1)
                                     adapter.notifyItemRangeChanged(list.size - 1, list.size)
                                     page += 1
-                                    categoryWiseVideo()
+                                    quotesTemplateList()
 
                                 }, 1000)
                             }
@@ -103,7 +104,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
                     })
                 } else {
                     list.removeAt(list.size - 1)
-                    list.addAll(pojo.data.templates!!)
+                    list.addAll(pojo.data!!.templates!!)
 
                     adapter.notifyItemRemoved(list.size - 1)
                     adapter.notifyItemRangeChanged(list.size - 1, list.size)
@@ -120,5 +121,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
             }
         })
     }
+
+
 
 }

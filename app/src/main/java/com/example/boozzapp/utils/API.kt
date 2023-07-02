@@ -7,13 +7,18 @@ import retrofit2.Call
 import retrofit2.http.*
 
 
-
 interface API {
 
     @GET("/api/v1/categories")
     fun homeCategories(
         @Header("Authorization") Authorization: String,
-        ): Call<ResponseBody>
+    ): Call<ResponseBody>
+
+
+    @GET("/api/v1/quoteCategories")
+    fun quotesCategories(
+        @Header("Authorization") Authorization: String,
+    ): Call<ResponseBody>
 
 
     @FormUrlEncoded
@@ -31,6 +36,24 @@ interface API {
         @Field("category_id") category_id: String,
         @Field("page") page: Int
     ): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("/api/v1/categoryWiseQuotes")
+    fun categoryWiseQuotes(
+        @Field("sort_by") sort_by: String,
+        @Field("category_id") category_id: String,
+        @Field("page") page: Int
+    ): Call<ResponseBody>
+
+
+
+    @FormUrlEncoded
+    @POST("/api/v1/quotes")
+    fun quotesList(
+        @Field("sort_by") sort_by: String,
+        @Field("page") page: Int
+    ): Call<ResponseBody>
+
 
     @FormUrlEncoded
     @POST
@@ -123,8 +146,9 @@ interface API {
 
     @GET("api/v1/deletePropertyFile/{id}")
     fun deletePropertyFile(
-        @Header("Authorization") Authorization:String,
-        @Path("id") id: String): Call<ResponseBody>
+        @Header("Authorization") Authorization: String,
+        @Path("id") id: String
+    ): Call<ResponseBody>
 
     @GET("api/v1/page/{id}")
     fun pages(
@@ -606,8 +630,6 @@ interface API {
         @Header("Authorization") Authorization: String,
         @Query("property_id") property_id: Int
     ): Call<ResponseBody>
-
-
 
 
     //TODO: This api is remaining as per Laravel

@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeCategoryAdapter
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
@@ -36,13 +37,25 @@ class HomeActivity : BaseActivity() {
 
 
         tvQuotes.setOnClickListener {
+            it.isClickable = false
             activity.startActivity(Intent(activity, QuotesActivity::class.java))
+            Handler(Looper.getMainLooper()).postDelayed({
+                it.isClickable = true
+            }, 500)
         }
 
         llFilter.setOnClickListener {
             flBottom.isVisible = false
             llBottom.isVisible = true
         }
+        llTopArrow.setOnClickListener {
+            rvHomeList.smoothScrollToPosition(0)
+        }
+        rvHomeList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                llTopArrow.isVisible = recyclerView.canScrollVertically(-1)
+            }
+        })
 
         ivClose.setOnClickListener {
             flBottom.isVisible = true
@@ -55,6 +68,7 @@ class HomeActivity : BaseActivity() {
 
         llRandom.setOnClickListener {
             sort_by = "random"
+            page = 1
             homeTemplateList(sort_by)
             ivClose.performClick()
 
@@ -62,6 +76,7 @@ class HomeActivity : BaseActivity() {
 
         llNew.setOnClickListener {
             sort_by = "newest"
+            page = 1
             homeTemplateList(sort_by)
             ivClose.performClick()
 
@@ -69,12 +84,14 @@ class HomeActivity : BaseActivity() {
 
         llOldest.setOnClickListener {
             sort_by = "oldest"
+            page = 1
             homeTemplateList(sort_by)
             ivClose.performClick()
 
         }
         llPopular.setOnClickListener {
-            sort_by = "newest"
+            sort_by = "popular"
+            page = 1
             homeTemplateList(sort_by)
             ivClose.performClick()
 
@@ -105,11 +122,8 @@ class HomeActivity : BaseActivity() {
                     activity,
                     categoryPojo.data as ArrayList<CategoryList>,
                     sort_by
-
                 )
-
                 rvCategories.adapter = categoryAdapter
-
                 homeTemplateList(sort_by)
 
 
@@ -151,7 +165,7 @@ class HomeActivity : BaseActivity() {
                     adapter =
                         HomeTemplatesAdapter(activity, list, rvHomeList)
                     activity.rvHomeList.adapter = adapter
-                    adapter!!.setOnLoadMoreListener(object :
+                    adapter.setOnLoadMoreListener(object :
                         HomeTemplatesAdapter.OnLoadMoreListener {
                         override fun onLoadMore() {
                             if (page < totalPage) {

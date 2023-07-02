@@ -1,64 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/app_background_color"
+    android:orientation="vertical"
     tools:context=".activities.QuotesActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_gravity="center"
-        android:background="@color/app_background_color"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/ivQuotesBack"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:src="@drawable/back_icon" />
+            android:background="@color/app_background_color"
+            android:orientation="horizontal">
 
-        <com.example.boozzapp.controls.CTextView
-            android:id="@+id/tvQuotes"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/ivQuotesBack"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:src="@drawable/back_icon" />
+
+            <com.example.boozzapp.controls.CTextView
+                android:id="@+id/tvQuotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:gravity="center"
+                android:text="QUOTES"
+                android:textColor="@color/blue_text"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="bold" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvQuotesCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="25"
+            tools:listitem="@layout/row_quotes_category" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvQuotesList"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:gravity="center"
-            android:text="QUOTES"
-            android:textColor="@color/blue_text"
-            android:textSize="@dimen/_16sdp"
-            android:textStyle="bold" />
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/row_home_list" />
+
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvQuotesCategory"
+    <FrameLayout
+        android:id="@+id/flQuotesBottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:itemCount="25"
-        tools:listitem="@layout/row_quotes_category" />
+        android:layout_height="@dimen/_50sdp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_30sdp"
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvQuotesList"
+        android:paddingHorizontal="@dimen/_25sdp">
+
+        <LinearLayout
+            android:id="@+id/llQuotesFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_rounded_blue"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_25sdp"
+            android:paddingVertical="@dimen/_7sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/filter_icon" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llQuotesTopArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:background="@drawable/bg_rounded_blue"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_25sdp"
+            android:paddingVertical="@dimen/_7sdp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_16sdp"
+                android:layout_height="@dimen/_16sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/up_white_icon" />
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/llQuotesBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_gravity="center"
-        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="@dimen/_25sdp"
+        android:layout_marginBottom="@dimen/_25sdp"
+        android:background="@drawable/bg_rounded_blue"
         android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
-        tools:listitem="@layout/row_home_list" />
+        android:padding="@dimen/_15sdp"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/_30sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:src="@drawable/filter_icon" />
+
+            <com.example.boozzapp.controls.CTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_weight="1"
+                android:text="@string/sort_videos_by"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp" />
+
+            <ImageView
+                android:id="@+id/ivQuotesClose"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/close_icon" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llQuotesRandom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/random_icon" />
+
+                <com.example.boozzapp.controls.CTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="@string/random"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llQuotesNew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/new_icon" />
+
+                <com.example.boozzapp.controls.CTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="@string/new_text"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llQuotesPopular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/popular_icon" />
+
+                <com.example.boozzapp.controls.CTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="@string/popular"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llQuotesOldest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/oldest_icon" />
+
+                <com.example.boozzapp.controls.CTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="@string/oldest"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
 
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</FrameLayout>

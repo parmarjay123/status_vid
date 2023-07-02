@@ -2,12 +2,10 @@ package com.example.boozzapp.activities
 
 import android.os.Bundle
 import android.util.Log
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.boozzapp.R
-import com.example.boozzapp.adapter.QuotesCategoryAdapter
 import com.example.boozzapp.adapter.QuotesCategoryListAdapter
-import com.example.boozzapp.pojo.CategoryList
-import com.example.boozzapp.pojo.HomeCategoryPojo
+import com.example.boozzapp.pojo.QuoteCategoryList
+import com.example.boozzapp.pojo.QuotesCategory
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
@@ -18,6 +16,8 @@ import retrofit2.Call
 import retrofit2.Response
 
 class QuotesCategoryListActivity : BaseActivity() {
+    var quotesCategoryList = ArrayList<QuoteCategoryList?>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quotes_category_list)
@@ -34,7 +34,7 @@ class QuotesCategoryListActivity : BaseActivity() {
         showProgress()
         val retrofitHelper = RetrofitHelper(activity)
         var call: Call<ResponseBody> =
-            retrofitHelper.api().homeCategories(
+            retrofitHelper.api().quotesCategories(
                 storeUserData.getString(Constants.USER_TOKEN),
             )
 
@@ -43,12 +43,12 @@ class QuotesCategoryListActivity : BaseActivity() {
                 dismissProgress()
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
-                var categoryPojo = Gson().fromJson(responseString, HomeCategoryPojo::class.java)
+                var categoryPojo = Gson().fromJson(responseString, QuotesCategory::class.java)
 
-
+                categoryPojo.data?.let { quotesCategoryList.addAll(it) }
                 var QuotesCategoryListAdapter = QuotesCategoryListAdapter(
                     activity,
-                    categoryPojo.data as ArrayList<CategoryList>,
+                    quotesCategoryList,
                 )
 
                 rvQuotesCatList.adapter = QuotesCategoryListAdapter
