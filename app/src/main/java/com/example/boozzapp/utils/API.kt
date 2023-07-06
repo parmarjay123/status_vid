@@ -50,7 +50,6 @@ interface API {
     @FormUrlEncoded
     @POST("/api/v1/quotes")
     fun quotesList(
-        @Field("sort_by") sort_by: String,
         @Field("page") page: Int
     ): Call<ResponseBody>
 

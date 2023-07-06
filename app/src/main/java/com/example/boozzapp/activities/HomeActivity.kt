@@ -102,7 +102,6 @@ class HomeActivity : BaseActivity() {
 
     }
 
-
     private fun homeCategories() {
         val retrofitHelper = RetrofitHelper(activity)
         var call: Call<ResponseBody> =

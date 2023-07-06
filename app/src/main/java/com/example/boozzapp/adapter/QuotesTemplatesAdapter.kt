@@ -2,6 +2,7 @@ package com.example.boozzapp.adapter
 
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,7 +77,7 @@ class QuotesTemplatesAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolder) {
             val data = items[position]
-
+            Log.i("TAG", "QuotesID :- ${data!!.id} ")
             Glide.with(activity).load(data!!.imageUrl).into(holder.itemView.ivItem)
             holder.itemView.setOnClickListener {
                 activity.startActivity(

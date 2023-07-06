@@ -9,9 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded_white"
-        android:paddingHorizontal="@dimen/_25sdp"
-        android:paddingVertical="@dimen/_7sdp"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_7sdp">
 
 
         <com.example.boozzapp.controls.CTextView
@@ -20,11 +20,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="love"
-            android:textStyle="bold"
             android:textColor="@color/blue_text"
-            android:textSize="@dimen/_10sdp" />
-
-
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
 
 
     </LinearLayout>

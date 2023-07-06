@@ -55,39 +55,6 @@ class QuotesActivity : BaseActivity() {
             flQuotesBottom.isVisible = true
             llQuotesBottom.isVisible = false
         }
-
-        llQuotesRandom.setOnClickListener {
-            sort_by = "random"
-            page = 1
-            quotesTemplateList(sort_by)
-            ivQuotesClose.performClick()
-
-        }
-
-        llQuotesNew.setOnClickListener {
-            sort_by = "newest"
-            page = 1
-            quotesTemplateList(sort_by)
-            ivQuotesClose.performClick()
-
-
-        }
-
-        llQuotesOldest.setOnClickListener {
-            sort_by = "oldest"
-            page = 1
-            quotesTemplateList(sort_by)
-            ivQuotesClose.performClick()
-
-        }
-        llQuotesPopular.setOnClickListener {
-            sort_by = "popular"
-            page = 1
-            quotesTemplateList(sort_by)
-            ivQuotesClose.performClick()
-
-        }
-
         quotesCategory()
     }
 
@@ -118,7 +85,7 @@ class QuotesActivity : BaseActivity() {
 
                 rvQuotesCategory.adapter = categoryAdapter
 
-                quotesTemplateList(sort_by)
+                quotesTemplateList()
             }
 
             override fun onError(code: Int, error: String) {
@@ -130,26 +97,23 @@ class QuotesActivity : BaseActivity() {
         })
     }
 
-    private fun quotesTemplateList(sort_by: String) {
+    private fun quotesTemplateList() {
         if (page == 1)
             showProgress()
         val retrofitHelper = RetrofitHelper(activity)
         var call: Call<ResponseBody> =
-            retrofitHelper.api().quotesList(
-                sort_by, page
-            )
+            retrofitHelper.api().quotesList(page)
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
             override fun onSuccess(body: Response<ResponseBody>) {
                 if (page == 1)
                     dismissProgress()
                 val responseString = body.body()!!.string()
-                Log.i("TAG", "homeTemplateList$responseString")
+                Log.i("TAG", "quotesTemplateList$responseString")
 
                 val pojo =
                     Gson().fromJson(responseString, QuotesTemplate::class.java)
-
-
+                totalPage = pojo.data!!.pageSize!!.toInt()
                 if (page == 1) {
                     list.clear()
                     list.addAll(pojo.data!!.templates!!)
@@ -166,7 +130,7 @@ class QuotesActivity : BaseActivity() {
                                     adapter.notifyItemInserted(list.size - 1)
                                     adapter.notifyItemRangeChanged(list.size - 1, list.size)
                                     page += 1
-                                    quotesTemplateList("newest")
+                                    quotesTemplateList()
 
                                 }, 1000)
                             }

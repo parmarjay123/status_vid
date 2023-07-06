@@ -9,16 +9,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded_white"
-        android:paddingHorizontal="@dimen/_25sdp"
-        android:paddingVertical="@dimen/_7sdp"
+        android:paddingHorizontal="@dimen/_20sdp"
+        android:paddingVertical="@dimen/_5sdp"
         android:gravity="center">
 
 
 
         <ImageView
             android:id="@+id/ivCategoryImage"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
             android:layout_gravity="center"
             android:src="@drawable/explore_icon" />
 
