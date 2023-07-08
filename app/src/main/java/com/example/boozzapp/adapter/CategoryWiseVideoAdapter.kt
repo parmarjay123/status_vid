@@ -1,16 +1,17 @@
 package com.example.boozzapp.adapter
 
 
-import com.example.boozzapp.activities.PreviewActivity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
+import com.example.boozzapp.activities.PreviewActivity
 import com.example.boozzapp.pojo.TemplatesItem
 import kotlinx.android.synthetic.main.row_home_list.view.*
 
@@ -63,8 +64,7 @@ class CategoryWiseVideoAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return if (viewType == VIEW_TYPE_ITEM) {
-            val view =
-                LayoutInflater.from(activity).inflate(R.layout.row_home_list, parent, false)
+            val view = LayoutInflater.from(activity).inflate(R.layout.row_home_list, parent, false)
             ViewHolder(view)
         } else {
             val view =
@@ -79,10 +79,13 @@ class CategoryWiseVideoAdapter(
 
             Glide.with(activity).load(data!!.thumbnailUrl).into(holder.itemView.ivItem)
 
+            holder.itemView.ivHot.isVisible = data.isHot == true
+            holder.itemView.ivNew.isVisible = data.isNew == true
+            holder.itemView.ivPremium.isVisible = data.isPremium == 1
+
             holder.itemView.setOnClickListener {
                 activity.startActivity(
-                    Intent(activity, PreviewActivity::class.java)
-                        .putExtra("videoPojo", data)
+                    Intent(activity, PreviewActivity::class.java).putExtra("videoPojo", data)
                 )
             }
         }
@@ -97,8 +100,7 @@ class CategoryWiseVideoAdapter(
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
-    private inner class LoadingViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    private inner class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
     }

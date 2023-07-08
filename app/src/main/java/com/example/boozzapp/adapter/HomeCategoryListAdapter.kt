@@ -7,19 +7,18 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
-import com.example.boozzapp.activities.CategoryWiseQuotesActivity
 import com.example.boozzapp.activities.QuotesCategoryListActivity
+import com.example.boozzapp.pojo.CategoryList
 import com.example.boozzapp.pojo.QuoteCategoryList
+import kotlinx.android.synthetic.main.row_quotes_cat_list.view.*
 import kotlinx.android.synthetic.main.row_quotes_category.view.*
-import java.sql.Struct
 
 
-class QuotesCategoryAdapter(
+class HomeCategoryListAdapter(
     val activity: AppCompatActivity,
-    var data: ArrayList<QuoteCategoryList?>,
-    var sort_by:String
+    var data: ArrayList<CategoryList?>,
 
-    ) : RecyclerView.Adapter<QuotesCategoryAdapter.ViewHolder>() {
+    ) : RecyclerView.Adapter<HomeCategoryListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -27,29 +26,25 @@ class QuotesCategoryAdapter(
     ): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(activity).inflate(
-                R.layout.row_quotes_category,
+                R.layout.row_quotes_cat_list,
                 parent,
                 false
             )
         )
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pojo = data[position]
-        holder.itemView.tvQuotesCatTitle.text = pojo!!.name
+            holder.itemView.tvCatName.text = pojo!!.name
 
 
-        holder.itemView.setOnClickListener {
-            if (position == 0) {
-                activity.startActivity(Intent(activity, QuotesCategoryListActivity::class.java))
-            }
-        }
 
-        holder.itemView.setOnClickListener {
-            activity.startActivity(Intent(activity,CategoryWiseQuotesActivity::class.java)
+
+
+        /*holder.itemView.setOnClickListener {
+            activity.startActivity(Intent(activity,CategoryWiseVideoActivity::class.java)
                 .putExtra("sortBy",sort_by).putExtra("categoryId",pojo.id.toString())
                 .putExtra("categoryTitle",pojo.name.toString()))
-        }
+        }*/
 
 
     }

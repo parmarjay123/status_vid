@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
 import com.example.boozzapp.activities.CategoryWiseVideoActivity
+import com.example.boozzapp.activities.HomeCategoryListActivity
 import com.example.boozzapp.pojo.CategoryList
 import kotlinx.android.synthetic.main.row_category.view.*
 
 
 class HomeCategoryAdapter(
     val activity: AppCompatActivity,
-    var data: ArrayList<CategoryList>,
+    var data: ArrayList<CategoryList?>,
     var sort_by: String,
 ) : RecyclerView.Adapter<HomeCategoryAdapter.ViewHolder>() {
 
@@ -34,17 +35,27 @@ class HomeCategoryAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pojo = data[position]
-        holder.itemView.tvCategoryTitle.text = pojo.name
+        holder.itemView.tvCategoryTitle.text = pojo!!.name
 
-        Glide.with(activity).load(pojo.imageUrl).into(holder.itemView.ivCategoryImage)
+        if (position == 0) {
+            Glide.with(activity).load(R.drawable.explore_icon).into(holder.itemView.ivCategoryImage)
 
-        holder.itemView.setOnClickListener {
-            activity.startActivity(Intent(activity,CategoryWiseVideoActivity::class.java)
-                .putExtra("sortBy",sort_by).putExtra("categoryId",pojo.id.toString())
-                .putExtra("categoryTitle",pojo.name.toString()))
+        } else {
+            Glide.with(activity).load(pojo!!.imageUrl).into(holder.itemView.ivCategoryImage)
+
         }
 
-
+        holder.itemView.setOnClickListener {
+            if (position == 0) {
+              activity.startActivity(Intent(activity,HomeCategoryListActivity::class.java))
+            } else {
+                activity.startActivity(
+                    Intent(activity, CategoryWiseVideoActivity::class.java)
+                        .putExtra("sortBy", sort_by).putExtra("categoryId", pojo.id.toString())
+                        .putExtra("categoryTitle", pojo.name.toString())
+                )
+            }
+        }
     }
 
     override fun getItemCount(): Int {

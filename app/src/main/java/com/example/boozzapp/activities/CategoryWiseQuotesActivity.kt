@@ -59,7 +59,7 @@ class CategoryWiseQuotesActivity : BaseActivity() {
         val retrofitHelper = RetrofitHelper(activity)
         var call: Call<ResponseBody> =
             retrofitHelper.api().categoryWiseQuotes(
-                sortby,categoryID, page,
+                sortby, categoryID, page,
             )
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
@@ -71,15 +71,14 @@ class CategoryWiseQuotesActivity : BaseActivity() {
 
                 val pojo =
                     Gson().fromJson(responseString, QuotesTemplate::class.java)
+
                 if (pojo.data?.templates.isNullOrEmpty()) {
                     // Return if the templates list is null or empty
                     return
                 }
 
-
+                totalPage = pojo.data!!.pageSize!!.toInt()
                 if (page == 1) {
-
-
                     list.clear()
                     list.addAll(pojo.data!!.templates!!)
 
@@ -121,7 +120,6 @@ class CategoryWiseQuotesActivity : BaseActivity() {
             }
         })
     }
-
 
 
 }

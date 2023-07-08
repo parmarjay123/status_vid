@@ -27,6 +27,8 @@ class HomeActivity : BaseActivity() {
     var totalPage = 1
     var page = 1
     lateinit var adapter: HomeTemplatesAdapter
+    var homeCategoryList = ArrayList<CategoryList?>()
+
     var list = ArrayList<TemplatesItem?>()
     var sort_by = "newest"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,11 +117,12 @@ class HomeActivity : BaseActivity() {
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
                 var categoryPojo = Gson().fromJson(responseString, HomeCategoryPojo::class.java)
-
+                homeCategoryList.add(CategoryList("", "Explore", 0))
+                categoryPojo.data?.let { homeCategoryList.addAll(it) }
 
                 var categoryAdapter = HomeCategoryAdapter(
                     activity,
-                    categoryPojo.data as ArrayList<CategoryList>,
+                    homeCategoryList,
                     sort_by
                 )
                 rvCategories.adapter = categoryAdapter
