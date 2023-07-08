@@ -87,8 +87,7 @@ class HomeTemplatesAdapter(
             holder.itemView.setOnClickListener {
                 activity.startActivity(
                     Intent(activity, PreviewActivity::class.java)
-                        .putExtra("videoURL", data.videoUrl.toString())
-                        .putExtra("songName", data.title.toString())
+                        .putExtra("videoPojo", data)
                 );
             }
         }

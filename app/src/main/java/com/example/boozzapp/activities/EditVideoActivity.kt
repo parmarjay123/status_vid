@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
+import com.example.boozzapp.pojo.TemplatesItem
 import com.example.boozzapp.utils.StoreUserData
 import kotlinx.android.synthetic.main.activity_edit_video.*
 import kotlinx.android.synthetic.main.activity_edit_video.pauseBtn
@@ -17,26 +18,20 @@ import kotlinx.android.synthetic.main.activity_preview.*
 import kotlinx.android.synthetic.main.dialog_watermark.*
 
 class EditVideoActivity : BaseActivity() {
+    lateinit var videoPojo: TemplatesItem
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_video)
         activity = this
         storeUserData = StoreUserData(activity)
+        videoPojo = intent.getParcelableExtra("videoPojo")!!
 
 
         editBack.setOnClickListener { finish() }
+        tvEditSongName.text = videoPojo.title
 
 
-        if (intent.getStringExtra("songName") != null || intent.getStringExtra("songName") != "") {
-            tvEditSongName.text = intent.getStringExtra("songName")
-
-        }
-        if (intent.getStringExtra("videoURL") != null && intent.getStringExtra("videoURL") != "") {
-            var videoUrl =
-                intent.getStringExtra("videoURL") // Retrieve the video URL from intent extras or any other data source
-            playVideo(videoUrl)
-
-        }
+        playVideo(videoPojo.videoUrl)
 
 
         player.setOnClickListener {

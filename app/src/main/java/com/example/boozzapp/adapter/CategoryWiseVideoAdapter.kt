@@ -80,9 +80,10 @@ class CategoryWiseVideoAdapter(
             Glide.with(activity).load(data!!.thumbnailUrl).into(holder.itemView.ivItem)
 
             holder.itemView.setOnClickListener {
-                activity.startActivity(Intent(activity, PreviewActivity::class.java)
-                    .putExtra("videoURL",data.videoUrl.toString())
-                    .putExtra("songName",data.title.toString()));
+                activity.startActivity(
+                    Intent(activity, PreviewActivity::class.java)
+                        .putExtra("videoPojo", data)
+                )
             }
         }
     }
