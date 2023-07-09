@@ -83,7 +83,7 @@
 
 
                 <com.google.android.exoplayer2.ui.PlayerView
-                    android:id="@+id/exo_player_video_detail"
+                    android:id="@+id/exoPlayerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:surface_type="texture_view"
