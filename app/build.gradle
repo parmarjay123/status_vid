@@ -62,12 +62,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.5.1'
     implementation 'com.google.firebase:firebase-analytics:20.0.1'
 
+    implementation 'com.github.Cutta:GifView:1.6'
 
     implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
-
-
-
-
 
 
 

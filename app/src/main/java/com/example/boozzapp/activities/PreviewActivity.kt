@@ -82,7 +82,7 @@ class PreviewActivity : BaseActivity() {
         previewEdit.setOnClickListener {
             activity.startActivity(
                 Intent(activity, EditVideoActivity::class.java)
-                    .putExtra("videoObject", videoPojo)
+                    .putExtra("videoPojo", videoPojo)
             )
         }
 

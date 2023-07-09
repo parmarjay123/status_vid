@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,35 +7,6 @@
     android:orientation="vertical"
     tools:context=".activities.EditVideoActivity">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <VideoView
-            android:id="@+id/player"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true" />
-
-    </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/progressLoader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/pauseBtn"
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
-        android:layout_gravity="center"
-        android:src="@drawable/exo_icon_play"
-        android:visibility="gone" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -83,13 +54,86 @@
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clPreview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_weight="1"
+        tools:ignore="NestedWeights">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_margin="18dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+
+                <com.google.android.exoplayer2.ui.PlayerView
+                    android:id="@+id/exo_player_video_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:surface_type="texture_view"
+                    tools:ignore="TooDeepLayout" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar_exoplayer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+                <View
+                    android:id="@+id/view_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="#00000000" />
+
+                <ImageView
+                    android:id="@+id/exo_thumb"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitXY"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/preview_controls"
+                    layout="@layout/layout_preview_controls"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    android:id="@+id/layout_export_video"
+                    layout="@layout/layout_export_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+
+
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginHorizontal="25dp"
-        android:layout_marginBottom="@dimen/_50sdp"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingVertical="@dimen/_10sdp">
@@ -165,4 +209,4 @@
         android:layout_height="@dimen/_50sdp"
         android:layout_gravity="bottom" />
 
-</FrameLayout>
+</LinearLayout>

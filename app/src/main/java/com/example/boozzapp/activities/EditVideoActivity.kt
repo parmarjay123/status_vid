@@ -4,16 +4,19 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.pojo.TemplatesItem
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import kotlinx.android.synthetic.main.activity_edit_video.*
-import kotlinx.android.synthetic.main.activity_edit_video.pauseBtn
-import kotlinx.android.synthetic.main.activity_edit_video.player
 import kotlinx.android.synthetic.main.activity_preview.*
 import kotlinx.android.synthetic.main.dialog_watermark.*
 
@@ -30,19 +33,6 @@ class EditVideoActivity : BaseActivity() {
         editBack.setOnClickListener { finish() }
         tvEditSongName.text = videoPojo.title
 
-
-        playVideo(videoPojo.videoUrl)
-
-
-        player.setOnClickListener {
-            if (player.isPlaying) {
-                player.pause()
-                pauseBtn.isVisible = true
-            } else {
-                player.start()
-                pauseBtn.isVisible = false
-            }
-        }
 
         ivCloseWatermark.setOnClickListener {
             showDialog()
@@ -72,15 +62,8 @@ class EditVideoActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("SuspiciousIndentation")
-    private fun playVideo(videoUrl: String?) {
-        videoUrl?.let {
-            player.setVideoPath(videoUrl)
-            player.setOnPreparedListener { mediaPlayer ->
-                mediaPlayer.start()
-            }
-        }
-    }
 
+    //endregion
+    //region Player zone...
 
 }
