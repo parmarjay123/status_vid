@@ -27,7 +27,10 @@ data class TemplateData(
     val categories: List<CategoriesItem?>? = emptyList(),
 
     @field:SerializedName("page_size")
-    val pageSize: String? = ""
+    val pageSize: String? = "",
+
+    @field:SerializedName("total_page")
+    val total_page: String? = ""
 ) : Parcelable
 
 @Parcelize

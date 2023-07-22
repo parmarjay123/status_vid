@@ -27,7 +27,10 @@ data class Data(
     val categories: List<QuotesCategoriesItem?>? = emptyList(),
 
     @field:SerializedName("page_size")
-    val pageSize: Int? = 0
+    val pageSize: Int? = 0,
+
+    @field:SerializedName("total_page")
+    val total_page: Int? = 0
 ) : Parcelable
 
 @Parcelize

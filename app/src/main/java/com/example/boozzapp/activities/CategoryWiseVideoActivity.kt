@@ -73,7 +73,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
                 if (pojo.data?.pageSize.isNullOrEmpty()){
                     return
                 }
-                totalPage = pojo.data!!.pageSize!!.toInt()
+                totalPage = pojo.data!!.total_page!!.toInt()
                 if (pojo.data?.templates.isNullOrEmpty()) {
                     // Return if the templates list is null or empty
                     return

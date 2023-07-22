@@ -113,7 +113,7 @@ class QuotesActivity : BaseActivity() {
 
                 val pojo =
                     Gson().fromJson(responseString, QuotesTemplate::class.java)
-                totalPage = pojo.data!!.pageSize!!.toInt()
+                totalPage = pojo.data!!.total_page!!.toInt()
                 if (page == 1) {
                     list.clear()
                     list.addAll(pojo.data!!.templates!!)
