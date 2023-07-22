@@ -42,16 +42,12 @@ class QuotesCategoryAdapter(
         holder.itemView.setOnClickListener {
             if (position == 0) {
                 activity.startActivity(Intent(activity, QuotesCategoryListActivity::class.java))
+            }else{
+                activity.startActivity(Intent(activity,CategoryWiseQuotesActivity::class.java)
+                    .putExtra("sortBy",sort_by).putExtra("categoryId",pojo.id.toString())
+                    .putExtra("categoryTitle",pojo.name.toString()))
             }
         }
-
-        holder.itemView.setOnClickListener {
-            activity.startActivity(Intent(activity,CategoryWiseQuotesActivity::class.java)
-                .putExtra("sortBy",sort_by).putExtra("categoryId",pojo.id.toString())
-                .putExtra("categoryTitle",pojo.name.toString()))
-        }
-
-
     }
 
     override fun getItemCount(): Int {

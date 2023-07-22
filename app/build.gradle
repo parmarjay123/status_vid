@@ -15,6 +15,7 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,6 +25,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    aaptOptions {
+        ignoreAssetsPattern "!*ffprobe"
+        ignoreAssetsPattern "!*ffmpeg"
+        ignoreAssetsPattern "!arm"
+        ignoreAssetsPattern "!x86"
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -62,10 +69,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:17.5.1'
     implementation 'com.google.firebase:firebase-analytics:20.0.1'
 
-    implementation 'com.github.Cutta:GifView:1.6'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
 
     implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
-
-
+    implementation 'com.mindorks.android:prdownloader:0.6.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
+    implementation 'com.arthenica:mobile-ffmpeg-full-gpl:4.4.LTS'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.27'
 
 }

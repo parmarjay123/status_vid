@@ -1,34 +1,38 @@
-<!-- list_item_layout.xml -->
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp"
-    app:cardUseCompatPadding="true">
+    android:orientation="vertical"
+    android:paddingStart="@dimen/_10sdp"
+    android:paddingVertical="@dimen/_10sdp">
 
-    <!-- Customize the layout according to your item's design -->
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
+        android:background="@drawable/bg_rounded_explore"
+        android:padding="@dimen/_15sdp">
+
+        <ImageView
+            android:id="@+id/ivExploreCategory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <com.example.boozzapp.controls.CTextView
+        android:id="@+id/tvCatName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingVertical="@dimen/_18sdp">
-
-        <com.example.boozzapp.controls.CTextView
-            android:id="@+id/tvCatName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:layout_gravity="center"
-            android:textColor="@color/blue_text"
-            android:textSize="@dimen/_14sdp"
-            android:textStyle="bold"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:gravity="center"
+        android:text="Category"
+        android:textColor="@color/blue_text"
+        android:textSize="@dimen/_14sdp"
+        android:textStyle="bold" />
 
 
-        <!-- Add your item views here, such as TextView, ImageView, etc. -->
+</androidx.appcompat.widget.LinearLayoutCompat>
 
-    </LinearLayout>
 
-</androidx.cardview.widget.CardView>

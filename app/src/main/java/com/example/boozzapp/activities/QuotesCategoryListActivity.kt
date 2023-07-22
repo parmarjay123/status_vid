@@ -33,7 +33,7 @@ class QuotesCategoryListActivity : BaseActivity() {
     private fun quotesCategory() {
         showProgress()
         val retrofitHelper = RetrofitHelper(activity)
-        var call: Call<ResponseBody> =
+        val call: Call<ResponseBody> =
             retrofitHelper.api().quotesCategories(
                 storeUserData.getString(Constants.USER_TOKEN),
             )
@@ -43,19 +43,19 @@ class QuotesCategoryListActivity : BaseActivity() {
                 dismissProgress()
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
-                var categoryPojo = Gson().fromJson(responseString, QuotesCategory::class.java)
+                val categoryPojo = Gson().fromJson(responseString, QuotesCategory::class.java)
 
                 categoryPojo.data?.let { quotesCategoryList.addAll(it) }
-                var QuotesCategoryListAdapter = QuotesCategoryListAdapter(
+                val quotesCategoryListAdapter = QuotesCategoryListAdapter(
                     activity,
                     quotesCategoryList,
                 )
 
-                rvQuotesCatList.adapter = QuotesCategoryListAdapter
+                rvQuotesCatList.adapter = quotesCategoryListAdapter
             }
             override fun onError(code: Int, error: String) {
                 dismissProgress()
-                Log.i("Error", error.toString())
+                Log.i("Error", error)
             }
 
 

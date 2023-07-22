@@ -4,6 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="zip_directory">Boozz_data</string>
+    <string name="watermark">watermark.gif</string>
 
     <string name="label_done">Done</string>
     <string name="permission_title">Uh oh!</string>
@@ -28,5 +30,8 @@
     <string name="Ok" />
     <string name="all_category">All Category</string>
     <string name="video_export_text">Crafting your video… Please wait a moment!</string>
+    <string name="rate_app">Rate App</string>
+    <string name="check_for_update">Check For Update</string>
+    <string name="explore">Explore</string>
 
 </resources>

@@ -31,8 +31,8 @@
                 android:paddingVertical="@dimen/_5sdp">
 
                 <ImageView
-                    android:layout_width="@dimen/_14sdp"
-                    android:layout_height="@dimen/_14sdp"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/search_icon" />
             </LinearLayout>
@@ -54,8 +54,8 @@
                 android:paddingVertical="@dimen/_5sdp">
 
                 <ImageView
-                    android:layout_width="@dimen/_14sdp"
-                    android:layout_height="@dimen/_14sdp"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/setting_icon" />
             </LinearLayout>

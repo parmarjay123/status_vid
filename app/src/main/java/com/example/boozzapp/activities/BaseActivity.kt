@@ -11,17 +11,17 @@ import com.example.boozzapp.utils.StoreUserData
 open class BaseActivity : AppCompatActivity() {
     lateinit var activity: AppCompatActivity
     lateinit var storeUserData: StoreUserData
-    lateinit var progressDialog: CustomProgressDialog
-    lateinit var alert: CustomDialog
+    private lateinit var progressDialog: CustomProgressDialog
+    private lateinit var alert: CustomDialog
 
     fun showAlert(message: String) {
         alert = CustomDialog(activity)
         alert.setCancelable(false)
         alert.show()
         alert.setMessage(message)
-        alert.setPositiveButton("ok", View.OnClickListener {
+        alert.setPositiveButton("ok") {
             alert.dismiss()
-        })
+        }
     }
 
     fun showAlert(message: String, finish: Boolean) {
@@ -29,25 +29,25 @@ open class BaseActivity : AppCompatActivity() {
         alert.setCancelable(false)
         alert.show()
         alert.setMessage(message)
-        alert.setPositiveButton("ok", View.OnClickListener {
+        alert.setPositiveButton("ok") {
             alert.dismiss()
             if (finish) {
                 finish()
             }
-        })
+        }
     }
      fun showAlert(message: String, finish: Boolean, java: Class<*>) {
          alert = CustomDialog(activity)
          alert.setCancelable(false)
          alert.show()
          alert.setMessage(message)
-         alert.setPositiveButton("ok", View.OnClickListener {
+         alert.setPositiveButton("ok") {
              alert.dismiss()
              if (finish) {
-                 startActivity(Intent(activity,java))
+                 startActivity(Intent(activity, java))
              }
-         })
-    }
+         }
+     }
 
 
 
@@ -57,10 +57,10 @@ open class BaseActivity : AppCompatActivity() {
         alert.show()
         alert.setTitle(title)
         alert.setMessage(message)
-        alert.setPositiveButton("ok", View.OnClickListener {
+        alert.setPositiveButton("ok") {
             alert.dismiss()
 
-        })
+        }
     }
 
     fun showProgress() {

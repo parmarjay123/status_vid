@@ -29,7 +29,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/_20sdp"
             android:gravity="center"
-            android:text="@string/all_category"
+            android:text="@string/explore"
             android:textColor="@color/blue_text"
             android:textSize="@dimen/_16sdp"
             android:textStyle="bold" />
@@ -41,7 +41,8 @@
         android:id="@+id/rvQuotesCatList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/row_quotes_cat_list"/>
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/row_quotes_explore_list"/>
 
 </LinearLayout>

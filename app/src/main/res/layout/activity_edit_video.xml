@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/black"
     tools:context=".activities.EditVideoActivity">
 
 
@@ -54,6 +55,7 @@
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clPreview"
         android:layout_width="match_parent"
@@ -63,11 +65,10 @@
         tools:ignore="NestedWeights">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv_view"
+            android:id="@+id/cvView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_margin="18dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp"
             app:cardElevation="4dp"
@@ -82,12 +83,13 @@
                 android:gravity="center">
 
 
+
                 <com.google.android.exoplayer2.ui.PlayerView
                     android:id="@+id/exoPlayerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:surface_type="texture_view"
-                    tools:ignore="TooDeepLayout" />
+                    app:resize_mode="fit"/>
 
                 <ProgressBar
                     android:id="@+id/progressBar_exoplayer"
@@ -111,17 +113,133 @@
                     android:scaleType="fitXY"
                     android:visibility="gone" />
 
-                <include
-                    android:id="@+id/preview_controls"
-                    layout="@layout/layout_preview_controls"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                <ImageView
+                    android:id="@+id/pauseButton"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/exo_icon_play"
+                    android:visibility="gone" />
 
-                <include
-                    android:id="@+id/layout_export_video"
-                    layout="@layout/layout_export_video"
+
+
+
+                <LinearLayout
+                    android:id="@+id/rl_preview_control"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="#80F7931E"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:orientation="vertical"
+
+                    >
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="@string/app_name"
+                        app:srcCompat="@drawable/ic_preview" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:text="Click to preview"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rl_export_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="#44000000"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/ll_progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        tools:ignore="UselessParent">
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/cp_export_progress"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp" />
+
+                        <TextView
+                            android:id="@+id/processmessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/video_export_text"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <FrameLayout
+                            android:layout_width="@dimen/_100sdp"
+                            android:layout_height="@dimen/_40sdp">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:id="@+id/llWaterMark"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_30sdp"
+                                android:layout_gravity="center"
+                                android:background="@drawable/bg_rounded_transparent"
+                                android:gravity="center">
+                                <pl.droidsonroids.gif.GifImageView
+                                    android:id="@+id/watermark_top"
+                                    android:layout_width="73dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/watermark" />
+                                <ImageView
+                                    android:layout_width="@dimen/_40sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:visibility="gone"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/boozz_white" />
+
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <ImageView
+                                android:id="@+id/ivCloseWatermark"
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="@dimen/_15sdp"
+                                android:layout_gravity="end"
+                                android:src="@drawable/close_red_icon" />
+
+                        </FrameLayout>
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
             </FrameLayout>
 
 
@@ -136,72 +254,16 @@
         android:layout_marginHorizontal="25dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingVertical="@dimen/_10sdp">
+      >
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:id="@+id/llUpload"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/add_pic_border">
-
-
-                </ImageView>
-
-                <ImageView
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_24sdp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/plus_icon" />
-
-
-            </FrameLayout>
-
-
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_weight="1">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/llWaterMark"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_rounded_transparent"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/boozz_white" />
-
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <ImageView
-                android:id="@+id/ivCloseWatermark"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:layout_gravity="end"
-                android:src="@drawable/close_red_icon" />
-
-        </FrameLayout>
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_image_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_70sdp"
+            android:layout_gravity="center_vertical"
+            android:clipToPadding="false"
+            android:padding="5dp"
+            android:visibility="visible" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat

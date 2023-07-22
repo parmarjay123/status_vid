@@ -65,29 +65,6 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/llFavorites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_14sdp"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/_25sdp">
-
-            <ImageView
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_24sdp"
-                android:src="@drawable/fav_icon" />
-
-            <com.example.boozzapp.controls.CTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:text="@string/favorites"
-                android:textColor="@color/blue_text"
-                android:textSize="@dimen/_16sdp" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/llShareApp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -132,6 +109,55 @@
                 android:textColor="@color/blue_text"
                 android:textSize="@dimen/_16sdp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llRateApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/_25sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:src="@drawable/ratting_icon" />
+
+            <com.example.boozzapp.controls.CTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:text="@string/rate_app"
+                android:textColor="@color/blue_text"
+                android:textSize="@dimen/_16sdp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/llCheckUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_14sdp"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/_25sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:src="@drawable/update_icon" />
+
+            <com.example.boozzapp.controls.CTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:text="@string/check_for_update"
+                android:textColor="@color/blue_text"
+                android:textSize="@dimen/_16sdp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
 
 
         <com.example.boozzapp.controls.CTextView

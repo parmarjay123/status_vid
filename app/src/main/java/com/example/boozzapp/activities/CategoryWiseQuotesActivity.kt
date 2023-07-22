@@ -21,8 +21,8 @@ class CategoryWiseQuotesActivity : BaseActivity() {
     var page = 1
     lateinit var adapter: QuotesTemplatesAdapter
     var list = ArrayList<QuotesTemplatesItem?>()
-    var sortby = ""
-    var categoryID = ""
+    var sortBy = ""
+    private var categoryID = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class CategoryWiseQuotesActivity : BaseActivity() {
         }
 
         if (intent.getStringExtra("sortBy") != null && intent.getStringExtra("sortBy") != "") {
-            sortby = intent.getStringExtra("sortBy").toString()
+            sortBy = intent.getStringExtra("sortBy").toString()
         }
 
         if (intent.getStringExtra("categoryId") != null && intent.getStringExtra("categoryId") != "") {
@@ -45,7 +45,7 @@ class CategoryWiseQuotesActivity : BaseActivity() {
 
         }
 
-        Log.i("TAG", "onCreate:$sortby ")
+        Log.i("TAG", "onCreate:$sortBy ")
         Log.i("TAG", "onCreate:$categoryID ")
 
         quotesTemplateList()
@@ -57,9 +57,9 @@ class CategoryWiseQuotesActivity : BaseActivity() {
         if (page == 1)
             showProgress()
         val retrofitHelper = RetrofitHelper(activity)
-        var call: Call<ResponseBody> =
+        val call: Call<ResponseBody> =
             retrofitHelper.api().categoryWiseQuotes(
-                sortby, categoryID, page,
+                sortBy, categoryID, page,
             )
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
@@ -77,15 +77,15 @@ class CategoryWiseQuotesActivity : BaseActivity() {
                     return
                 }
 
-                totalPage = pojo.data!!.pageSize!!.toInt()
+                totalPage = pojo.data!!.total_page!!.toInt()
                 if (page == 1) {
                     list.clear()
-                    list.addAll(pojo.data!!.templates!!)
+                    list.addAll(pojo.data.templates!!)
 
                     adapter =
                         QuotesTemplatesAdapter(activity, list, rvQuotesCategoriesWiseVideo)
                     activity.rvQuotesCategoriesWiseVideo.adapter = adapter
-                    adapter!!.setOnLoadMoreListener(object :
+                    adapter.setOnLoadMoreListener(object :
                         QuotesTemplatesAdapter.OnLoadMoreListener {
                         override fun onLoadMore() {
                             if (page < totalPage) {
@@ -103,7 +103,7 @@ class CategoryWiseQuotesActivity : BaseActivity() {
                     })
                 } else {
                     list.removeAt(list.size - 1)
-                    list.addAll(pojo.data!!.templates!!)
+                    list.addAll(pojo.data.templates!!)
 
                     adapter.notifyItemRemoved(list.size - 1)
                     adapter.notifyItemRangeChanged(list.size - 1, list.size)

@@ -1,10 +1,15 @@
 package com.example.boozzapp.activities
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
@@ -22,6 +27,9 @@ import kotlinx.android.synthetic.main.activity_home.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class HomeActivity : BaseActivity() {
     var totalPage = 1
@@ -30,12 +38,18 @@ class HomeActivity : BaseActivity() {
     var homeCategoryList = ArrayList<CategoryList?>()
 
     var list = ArrayList<TemplatesItem?>()
-    var sort_by = "newest"
+    var sortBy = "newest"
+    val permissionList = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         activity = this
         storeUserData = StoreUserData(activity)
+
 
 
         tvQuotes.setOnClickListener {
@@ -69,44 +83,104 @@ class HomeActivity : BaseActivity() {
         }
 
         llRandom.setOnClickListener {
-            sort_by = "random"
+            sortBy = "random"
             page = 1
-            homeTemplateList(sort_by)
+            homeTemplateList(sortBy)
             ivClose.performClick()
 
         }
 
         llNew.setOnClickListener {
-            sort_by = "newest"
+            sortBy = "newest"
             page = 1
-            homeTemplateList(sort_by)
+            homeTemplateList(sortBy)
             ivClose.performClick()
 
         }
 
         llOldest.setOnClickListener {
-            sort_by = "oldest"
+            sortBy = "oldest"
             page = 1
-            homeTemplateList(sort_by)
+            homeTemplateList(sortBy)
             ivClose.performClick()
 
         }
         llPopular.setOnClickListener {
-            sort_by = "popular"
+            sortBy = "popular"
             page = 1
-            homeTemplateList(sort_by)
+            homeTemplateList(sortBy)
             ivClose.performClick()
 
         }
 
+        val watermark_path: String =
+            getZipDirectoryPath(activity) + getString(R.string.watermark)
+        val watermark_file = File(watermark_path)
+        if (!watermark_file.exists()) {
+            try {
+                generateWatermark()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
 
         homeCategories()
 
     }
 
+
+    private fun hasPermissions(vararg permissions: String): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && activity != null && permissions != null) {
+            for (permission in permissions) {
+                if (ActivityCompat.checkSelfPermission(
+                        activity,
+                        permission
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
+    @Throws(IOException::class)
+    private fun generateWatermark() {
+        val file = getZipDirectoryPath(activity) + getString(R.string.watermark)
+        try {
+            val inputStream = assets.open(getString(R.string.watermark))
+            try {
+                val outputStream = FileOutputStream(file)
+                try {
+                    val buf = ByteArray(1024)
+                    var len: Int
+                    while (inputStream.read(buf).also { len = it } > 0) {
+                        outputStream.write(buf, 0, len)
+                    }
+                } finally {
+                    outputStream.close()
+                }
+            } finally {
+                inputStream.close()
+            }
+        } catch (e: IOException) {
+            throw IOException("Could not open robot png", e)
+        }
+    }
+
+    private fun getZipDirectoryPath(mContext: Context): String {
+        val externalDirectory = mContext.filesDir.absolutePath
+        val dir = File(
+            externalDirectory + File.separator +
+                    mContext.resources.getString(R.string.zip_directory)
+        )
+        if (!dir.exists()) dir.mkdirs()
+        return dir.absolutePath + File.separator
+    }
+
     private fun homeCategories() {
         val retrofitHelper = RetrofitHelper(activity)
-        var call: Call<ResponseBody> =
+        val call: Call<ResponseBody> =
             retrofitHelper.api().homeCategories(
                 storeUserData.getString(Constants.USER_TOKEN),
             )
@@ -116,24 +190,24 @@ class HomeActivity : BaseActivity() {
 
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
-                var categoryPojo = Gson().fromJson(responseString, HomeCategoryPojo::class.java)
+                val categoryPojo = Gson().fromJson(responseString, HomeCategoryPojo::class.java)
                 homeCategoryList.add(CategoryList("", "Explore", 0))
                 categoryPojo.data?.let { homeCategoryList.addAll(it) }
 
-                var categoryAdapter = HomeCategoryAdapter(
+                val categoryAdapter = HomeCategoryAdapter(
                     activity,
                     homeCategoryList,
-                    sort_by
+                    sortBy
                 )
                 rvCategories.adapter = categoryAdapter
-                homeTemplateList(sort_by)
+                homeTemplateList(sortBy)
 
 
             }
 
             override fun onError(code: Int, error: String) {
 
-                Log.i("Error", error.toString())
+                Log.i("Error", error)
             }
 
 
@@ -144,7 +218,7 @@ class HomeActivity : BaseActivity() {
         if (page == 1)
             showProgress()
         val retrofitHelper = RetrofitHelper(activity)
-        var call: Call<ResponseBody> =
+        val call: Call<ResponseBody> =
             retrofitHelper.api().homeTemplates(
                 sort_by, page
             )

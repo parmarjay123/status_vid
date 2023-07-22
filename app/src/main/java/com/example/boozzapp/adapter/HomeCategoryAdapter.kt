@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
 import com.example.boozzapp.activities.CategoryWiseVideoActivity
-import com.example.boozzapp.activities.HomeCategoryListActivity
+import com.example.boozzapp.activities.ExploreActivity
 import com.example.boozzapp.pojo.CategoryList
 import kotlinx.android.synthetic.main.row_category.view.*
 
@@ -47,7 +47,7 @@ class HomeCategoryAdapter(
 
         holder.itemView.setOnClickListener {
             if (position == 0) {
-              activity.startActivity(Intent(activity,HomeCategoryListActivity::class.java))
+              activity.startActivity(Intent(activity,ExploreActivity::class.java))
             } else {
                 activity.startActivity(
                     Intent(activity, CategoryWiseVideoActivity::class.java)

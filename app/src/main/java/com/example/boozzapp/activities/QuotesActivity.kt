@@ -28,7 +28,7 @@ class QuotesActivity : BaseActivity() {
     lateinit var adapter: QuotesTemplatesAdapter
     var quotesCategoryList = ArrayList<QuoteCategoryList?>()
     var list = ArrayList<QuotesTemplatesItem?>()
-    var sort_by = "newest"
+    var sortBy = "newest"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qutoes)
@@ -62,7 +62,7 @@ class QuotesActivity : BaseActivity() {
     private fun quotesCategory() {
         showProgress()
         val retrofitHelper = RetrofitHelper(activity)
-        var call: Call<ResponseBody> =
+        val call: Call<ResponseBody> =
             retrofitHelper.api().quotesCategories(
                 storeUserData.getString(Constants.USER_TOKEN),
             )
@@ -72,15 +72,15 @@ class QuotesActivity : BaseActivity() {
                 dismissProgress()
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
-                var categoryPojo = Gson().fromJson(responseString, QuotesCategory::class.java)
+                val categoryPojo = Gson().fromJson(responseString, QuotesCategory::class.java)
                 quotesCategoryList.add(QuoteCategoryList("", "Explore", 0))
                 categoryPojo.data?.let { quotesCategoryList.addAll(it) }
 
 
-                var categoryAdapter = QuotesCategoryAdapter(
+                val categoryAdapter = QuotesCategoryAdapter(
                     activity,
                     quotesCategoryList,
-                    sort_by
+                    sortBy
                 )
 
                 rvQuotesCategory.adapter = categoryAdapter
@@ -90,7 +90,7 @@ class QuotesActivity : BaseActivity() {
 
             override fun onError(code: Int, error: String) {
                 dismissProgress()
-                Log.i("Error", error.toString())
+                Log.i("Error", error)
             }
 
 
@@ -101,7 +101,7 @@ class QuotesActivity : BaseActivity() {
         if (page == 1)
             showProgress()
         val retrofitHelper = RetrofitHelper(activity)
-        var call: Call<ResponseBody> =
+        val call: Call<ResponseBody> =
             retrofitHelper.api().quotesList(page)
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
@@ -116,12 +116,12 @@ class QuotesActivity : BaseActivity() {
                 totalPage = pojo.data!!.total_page!!.toInt()
                 if (page == 1) {
                     list.clear()
-                    list.addAll(pojo.data!!.templates!!)
+                    list.addAll(pojo.data.templates!!)
 
                     adapter =
                         QuotesTemplatesAdapter(activity, list, rvQuotesList)
                     activity.rvQuotesList.adapter = adapter
-                    adapter!!.setOnLoadMoreListener(object :
+                    adapter.setOnLoadMoreListener(object :
                         QuotesTemplatesAdapter.OnLoadMoreListener {
                         override fun onLoadMore() {
                             if (page < totalPage) {
@@ -139,7 +139,7 @@ class QuotesActivity : BaseActivity() {
                     })
                 } else {
                     list.removeAt(list.size - 1)
-                    list.addAll(pojo.data!!.templates!!)
+                    list.addAll(pojo.data.templates!!)
 
                     adapter.notifyItemRemoved(list.size - 1)
                     adapter.notifyItemRangeChanged(list.size - 1, list.size)

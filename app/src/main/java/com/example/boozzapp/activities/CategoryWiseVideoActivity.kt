@@ -21,8 +21,8 @@ class CategoryWiseVideoActivity : BaseActivity() {
     var page = 1
     lateinit var adapter: CategoryWiseVideoAdapter
     var list = ArrayList<TemplatesItem?>()
-    var sortby = ""
-    var categoryID = ""
+    var sortBy = ""
+    private var categoryID = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
         }
 
         if (intent.getStringExtra("sortBy") != null && intent.getStringExtra("sortBy") != "") {
-            sortby = intent.getStringExtra("sortBy").toString()
+            sortBy = intent.getStringExtra("sortBy").toString()
         }
 
         if (intent.getStringExtra("categoryId") != null && intent.getStringExtra("categoryId") != "") {
@@ -45,7 +45,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
         }
 
-        Log.i("TAG", "onCreate:$sortby ")
+        Log.i("TAG", "onCreate:$sortBy ")
         Log.i("TAG", "onCreate:$categoryID ")
         categoryWiseVideo()
 
@@ -56,9 +56,9 @@ class CategoryWiseVideoActivity : BaseActivity() {
         if (page == 1)
             showProgress()
         val retrofitHelper = RetrofitHelper(activity)
-        var call: Call<ResponseBody> =
+        val call: Call<ResponseBody> =
             retrofitHelper.api().categoryWiseVideo(
-                sortby, categoryID, page
+                sortBy, categoryID, page
             )
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
@@ -74,18 +74,18 @@ class CategoryWiseVideoActivity : BaseActivity() {
                     return
                 }
                 totalPage = pojo.data!!.total_page!!.toInt()
-                if (pojo.data?.templates.isNullOrEmpty()) {
+                if (pojo.data.templates.isNullOrEmpty()) {
                     // Return if the templates list is null or empty
                     return
                 }
                 if (page == 1) {
                     list.clear()
-                    list.addAll(pojo.data.templates!!)
+                    list.addAll(pojo.data.templates)
 
                     adapter =
                         CategoryWiseVideoAdapter(activity, list, rvCategoriesWiseVideo)
                     activity.rvCategoriesWiseVideo.adapter = adapter
-                    adapter!!.setOnLoadMoreListener(object :
+                    adapter.setOnLoadMoreListener(object :
                         CategoryWiseVideoAdapter.OnLoadMoreListener {
                         override fun onLoadMore() {
                             if (page < totalPage) {
@@ -103,7 +103,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
                     })
                 } else {
                     list.removeAt(list.size - 1)
-                    list.addAll(pojo.data.templates!!)
+                    list.addAll(pojo.data.templates)
 
                     adapter.notifyItemRemoved(list.size - 1)
                     adapter.notifyItemRangeChanged(list.size - 1, list.size)

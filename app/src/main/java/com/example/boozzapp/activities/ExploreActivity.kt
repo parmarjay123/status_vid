@@ -10,17 +10,17 @@ import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_video_category_list.*
+import kotlinx.android.synthetic.main.activity_explore.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
-class HomeCategoryListActivity : BaseActivity() {
+class ExploreActivity : BaseActivity() {
     var homeCategoryList = ArrayList<CategoryList?>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video_category_list)
+        setContentView(R.layout.activity_explore)
         activity = this
         storeUserData = StoreUserData(activity)
 
@@ -33,7 +33,7 @@ class HomeCategoryListActivity : BaseActivity() {
     private fun videoCategory() {
         showProgress()
         val retrofitHelper = RetrofitHelper(activity)
-        var call: Call<ResponseBody> =
+        val call: Call<ResponseBody> =
             retrofitHelper.api().homeCategories(
                 storeUserData.getString(Constants.USER_TOKEN),
             )
@@ -43,19 +43,19 @@ class HomeCategoryListActivity : BaseActivity() {
                 dismissProgress()
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
-                var categoryPojo = Gson().fromJson(responseString, HomeCategoryPojo::class.java)
+                val categoryPojo = Gson().fromJson(responseString, HomeCategoryPojo::class.java)
                 categoryPojo.data?.let { homeCategoryList.addAll(it) }
-                var HomeCategoryListAdapter = HomeCategoryListAdapter(
+                val homeCategoryListAdapter = HomeCategoryListAdapter(
                     activity,
                     homeCategoryList,
                 )
 
-                rvVideoCatList.adapter = HomeCategoryListAdapter
+                rvVideoCatList.adapter = homeCategoryListAdapter
             }
 
             override fun onError(code: Int, error: String) {
                 dismissProgress()
-                Log.i("Error", error.toString())
+                Log.i("Error", error)
             }
 
 
