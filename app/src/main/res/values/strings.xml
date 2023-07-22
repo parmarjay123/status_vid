@@ -33,5 +33,7 @@
     <string name="rate_app">Rate App</string>
     <string name="check_for_update">Check For Update</string>
     <string name="explore">Explore</string>
+    <string name="suggestions">Quotes Suggestions</string>
+    <string name="explore_list">Explore List</string>
 
 </resources>

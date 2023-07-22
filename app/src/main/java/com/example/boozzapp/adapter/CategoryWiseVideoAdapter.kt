@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
 import com.example.boozzapp.activities.PreviewActivity
-import com.example.boozzapp.pojo.TemplatesItem
+import com.example.boozzapp.pojo.ExploreTemplatesItem
 import kotlinx.android.synthetic.main.row_home_list.view.*
 
 
 class CategoryWiseVideoAdapter(
     val activity: AppCompatActivity,
-    var items: ArrayList<TemplatesItem?>,
+    var items: ArrayList<ExploreTemplatesItem?>,
     recyclerView: RecyclerView,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

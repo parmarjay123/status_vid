@@ -36,13 +36,23 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvQuotesCatList"
+        android:id="@+id/rvExploreQuotesVideo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3"
-        tools:listitem="@layout/row_quotes_explore_list"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/row_explore_quote_list" />
+
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_5sdp"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/_12sdp"
+        app:chipSpacingVertical="@dimen/_7sdp" />
 
 </LinearLayout>

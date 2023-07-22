@@ -7,7 +7,7 @@ import android.util.Log
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.CategoryWiseVideoAdapter
 import com.example.boozzapp.pojo.HomeTemplate
-import com.example.boozzapp.pojo.TemplatesItem
+import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.google.gson.Gson
@@ -20,7 +20,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
     var totalPage = 1
     var page = 1
     lateinit var adapter: CategoryWiseVideoAdapter
-    var list = ArrayList<TemplatesItem?>()
+    var list = ArrayList<ExploreTemplatesItem?>()
     var sortBy = ""
     private var categoryID = ""
 

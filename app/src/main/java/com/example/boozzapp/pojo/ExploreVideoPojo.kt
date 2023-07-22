@@ -5,36 +5,30 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class HomeTemplate(
+data class ExploreVideoPojo(
 
-    @field:SerializedName("data")
-    val data: TemplateData? = null,
+	@field:SerializedName("data")
+    val data: ExploreVideoData? = null,
 
-    @field:SerializedName("message")
+	@field:SerializedName("message")
     val message: String? = "",
 
-    @field:SerializedName("status")
+	@field:SerializedName("status")
     val status: Boolean? = false
 ) : Parcelable
 
 @Parcelize
-data class TemplateData(
+data class ExploreVideoData(
 
-    @field:SerializedName("templates")
+	@field:SerializedName("templates")
     val templates: List<ExploreTemplatesItem?>? = emptyList(),
 
-    @field:SerializedName("categories")
-    val categories: List<CategoriesItem?>? = emptyList(),
-
-    @field:SerializedName("page_size")
-    val pageSize: String? = "",
-
-    @field:SerializedName("total_page")
-    val total_page: String? = ""
+	@field:SerializedName("page_size")
+    val pageSize: String? = ""
 ) : Parcelable
 
 @Parcelize
-data class TemplatesItem(
+data class ExploreTemplatesItem(
 
     @field:SerializedName("zip")
     val zip: String? = "",
@@ -89,20 +83,4 @@ data class TemplatesItem(
 
     @field:SerializedName("height")
     val height: String? = ""
-) : Parcelable
-
-@Parcelize
-data class CategoriesItem(
-
-    @field:SerializedName("image_url")
-    val imageUrl: String? = "",
-
-    @field:SerializedName("name")
-    val name: String? = "",
-
-    @field:SerializedName("id")
-    val id: Int? = 0,
-
-    @field:SerializedName("sort_by")
-    val sortBy: String? = ""
 ) : Parcelable

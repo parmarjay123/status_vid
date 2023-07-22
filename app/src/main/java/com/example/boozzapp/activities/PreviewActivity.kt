@@ -11,7 +11,7 @@ import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.example.boozzapp.R
-import com.example.boozzapp.pojo.TemplatesItem
+import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.utils.PartyZipFileManager
 import com.example.boozzapp.utils.StoreUserData
 import com.google.android.exoplayer2.ExoPlayer
@@ -25,7 +25,7 @@ import java.io.File
 class PreviewActivity : BaseActivity() {
     lateinit var players: SimpleExoPlayer
     private var isPlaying: Boolean = true
-    private lateinit var videoPojo: TemplatesItem
+    private lateinit var videoPojo: ExploreTemplatesItem
     private var zipFilePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

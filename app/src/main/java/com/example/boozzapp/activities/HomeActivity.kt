@@ -1,15 +1,10 @@
 package com.example.boozzapp.activities
 
-import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
@@ -18,7 +13,7 @@ import com.example.boozzapp.adapter.HomeTemplatesAdapter
 import com.example.boozzapp.pojo.CategoryList
 import com.example.boozzapp.pojo.HomeCategoryPojo
 import com.example.boozzapp.pojo.HomeTemplate
-import com.example.boozzapp.pojo.TemplatesItem
+import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
@@ -27,9 +22,6 @@ import kotlinx.android.synthetic.main.activity_home.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 class HomeActivity : BaseActivity() {
     var totalPage = 1
@@ -37,20 +29,14 @@ class HomeActivity : BaseActivity() {
     lateinit var adapter: HomeTemplatesAdapter
     var homeCategoryList = ArrayList<CategoryList?>()
 
-    var list = ArrayList<TemplatesItem?>()
+    var list = ArrayList<ExploreTemplatesItem?>()
     var sortBy = "newest"
-    val permissionList = arrayOf(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         activity = this
         storeUserData = StoreUserData(activity)
-
-
 
         tvQuotes.setOnClickListener {
             it.isClickable = false
@@ -110,73 +96,12 @@ class HomeActivity : BaseActivity() {
             page = 1
             homeTemplateList(sortBy)
             ivClose.performClick()
-
-        }
-
-        val watermark_path: String =
-            getZipDirectoryPath(activity) + getString(R.string.watermark)
-        val watermark_file = File(watermark_path)
-        if (!watermark_file.exists()) {
-            try {
-                generateWatermark()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
         }
 
         homeCategories()
 
     }
 
-
-    private fun hasPermissions(vararg permissions: String): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && activity != null && permissions != null) {
-            for (permission in permissions) {
-                if (ActivityCompat.checkSelfPermission(
-                        activity,
-                        permission
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    return false
-                }
-            }
-        }
-        return true
-    }
-
-    @Throws(IOException::class)
-    private fun generateWatermark() {
-        val file = getZipDirectoryPath(activity) + getString(R.string.watermark)
-        try {
-            val inputStream = assets.open(getString(R.string.watermark))
-            try {
-                val outputStream = FileOutputStream(file)
-                try {
-                    val buf = ByteArray(1024)
-                    var len: Int
-                    while (inputStream.read(buf).also { len = it } > 0) {
-                        outputStream.write(buf, 0, len)
-                    }
-                } finally {
-                    outputStream.close()
-                }
-            } finally {
-                inputStream.close()
-            }
-        } catch (e: IOException) {
-            throw IOException("Could not open robot png", e)
-        }
-    }
-
-    private fun getZipDirectoryPath(mContext: Context): String {
-        val externalDirectory = mContext.filesDir.absolutePath
-        val dir = File(
-            externalDirectory + File.separator +
-                    mContext.resources.getString(R.string.zip_directory)
-        )
-        if (!dir.exists()) dir.mkdirs()
-        return dir.absolutePath + File.separator
-    }
 
     private fun homeCategories() {
         val retrofitHelper = RetrofitHelper(activity)
