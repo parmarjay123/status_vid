@@ -14,6 +14,17 @@ interface API {
         @Header("Authorization") Authorization: String,
     ): Call<ResponseBody>
 
+    @GET("/api/v1/suggestions")
+    fun exploreVideoSuggestions(
+        @Header("Authorization") Authorization: String,
+    ): Call<ResponseBody>
+
+
+    @GET("/api/v1/quoteSuggestions")
+    fun exploreQuotesSuggestions(
+        @Header("Authorization") Authorization: String,
+    ): Call<ResponseBody>
+
 
     @GET("/api/v1/quoteCategories")
     fun quotesCategories(
@@ -44,7 +55,6 @@ interface API {
         @Field("category_id") category_id: String,
         @Field("page") page: Int
     ): Call<ResponseBody>
-
 
 
     @FormUrlEncoded
