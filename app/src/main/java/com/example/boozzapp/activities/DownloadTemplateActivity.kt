@@ -1,9 +1,14 @@
 package com.example.boozzapp.activities
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.ExploreVideoAdapter
@@ -22,6 +27,8 @@ import kotlinx.android.synthetic.main.activity_download_template.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import java.io.File
+import java.io.FileOutputStream
 
 class DownloadTemplateActivity : BaseActivity() {
     var downloadVideoSuggestionList = ArrayList<ExploreTemplatesItem?>()
@@ -35,6 +42,99 @@ class DownloadTemplateActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
 
         downloadTempBack.setOnClickListener { finish() }
+
+        tvHome.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()
+        }
+
+        ivDownloadWtsApp.setOnClickListener {
+            val videoUri: Uri? = intent.getParcelableExtra("uri")
+            if (videoUri!=null){
+                val savedVideoUri = videoUri?.let { it1 -> saveVideoToLocalStorage(it1) }
+                if (savedVideoUri != null) {
+                    shareVideoToWhatsApp(savedVideoUri)
+
+
+                 /*   if (isWhatsAppInstalled()) {
+
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            "Whats App is not Installed, Please Install it first.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }*/
+
+                }
+            }else{
+                Toast.makeText(
+                    activity,
+                    "Something Went Wrong...",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+
+        }
+
+        ivDownloadInsta.setOnClickListener {
+            val videoUri: Uri? = intent.getParcelableExtra("uri")
+            if (videoUri!=null){
+                val savedVideoUri = videoUri?.let { it1 -> saveVideoToLocalStorage(it1) }
+                if (savedVideoUri != null) {
+                    shareToInstagramStories(savedVideoUri)
+
+
+                    /*   if (isWhatsAppInstalled()) {
+
+                       } else {
+                           Toast.makeText(
+                               activity,
+                               "Whats App is not Installed, Please Install it first.",
+                               Toast.LENGTH_LONG
+                           ).show()
+                       }*/
+
+                }
+            }else{
+                Toast.makeText(
+                    activity,
+                    "Something Went Wrong...",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+        ivDownloadFB.setOnClickListener {
+            val videoUri: Uri? = intent.getParcelableExtra("uri")
+            if (videoUri!=null){
+                val savedVideoUri = videoUri?.let { it1 -> saveVideoToLocalStorage(it1) }
+                if (savedVideoUri != null) {
+                    shareToStories(savedVideoUri)
+
+
+                    /*   if (isWhatsAppInstalled()) {
+
+                       } else {
+                           Toast.makeText(
+                               activity,
+                               "Whats App is not Installed, Please Install it first.",
+                               Toast.LENGTH_LONG
+                           ).show()
+                       }*/
+
+                }
+            }else{
+                Toast.makeText(
+                    activity,
+                    "Something Went Wrong...",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
 
         val loader: ProgressBar = progressLoaders
         loader.isVisible = true
@@ -90,6 +190,7 @@ class DownloadTemplateActivity : BaseActivity() {
             }
         }
 
+
         downloadSuggestionList()
 
     }
@@ -112,6 +213,90 @@ class DownloadTemplateActivity : BaseActivity() {
             }
 
         }
+    }
+
+    private fun saveVideoToLocalStorage(videoUri: Uri): Uri? {
+        val filename = "my_video.mp4"
+        val folder = File(getExternalFilesDir(Environment.DIRECTORY_MOVIES), "MyAppFolder")
+        folder.mkdirs()
+
+        val file = File(folder, filename)
+        try {
+            val inputStream = contentResolver.openInputStream(videoUri)
+            val outputStream = FileOutputStream(file)
+            inputStream?.copyTo(outputStream)
+            inputStream?.close()
+            outputStream.flush()
+            outputStream.close()
+            return FileProvider.getUriForFile(this, "$packageName.provider", file)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    private fun shareVideoToWhatsApp(videoUri: Uri) {
+        val intent = Intent("android.intent.action.SEND")
+        intent.type = "video/*"
+        intent.putExtra(Intent.EXTRA_STREAM, videoUri)
+        intent.setPackage("com.whatsapp")
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivity(Intent.createChooser(intent, "Share Video via WhatsApp"))
+
+    }
+
+    private fun shareToInstagramStories(videoUri: Uri) {
+        val intent = Intent("com.instagram.share.ADD_TO_STORY")
+        intent.setDataAndType(videoUri, "video/*")
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        startActivity(intent)
+        /*if (intent.resolveActivity(packageManager) != null) {
+
+        } else {
+            // Instagram is not installed on the device or no app can handle the intent
+            // Handle this case appropriately
+        }*/
+    }
+
+    private fun shareToStories(videoUri: Uri) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "video/*"
+        intent.putExtra(Intent.EXTRA_STREAM, videoUri)
+
+        val chooserIntent = Intent.createChooser(intent, "Share video to Stories")
+        val activities = packageManager.queryIntentActivities(chooserIntent, 0)
+        val targetShareIntents = ArrayList<Intent>()
+
+        for (ri in activities) {
+            val packageName = ri.activityInfo.packageName
+            if (packageName.contains("com.facebook.katana")) {
+                val targetIntent = Intent(Intent.ACTION_SEND)
+                targetIntent.type = "video/*"
+                targetIntent.putExtra(Intent.EXTRA_STREAM, videoUri)
+                targetIntent.setPackage(packageName)
+                targetShareIntents.add(targetIntent)
+            }
+        }
+
+        if (targetShareIntents.isNotEmpty()) {
+            val chooser = Intent.createChooser(targetShareIntents.removeAt(0), "Share video to Stories")
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetShareIntents.toTypedArray())
+            startActivity(chooser)
+        } else {
+            // Instagram and Facebook are not installed on the device or no app can handle the intent
+            // Handle this case appropriately
+        }
+    }
+
+
+
+
+
+    private fun isWhatsAppInstalled(): Boolean {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("smsto:")
+        intent.setPackage("com.whatsapp")
+        return packageManager.resolveActivity(intent, 0) != null
     }
 
     private fun downloadSuggestionList() {
