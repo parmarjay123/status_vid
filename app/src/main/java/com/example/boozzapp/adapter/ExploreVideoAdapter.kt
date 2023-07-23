@@ -1,5 +1,6 @@
 package com.example.boozzapp.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
+import com.example.boozzapp.activities.PreviewActivity
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import kotlinx.android.synthetic.main.row_explore_quote_list.view.*
 
@@ -34,6 +36,13 @@ class ExploreVideoAdapter(
         val pojo = data[position]
 
         Glide.with(activity).load(pojo!!.thumbnailUrl).into(holder.itemView.ivExploreItem)
+
+        holder.itemView.setOnClickListener {
+            activity.startActivity(
+                Intent(activity, PreviewActivity::class.java)
+                    .putExtra("videoPojo", pojo)
+            );
+        }
 
 
     }

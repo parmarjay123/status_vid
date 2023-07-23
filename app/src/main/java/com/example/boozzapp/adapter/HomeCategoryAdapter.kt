@@ -47,7 +47,7 @@ class HomeCategoryAdapter(
 
         holder.itemView.setOnClickListener {
             if (position == 0) {
-              activity.startActivity(Intent(activity,ExploreActivity::class.java))
+              activity.startActivity(Intent(activity,ExploreActivity::class.java).putExtra("sortBy", sort_by))
             } else {
                 activity.startActivity(
                     Intent(activity, CategoryWiseVideoActivity::class.java)

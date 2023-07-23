@@ -4,13 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/black"
     tools:context=".activities.PreviewActivity">
 
     <ImageView
         android:id="@+id/ivQuotesFullImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
+        android:padding="@dimen/_5sdp"
+        android:layout_gravity="center"/>
 
 
     <ImageView

@@ -34,6 +34,9 @@
     <string name="check_for_update">Check For Update</string>
     <string name="explore">Explore</string>
     <string name="suggestions">Quotes Suggestions</string>
-    <string name="explore_list">Explore List</string>
+    <string name="explore_list">Categories:-</string>
+    <string name="video_suggestions">Video Suggestions</string>
+    <string name="home">Home</string>
+    <string name="saved_in_gallery">Saved In Gallery</string>
 
 </resources>

@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:gravity="center"
-                android:text="@string/suggestions"
+                android:text="@string/video_suggestions"
                 android:textColor="@color/blue_text"
                 android:textSize="@dimen/_16sdp"
                 android:textStyle="bold" />

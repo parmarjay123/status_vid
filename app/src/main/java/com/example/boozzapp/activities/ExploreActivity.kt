@@ -5,7 +5,10 @@ import android.util.Log
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.ExploreVideoAdapter
 import com.example.boozzapp.adapter.HomeCategoryListAdapter
-import com.example.boozzapp.pojo.*
+import com.example.boozzapp.pojo.CategoryList
+import com.example.boozzapp.pojo.ExploreTemplatesItem
+import com.example.boozzapp.pojo.ExploreVideoPojo
+import com.example.boozzapp.pojo.HomeCategoryPojo
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
@@ -18,6 +21,7 @@ import retrofit2.Response
 class ExploreActivity : BaseActivity() {
     var homeCategoryList = ArrayList<CategoryList?>()
     var exploreVideoSuggestionList = ArrayList<ExploreTemplatesItem?>()
+    var sort_by = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +31,10 @@ class ExploreActivity : BaseActivity() {
 
 
         ivVideoCatBack.setOnClickListener { finish() }
+
+        if (intent.getStringExtra("sortBy") != null) {
+            sort_by = intent.getStringExtra("sortBy").toString()
+        }
 
         exploreSuggestionList()
 
@@ -54,7 +62,7 @@ class ExploreActivity : BaseActivity() {
 
                 rvExploreVideo.adapter = exploreVideoListAdapter
 
-                  exploreCategoryList()
+                exploreCategoryList()
             }
 
             override fun onError(code: Int, error: String) {
@@ -85,6 +93,7 @@ class ExploreActivity : BaseActivity() {
                 val homeCategoryListAdapter = HomeCategoryListAdapter(
                     activity,
                     homeCategoryList,
+                    sort_by
                 )
 
                 rvVideoCatList.adapter = homeCategoryListAdapter

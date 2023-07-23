@@ -1,5 +1,6 @@
 package com.example.boozzapp.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
+import com.example.boozzapp.activities.CategoryWiseVideoActivity
 import com.example.boozzapp.pojo.CategoryList
 import kotlinx.android.synthetic.main.row_quotes_cat_list.view.*
 
@@ -14,6 +16,7 @@ import kotlinx.android.synthetic.main.row_quotes_cat_list.view.*
 class HomeCategoryListAdapter(
     val activity: AppCompatActivity,
     var data: ArrayList<CategoryList?>,
+    var sort_by: String
 
     ) : RecyclerView.Adapter<HomeCategoryListAdapter.ViewHolder>() {
 
@@ -36,11 +39,13 @@ class HomeCategoryListAdapter(
         holder.itemView.tvCatName.text = pojo!!.name
 
 
-        /*holder.itemView.setOnClickListener {
-            activity.startActivity(Intent(activity,CategoryWiseVideoActivity::class.java)
-                .putExtra("sortBy",sort_by).putExtra("categoryId",pojo.id.toString())
-                .putExtra("categoryTitle",pojo.name.toString()))
-        }*/
+        holder.itemView.setOnClickListener {
+          activity.startActivity(
+                    Intent(activity, CategoryWiseVideoActivity::class.java)
+                        .putExtra("sortBy", sort_by).putExtra("categoryId", pojo.id.toString())
+                        .putExtra("categoryTitle", pojo.name.toString())
+                )
+        }
 
 
     }

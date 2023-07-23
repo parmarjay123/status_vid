@@ -8,10 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
 import com.example.boozzapp.activities.CategoryWiseQuotesActivity
-import com.example.boozzapp.activities.QuotesCategoryListActivity
+import com.example.boozzapp.activities.ExploreQuotesActivity
 import com.example.boozzapp.pojo.QuoteCategoryList
 import kotlinx.android.synthetic.main.row_quotes_category.view.*
-import java.sql.Struct
 
 
 class QuotesCategoryAdapter(
@@ -41,7 +40,7 @@ class QuotesCategoryAdapter(
 
         holder.itemView.setOnClickListener {
             if (position == 0) {
-                activity.startActivity(Intent(activity, QuotesCategoryListActivity::class.java))
+                activity.startActivity(Intent(activity, ExploreQuotesActivity::class.java))
             }else{
                 activity.startActivity(Intent(activity,CategoryWiseQuotesActivity::class.java)
                     .putExtra("sortBy",sort_by).putExtra("categoryId",pojo.id.toString())

@@ -17,6 +17,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.BoozApp">
         <activity
+            android:name=".activities.DownloadTemplateActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.ExploreActivity"
             android:exported="false">
             <meta-data
@@ -38,7 +45,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".activities.QuotesCategoryListActivity"
+            android:name=".activities.ExploreQuotesActivity"
             android:exported="false"
             android:screenOrientation="portrait">
             <meta-data

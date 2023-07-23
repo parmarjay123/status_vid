@@ -11,13 +11,12 @@ import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_explore.*
 import kotlinx.android.synthetic.main.activity_quotes_category_list.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
-class QuotesCategoryListActivity : BaseActivity() {
+class ExploreQuotesActivity : BaseActivity() {
     var quotesCategoryList = ArrayList<QuoteCategoryList?>()
     var exploreVideoSuggestionList = ArrayList<ExploreQuotesTemplatesItem?>()
 
