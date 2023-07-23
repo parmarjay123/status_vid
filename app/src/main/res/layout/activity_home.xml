@@ -18,7 +18,7 @@
             android:layout_height="@dimen/_50sdp"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_25sdp">
+            android:paddingHorizontal="@dimen/_16sdp">
 
             <LinearLayout
                 android:id="@+id/llSearch"
@@ -27,12 +27,12 @@
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/bg_rounded_white"
                 android:gravity="start"
-                android:paddingHorizontal="@dimen/_18sdp"
-                android:paddingVertical="@dimen/_5sdp">
+                android:paddingHorizontal="@dimen/_22sdp"
+                android:paddingVertical="@dimen/_6sdp">
 
                 <ImageView
-                    android:layout_width="@dimen/_16sdp"
-                    android:layout_height="@dimen/_16sdp"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/search_icon" />
             </LinearLayout>
@@ -50,12 +50,12 @@
                 android:layout_gravity="end|center"
                 android:background="@drawable/bg_rounded_white"
                 android:gravity="center"
-                android:paddingHorizontal="@dimen/_18sdp"
-                android:paddingVertical="@dimen/_5sdp">
+                android:paddingHorizontal="@dimen/_22sdp"
+                android:paddingVertical="@dimen/_6sdp">
 
                 <ImageView
-                    android:layout_width="@dimen/_16sdp"
-                    android:layout_height="@dimen/_16sdp"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/setting_icon" />
             </LinearLayout>

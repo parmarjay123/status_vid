@@ -134,8 +134,6 @@ class EditVideoActivity : BaseActivity() {
         performTaskWithCallback(jsonFilePath)
 
 
-
-
         loadingAnim.setProgressVector(resources.getDrawable(R.drawable.black_three_dot_circle))
         loadingAnim.setTextViewVisibility(true)
         loadingAnim.setTextStyle(true)
@@ -412,6 +410,7 @@ class EditVideoActivity : BaseActivity() {
         holdDialog.show()
 
         holdDialog.llRemoveWaterMark.setOnClickListener {
+            llImageList.isVisible=false
             loaderView.isVisible = true
             isRemoveWaterMark = true
             exportVideo("export")
@@ -421,6 +420,7 @@ class EditVideoActivity : BaseActivity() {
 
         holdDialog.ivCloseDialog.setOnClickListener {
             if (!isRemoveWaterMark && !fromWatermark) {
+                llImageList.isVisible=false
                 loaderView.isVisible = true
                 saveVideo(outputVideo, "export")
             }
@@ -447,9 +447,28 @@ class EditVideoActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        pauseDuration = 0
-        isPlaying = true
-        playPausePlayer(isPlaying)
+        if (flagChanges) {
+            exo_thumb.visibility = View.VISIBLE
+            remove.isVisible = true
+            exo_thumb.setImageBitmap(bitmap_thumb)
+            if (!flagExporting) {
+                rl_preview_control.setVisibility(View.VISIBLE)
+            }
+            Log.i("VideoPlayer>>>", "flagChanges")
+        } else {
+            Log.i("VideoPlayer>>>", "not flagChanges")
+            if (!isPlaying) {
+                exo_thumb.visibility = View.VISIBLE
+                exo_thumb.setImageBitmap(bitmap_thumb)
+                playPausePlayer(isPlaying)
+            } else {
+                playPausePlayer(isPlaying)
+            }
+            if (!flagExporting) {
+                initializeExoPlayer()
+            }
+        }
+
 
         /*   if (flagIsFirstTime) {
                flagIsFirstTime = false
@@ -962,11 +981,6 @@ class EditVideoActivity : BaseActivity() {
     }
 
 
-    fun getCamelCaseFontName(fontName: String): String {
-        val words = fontName.split("_").map { it.capitalize() }
-        return words.joinToString("")
-    }
-
     private fun killExportProgress() {
         try {
             Log.d("killExportProg", "id $executionId")
@@ -983,10 +997,6 @@ class EditVideoActivity : BaseActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        killExportProgress()
-    }
 
     //Save video with different option...
     private fun saveVideo(filePath: String, exportType: String) {
@@ -1002,13 +1012,16 @@ class EditVideoActivity : BaseActivity() {
         val srcFile = File(srcPath)
         val dstFile = File(dstPath)
         try {
+            llImageList.isVisible=true
             loaderView.isVisible = false
             copyFileToStorage(srcFile, dstFile, exportType)
             refreshGallery(activity, dstFile)
         } catch (e: java.lang.Exception) {
             loaderView.isVisible = false
+            llImageList.isVisible=true
 
         }
+
     }
 
     //Copy file to app folder...
@@ -1050,19 +1063,19 @@ class EditVideoActivity : BaseActivity() {
     }
 
     private fun refreshGallery(mContext: Activity, file: File) {
-        loaderView.isVisible = false
         val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         val contentUri = Uri.fromFile(file)
         mediaScanIntent.data = contentUri
-        mContext.sendBroadcast(mediaScanIntent)
-
         startActivity(
             Intent(this, DownloadTemplateActivity::class.java).putExtra(
                 "uri",
                 contentUri
             )
         )
+        mContext.sendBroadcast(mediaScanIntent)
+
     }
+
 
     private fun getDownloadedPath(mContext: Context): String {
         val externalDirectory: String

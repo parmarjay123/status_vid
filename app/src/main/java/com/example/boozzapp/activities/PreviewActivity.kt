@@ -1,11 +1,11 @@
 package com.example.boozzapp.activities
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
-import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import com.downloader.Error
 import com.downloader.OnDownloadListener
@@ -36,8 +36,7 @@ class PreviewActivity : BaseActivity() {
         videoPojo = intent.getParcelableExtra("videoPojo")!!
 
 
-        val loader: ProgressBar = progressLoader
-        loader.isVisible = true
+        frameLoader.isVisible = true
         players = SimpleExoPlayer.Builder(activity).build()
         player.player = players
         player.useController = false
@@ -46,7 +45,7 @@ class PreviewActivity : BaseActivity() {
                 super.onPlaybackStateChanged(state)
                 when (state) {
                     ExoPlayer.STATE_READY -> {
-                        loader.isVisible = false
+                        players.pause()
                     }
 
                     ExoPlayer.STATE_ENDED -> {
@@ -71,8 +70,19 @@ class PreviewActivity : BaseActivity() {
         isPlaying = true
 
 
+
+        previewLoader.setProgressVector(resources.getDrawable(R.drawable.black_three_dot_circle))
+        previewLoader.setTextViewVisibility(true)
+        previewLoader.setTextStyle(true)
+        previewLoader.setTextColor(Color.WHITE)
+        previewLoader.setBackgroundColor(Color.BLACK)
+        previewLoader.setTextSize(12F)
+        previewLoader.setTextMsg("Downloading Video Please Wait...")
+        previewLoader.setEnlarge(5)
+
+
         videoPojo.let {
-            showProgress()
+            frameLoader.isVisible = true
             downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
         }
 
@@ -151,12 +161,17 @@ class PreviewActivity : BaseActivity() {
                     Log.i("TAG", "onDownloadComplete:  after" + getZipDirectoryPath()!!)
                     val unzipTask = UnZipFileFromURLs(this@PreviewActivity::getZipDirectoryPath)
                     unzipTask.execute(zipFilePath)
-                    dismissProgress()
+                    frameLoader.isVisible = false
+                    llBottomMenu.isVisible = true
+                    players.play()
 
 
                 }
 
                 override fun onError(error: Error) {
+                    frameLoader.isVisible = false
+                    players.play()
+
                     Log.i(
                         "TAG",
                         "onDownloadComplete: " + "Download failed" + error.serverErrorMessage

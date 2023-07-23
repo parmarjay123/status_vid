@@ -37,14 +37,15 @@
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_20sdp"
-                android:src="@drawable/confirm_icon" />
+                android:src="@drawable/confirm_icon"
+                app:tint="@color/black" />
 
             <com.example.boozzapp.controls.CTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_12sdp"
                 android:text="@string/saved_in_gallery"
-                android:textColor="@color/text_pink_color"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_16sdp"
                 android:textStyle="bold" />
 
@@ -92,6 +93,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center">
+
                     <ProgressBar
                         android:id="@+id/progressLoaders"
                         android:layout_width="wrap_content"
