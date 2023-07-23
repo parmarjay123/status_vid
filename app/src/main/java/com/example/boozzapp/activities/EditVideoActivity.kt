@@ -32,9 +32,10 @@ import com.arthenica.mobileffmpeg.Statistics
 import com.arthenica.mobileffmpeg.StatisticsCallback
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.TemplateImageAdapter
+import com.example.boozzapp.controls.CustomDialog
+import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.PartyModelCommandImages
 import com.example.boozzapp.pojo.PartyModelStaticInputs
-import com.example.boozzapp.pojo.TemplatesItem
 import com.example.boozzapp.utils.StoreUserData
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.exoplayer2.Player
@@ -59,7 +60,7 @@ import java.math.BigDecimal
 import java.util.*
 
 class EditVideoActivity : BaseActivity() {
-    lateinit var videoPojo: TemplatesItem
+    lateinit var videoPojo: ExploreTemplatesItem
     private var player: SimpleExoPlayer? = null
     private var mediaSource: MediaSource? = null
     private var dataSourceFactory: DataSource.Factory? = null
@@ -85,7 +86,7 @@ class EditVideoActivity : BaseActivity() {
     private var audioGap: Long = 0
     private var executionId: Long = 0
     private var flagVideoDuration = 0
-    private val video_duration = 0
+    private var video_duration = 0
     private var video_total_dur = 0
     private var fileNameInstaCrop: String? = null
     private var bitmap_thumb: Bitmap? = null
@@ -125,6 +126,7 @@ class EditVideoActivity : BaseActivity() {
         dataSourceFactory = buildDataSourceFactory()
         mediaPlayer = MediaPlayer()
 
+
         zipFileName = videoPojo.zip?.lastIndexOf(".")?.let { videoPojo.zip?.substring(0, it) } ?: ""
         val jsonFile = "python.json"
         val jsonFilePath: String =
@@ -132,8 +134,20 @@ class EditVideoActivity : BaseActivity() {
         performTaskWithCallback(jsonFilePath)
 
 
+
+
+        loadingAnim.setProgressVector(resources.getDrawable(R.drawable.black_three_dot_circle))
+        loadingAnim.setTextViewVisibility(true)
+        loadingAnim.setTextStyle(true)
+        loadingAnim.setTextColor(Color.WHITE)
+        loadingAnim.setBackgroundColor(Color.BLACK)
+        loadingAnim.setTextSize(12F)
+        loadingAnim.setTextMsg("Downloading Video Please Wait...")
+        loadingAnim.setEnlarge(5)
+
         try {
             outputVideo = getZipDirectoryPath(this) + zipFileName + File.separator + "output.mp4"
+
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
@@ -157,9 +171,11 @@ class EditVideoActivity : BaseActivity() {
         tvEditSongName.text = videoPojo.title
 
         ivCloseWatermark.setOnClickListener {
-            showDialog()
+            showDialog(true)
         }
-
+        tvExport.setOnClickListener {
+            showDialog(false)
+        }
 
         clPreview.setOnClickListener {
             playPausePlayer(isPlaying)
@@ -174,9 +190,6 @@ class EditVideoActivity : BaseActivity() {
                 playPausePlayer(isPlaying)
             }
 
-        }
-        tvExport.setOnClickListener {
-            showDialog()
         }
 
 
@@ -217,6 +230,29 @@ class EditVideoActivity : BaseActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (flagExporting || flagChanges) {
+            val alert = CustomDialog(activity)
+            alert.setCancelable(false)
+            alert.show()
+            alert.setTitle("Are you sure?")
+            alert.setMessage("Leave edit page?")
+            alert.setPositiveButton("Yes") {
+                killExportProgress()
+                File(finalVideoPath).delete()
+                finalVideoPath = ""
+                alert.dismiss()
+                super.onBackPressed()
+            }
+            alert.setNegativeButton("No") {
+                alert.dismiss()
+            }
+        } else {
+            super.onBackPressed()
+
+        }
+
+    }
 
     override fun onStop() {
         super.onStop()
@@ -258,6 +294,10 @@ class EditVideoActivity : BaseActivity() {
         if (video_obj != null) {
             audioGap = video_obj.getString("duration").toDouble().toLong()
         }
+
+        if (video_obj != null) {
+            video_duration = video_obj.getString("duration").toInt()
+        }
         if (video_obj != null) {
             flagVideoDuration = video_obj.getString("duration").toInt()
         }
@@ -271,14 +311,31 @@ class EditVideoActivity : BaseActivity() {
                 imagesList.add(modelCommandImages)
                 for (i in 0 until textDataArray!!.length()) {
                     val textObject = textDataArray!!.getJSONObject(i)
-                    textObject.put("replaced_value", "")
-                    textObject.put("date", 0)
-                    textObject.put("month", 0)
-                    textObject.put("year", 0)
-                    textObject.put("hour", 0)
-                    textObject.put("minutes", 0)
+                    val oldValue = textObject.getString("label")
+                    // Replace the old value with the new value here
+                    val newValue = "Your New Text Value" // Replace this with the new label value
+                    textObject.put("label", oldValue)
+
+                    // Optional: If you want to update the "value" field as well, you can do it like this
+                    textObject.put(
+                        "value",
+                        textObject.getString("value")
+                    ) // Replace this with the new value
                 }
             }
+            /*  if (textDataArray != null && textDataArray!!.length() > 0) {
+                  val modelCommandImages = PartyModelCommandImages("text", textDataArray!!)
+                  imagesList.add(modelCommandImages)
+                  for (i in 0 until textDataArray!!.length()) {
+                      val textObject = textDataArray!!.getJSONObject(i)
+                      textObject.put("replaced_value", "")
+                      textObject.put("date", 0)
+                      textObject.put("month", 0)
+                      textObject.put("year", 0)
+                      textObject.put("hour", 0)
+                      textObject.put("minutes", 0)
+                  }
+              }*/
         } catch (e: Exception) {
             // Handle any exceptions
         }
@@ -336,7 +393,7 @@ class EditVideoActivity : BaseActivity() {
         return dir.absolutePath + File.separator
     }
 
-    fun showDialog() {
+    fun showDialog(fromWatermark: Boolean) {
         val holdDialog = Dialog(activity)
         holdDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         holdDialog.setContentView(R.layout.dialog_watermark)
@@ -355,45 +412,32 @@ class EditVideoActivity : BaseActivity() {
         holdDialog.show()
 
         holdDialog.llRemoveWaterMark.setOnClickListener {
+            loaderView.isVisible = true
             isRemoveWaterMark = true
+            exportVideo("export")
             holdDialog.dismiss()
+
         }
 
         holdDialog.ivCloseDialog.setOnClickListener {
-            if (!isRemoveWaterMark) {
-                saveVideo(finalVideoPath, "export")
+            if (!isRemoveWaterMark && !fromWatermark) {
+                loaderView.isVisible = true
+                saveVideo(outputVideo, "export")
             }
             holdDialog.dismiss()
+
         }
 
-        /*    if (!flagExporting) {
-                processmessage.text = "Crafting your video… Please wait a moment!"
-                if (finalVideoPath != "" && File(finalVideoPath).exists()) {
-                    if (flagChanges) {
-                        exportVideo("export")
-                    } else {
-                        saveVideo(finalVideoPath, "export")
-                    }
-                } else {
-                    if (isRemoveWaterMark && !flagChanges) {
-                        if (finalVideoPath != "" && File(finalVideoPath).exists()) {
+        val watermark_path = getZipDirectoryPath(activity) + getString(R.string.watermark)
+        val watermark_file = File(watermark_path)
+        if (!watermark_file.exists()) {
+            try {
+                generateWatermark()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
 
-                        } else {
-                            val time = System.currentTimeMillis()
-                            fileName = "Boozz_$time.mp4"
-                            fileNameInstaCrop = "Boozz_Insta$time.mp4"
-                            finalVideoPath =
-                                File(getDownloadedPath(activity) + fileName).absolutePath
-                        }
-                        saveVideo(outputVideo, "export")
-                    } else {
-                        exportVideo("export")
-                    }
-                }
-            } else {
-                val animation = AnimationUtils.loadAnimation(activity, R.anim.shake_error)
-                ll_progress.startAnimation(animation)
-            }*/
     }
 
     private fun buildDataSourceFactory(): DataSource.Factory {
@@ -406,6 +450,32 @@ class EditVideoActivity : BaseActivity() {
         pauseDuration = 0
         isPlaying = true
         playPausePlayer(isPlaying)
+
+        /*   if (flagIsFirstTime) {
+               flagIsFirstTime = false
+           } else {
+               if (flagChanges) {
+                   mBinding.exoThumb.setVisibility(View.VISIBLE)
+                   mBinding.exoThumb.setImageBitmap(bitmap_thumb)
+                   if (!flagExporting) {
+                       if (notificationManagerCompat != null) notificationManagerCompat.cancel(
+                           PartyGlobals.video_noti_id
+                       )
+                       mBinding.previewControls.rlPreviewControl.setVisibility(View.VISIBLE)
+                   }
+               } else {
+                   if (!isPlaying) {
+                       mBinding.exoThumb.setVisibility(View.VISIBLE)
+                       mBinding.exoThumb.setImageBitmap(bitmap_thumb)
+                       playPausePlayer(false)
+                   } else {
+                       playPausePlayer(true)
+                   }
+                   if (!flagExporting) {
+                       initializeExoPlayer()
+                   }
+               }*/
+
     }
 
     //endregion
@@ -537,8 +607,6 @@ class EditVideoActivity : BaseActivity() {
 
                 imagesList.clear()
                 imagesList.addAll(updatedImageList)
-                Log.i("TAG", "onActivityResult: " + imagesList.toString())
-                Log.i("TAG", "onActivityResult: " + imagesList.size)
 
                 refreshImageAdapter()
                 isPlaying = false
@@ -573,151 +641,6 @@ class EditVideoActivity : BaseActivity() {
     }
 
 
-    private fun makwithoutwatercommand() {
-        filepathwithoutwater =
-            getDownloadedPath(activity) + "Boozz_" + System.currentTimeMillis() + 1 + ".mp4"
-        ffmpegcommandwithoutwater.clear()
-        try {
-            val str_e = rootJsonData!!.getJSONArray("e")
-            if (str_e.length() != 0) {
-                for (i in 0 until str_e.length()) {
-                    ffmpegcommandwithoutwater.add(replaceKeyWords(str_e.getString(i)))
-                }
-            }
-            // for images
-            for (i in imagesList.indices) {
-                if (!imagesList[i].imgName.equals("text")) {
-                    if (imagesList[i].prefix.length() !== 0) for (j in 0 until imagesList[i].prefix.length()) {
-                        ffmpegcommandwithoutwater.add(
-                            replaceKeyWords(
-                                imagesList[i].prefix.getString(j)
-                            )
-                        )
-                    }
-                    if (imagesList[i].imgPathExtra == null) ffmpegcommandwithoutwater.add(
-                        imagesList[i].imgPath
-                    ) else imagesList[i].imgPathExtra?.let {
-                        ffmpegcommandwithoutwater.add(
-                            it
-                        )
-                    }
-                    if (imagesList[i].postfix
-                            .length() !== 0
-                    ) for (j in 0 until imagesList[i].postfix.length()) {
-                        ffmpegcommandwithoutwater.add(
-                            replaceKeyWords(
-                                imagesList[i].postfix.getString(j)
-                            )
-                        )
-                    }
-                }
-            }
-            // for static inputs
-            val static_inputs = rootJsonData!!.getJSONArray("static_inputs")
-            for (i in 0 until static_inputs.length()) {
-                val st_in_obj = static_inputs.getJSONObject(i)
-                val path = getZipDirectoryPath(activity) +
-                        zipFileName + File.separator + st_in_obj.getString("name")
-                stcInputList.add(
-                    PartyModelStaticInputs(
-                        st_in_obj.getString("name"), path,
-                        st_in_obj.getJSONArray("prefix"),
-                        st_in_obj.getJSONArray("postfix")
-                    )
-                )
-                videoPath = stcInputList[0].videoPath
-                if (stcInputList[i].prefix
-                        .length() !== 0
-                ) for (j in 0 until stcInputList[i].prefix.length()) {
-                    ffmpegcommandwithoutwater.add(
-                        replaceKeyWords(
-                            stcInputList[i].prefix.getString(j)
-                        )
-                    )
-                }
-                ffmpegcommandwithoutwater.add(stcInputList[i].videoPath)
-                if (stcInputList[i].postfix.length() !== 0
-                ) for (j in 0 until stcInputList[i].postfix.length()) {
-                    ffmpegcommandwithoutwater.add(
-                        replaceKeyWords(
-                            stcInputList[i].postfix.getString(j)
-                        )
-                    )
-                }
-            }
-            val str_m = rootJsonData!!.getJSONArray("m")
-            if (str_m.length() != 0) {
-                for (i in 0 until str_m.length()) {
-                    ffmpegcommandwithoutwater.add(replaceKeyWords(str_m.getString(i)))
-                }
-            }
-            if (!isRemoveWaterMark) {
-                val img_count = imagesList.size
-                val startc_input_count = stcInputList.size
-                val total_count = img_count + startc_input_count
-                val half_dut = video_duration / 2
-                val add_watermarh =
-                    "[base_video];[base_video][$total_count]overlay=enable='between(t,0,$half_dut)':x=30:y=30[watermarked_part1];[watermarked_part1][$total_count]overlay=enable='between(t,$half_dut,$video_duration)':x=(main_w-overlay_w-30):y=(main_h-overlay_h-30)"
-                val str_i = rootJsonData!!.getJSONArray("r")
-                if (str_i.length() != 0) {
-                    for (i in 0 until str_i.length()) {
-                        ffmpegcommandwithoutwater.add(replaceKeyWordsDynamic(str_i.getString(i)) + add_watermarh)
-                    }
-                }
-            } else {
-                val str_r = rootJsonData!!.getJSONArray("r")
-                if (str_r.length() != 0) {
-                    for (i in 0 until str_r.length()) {
-                        ffmpegcommandwithoutwater.add(replaceKeyWordsDynamic(str_r.getString(i)))
-                    }
-                }
-            }
-            //            JSONArray str_r = rootJsonData.getJSONArray("r");
-//            if (str_r.length() != 0) {
-//                for (int i = 0; i < str_r.length(); i++) {
-//                    ffmpegcommandwithoutwater.add(replaceKeyWordsDynamic(str_r.getString(i)));
-//                }
-//            }
-            val str_n = rootJsonData!!.getJSONArray("n")
-            if (str_n.length() != 0) {
-                for (i in 0 until str_n.length()) {
-                    ffmpegcommandwithoutwater.add(replaceKeyWords(str_n.getString(i)))
-                }
-            }
-            val str_g = rootJsonData!!.getJSONArray("g")
-            if (str_g.length() != 0) {
-                for (i in 0 until str_g.length()) {
-                    ffmpegcommandwithoutwater.add(replaceKeyWords(str_g.getString(i)))
-                }
-            }
-            val str_c = rootJsonData!!.getJSONArray("c")
-            if (str_c.length() != 0) {
-                for (i in 0 until str_c.length()) {
-                    ffmpegcommandwithoutwater.add(replaceKeyWords(str_c.getString(i)))
-                }
-            }
-            val str_d = rootJsonData!!.getJSONArray("d")
-            if (str_d.length() != 0) {
-                for (i in 0 until str_d.length()) {
-                    ffmpegcommandwithoutwater.add(replaceKeyWords(str_d.getString(i)))
-                }
-            }
-            val str_s = rootJsonData!!.getJSONArray("s")
-            if (str_s.length() != 0) {
-                for (i in 0 until str_s.length()) {
-                    ffmpegcommandwithoutwater.add(replaceKeyWords(str_s.getString(i)))
-                }
-            }
-            ffmpegcommandwithoutwater.add("-flags")
-            ffmpegcommandwithoutwater.add("+global_header")
-            ffmpegcommandwithoutwater.add("-qscale:v")
-            ffmpegcommandwithoutwater.add("3")
-            ffmpegcommandwithoutwater.add(filepathwithoutwater!!)
-        } catch (e: java.lang.Exception) {
-            Log.e("FFMPEG>>>", Log.getStackTraceString(e))
-        }
-    }
-
     private fun executeCommand(filePath: String, exportType: String) {
         stcInputList.clear()
         val ffmpegCmd: MutableList<String> = ArrayList()
@@ -729,27 +652,61 @@ class EditVideoActivity : BaseActivity() {
                 }
             }
             // for images
+
+            // for images
             for (i in imagesList.indices) {
                 if (!imagesList[i].imgName.equals("text")) {
-                    if (imagesList[i].prefix.length() > 0) for (j in 0 until imagesList[i].prefix.length()) {
+                    if (imagesList[i].prefix.length() !== 0
+                    ) for (j in 0 until imagesList[i].prefix.length()) {
                         ffmpegCmd.add(replaceKeyWords(imagesList[i].prefix.getString(j)))
                     }
                     if (imagesList[i].imgPathExtra == null) {
-                        imagesList[i].imgPath.let { ffmpegCmd.add(it) }
+                        ffmpegCmd.add(imagesList[i].imgPath)
                     } else {
-                        ffmpegCmd.add(imagesList[i].imgPathExtra.toString())
+                        imagesList[i].imgPathExtra?.let { ffmpegCmd.add(it) }
                     }
-                    if ((imagesList[i].postfix.length()
-                            ?: 0) > 0
-                    ) for (j in 0 until (imagesList[i].postfix.length()
-                        ?: 0)) {
-                        replaceKeyWords(imagesList[i].postfix.getString(j))
-                            .let {
-                                ffmpegCmd.add(it)
-                            }
+                    if (imagesList[i].prefix.length() !== 0
+                    ) for (j in 0 until imagesList[i].postfix.length()) {
+                        ffmpegCmd.add(replaceKeyWords(imagesList[i].postfix.getString(j)))
                     }
                 }
             }
+
+            /*     if (rootJsonData?.getJSONArray("texts") != null) {
+                     val textsArray = rootJsonData!!.getJSONArray("texts")
+
+                     // Update the text values with the provided array
+                     val textValues = arrayOf("Akshay") // Modify the textValues array as needed
+                     for (i in 0 until textsArray.length()) {
+                         val textData = textsArray.getJSONObject(i)
+                         val replaceKey = textData.getString("replace_key")
+                         if (textValues.size > i) {
+                             textData.put("value", textValues[i])
+                         }
+                     }
+
+                     // ... (existing code)
+
+                     // Add the drawtext filter and font path to the ffmpeg command
+                     val drawTextFilters = StringBuilder()
+                     val fontPath =
+                         "font/latoblack.ttf" // Assuming the font file is named "<font_name>.ttf"
+
+                     for (i in 0 until textsArray.length()) {
+                         val textData = textsArray.getJSONObject(i)
+                         val value = textData.getString("value")
+
+                     }
+
+                     val drawTextFilter =
+                         "drawtext=fontfile=$fontPath:text='$value':fontcolor=#543436:fontsize=50:x=(270-(text_w/2)):y=746"
+                     if (i != 0) drawTextFilters.append(",")
+                     drawTextFilters.append(drawTextFilter)
+                   //  ffmpegCmd.add("-vf")
+                     ffmpegCmd.add(drawTextFilters.toString())
+
+                 }*/
+
 
             // for static inputs
             val static_inputs = rootJsonData!!.getJSONArray("static_inputs")
@@ -776,6 +733,7 @@ class EditVideoActivity : BaseActivity() {
                     ffmpegCmd.add(replaceKeyWords(stcInputList[i].postfix.getString(j)))
                 }
             }
+
             if (!isRemoveWaterMark) {
                 ffmpegCmd.add("-ignore_loop")
                 ffmpegCmd.add("0")
@@ -844,6 +802,7 @@ class EditVideoActivity : BaseActivity() {
             ffmpegCmd.add("-qscale:v")
             ffmpegCmd.add("3")
             ffmpegCmd.add(filePath)
+            Log.i("TAG", "executeCommand: " + ffmpegCmd.toString())
         } catch (e: java.lang.Exception) {
             Log.e("FFMPEG>>>", Log.getStackTraceString(e))
         }
@@ -880,6 +839,8 @@ class EditVideoActivity : BaseActivity() {
                         val timeInMilliseconds: Int = statistics.time
                         if (timeInMilliseconds > 0) {
                             if (video_total_dur != 0) {
+                                remove.isVisible = false
+                                tvExport.isVisible = false
                                 val totalVideoDuration: Int = video_total_dur
                                 val completePercentage =
                                     BigDecimal(timeInMilliseconds).multiply(BigDecimal(100)).divide(
@@ -891,6 +852,10 @@ class EditVideoActivity : BaseActivity() {
 
                                     if ((completePercentage.toInt() > 5) && (completePercentage.toInt() < 100)) {
                                         cp_export_progress.progress = completePercentage.toInt()
+                                    }
+                                    if (completePercentage.toInt() == 100) {
+                                        remove.isVisible = true
+                                        tvExport.isVisible = true
                                     }
                                     Log.i(
                                         "FFMPEG>>>", String.format(
@@ -907,11 +872,10 @@ class EditVideoActivity : BaseActivity() {
             flagExporting = true
             playPausePlayer(isPlaying)
             rl_preview_control.visibility = View.GONE
+
             cp_export_progress.progress = 1
             Handler().postDelayed({
-                cp_export_progress.setProgress(
-                    5
-                )
+                cp_export_progress.progress = 5
             }, 500)
             rl_export_video.visibility = View.VISIBLE
             executionId = FFmpeg.executeAsync(command) { executionId1, returnCode ->
@@ -998,6 +962,11 @@ class EditVideoActivity : BaseActivity() {
     }
 
 
+    fun getCamelCaseFontName(fontName: String): String {
+        val words = fontName.split("_").map { it.capitalize() }
+        return words.joinToString("")
+    }
+
     private fun killExportProgress() {
         try {
             Log.d("killExportProg", "id $executionId")
@@ -1011,6 +980,12 @@ class EditVideoActivity : BaseActivity() {
         initializeExoPlayer()
         flagExporting = false
 
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        killExportProgress()
     }
 
     //Save video with different option...
@@ -1027,9 +1002,12 @@ class EditVideoActivity : BaseActivity() {
         val srcFile = File(srcPath)
         val dstFile = File(dstPath)
         try {
+            loaderView.isVisible = false
             copyFileToStorage(srcFile, dstFile, exportType)
             refreshGallery(activity, dstFile)
         } catch (e: java.lang.Exception) {
+            loaderView.isVisible = false
+
         }
     }
 
@@ -1072,10 +1050,18 @@ class EditVideoActivity : BaseActivity() {
     }
 
     private fun refreshGallery(mContext: Activity, file: File) {
+        loaderView.isVisible = false
         val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         val contentUri = Uri.fromFile(file)
         mediaScanIntent.data = contentUri
         mContext.sendBroadcast(mediaScanIntent)
+
+        startActivity(
+            Intent(this, DownloadTemplateActivity::class.java).putExtra(
+                "uri",
+                contentUri
+            )
+        )
     }
 
     private fun getDownloadedPath(mContext: Context): String {
@@ -1137,5 +1123,30 @@ class EditVideoActivity : BaseActivity() {
         val durationStr = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
         return durationStr!!.toInt()
     }
+
+    @Throws(IOException::class)
+    private fun generateWatermark() {
+        val file = getZipDirectoryPath(activity) + getString(R.string.watermark)
+        try {
+            val inputStream = assets.open(getString(R.string.watermark))
+            try {
+                val outputStream = FileOutputStream(file)
+                try {
+                    val buf = ByteArray(1024)
+                    var len: Int
+                    while (inputStream.read(buf).also { len = it } > 0) {
+                        outputStream.write(buf, 0, len)
+                    }
+                } finally {
+                    outputStream.close()
+                }
+            } finally {
+                inputStream.close()
+            }
+        } catch (e: IOException) {
+            throw IOException("Could not open robot png", e)
+        }
+    }
+
 
 }

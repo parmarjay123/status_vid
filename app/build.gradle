@@ -77,5 +77,6 @@ dependencies {
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     implementation 'com.arthenica:mobile-ffmpeg-full-gpl:4.4.LTS'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.27'
+    implementation 'com.github.Marvel999:Android-Loading-Animation:1.0.0'
 
 }

@@ -81,6 +81,7 @@
 
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llMain"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_300sdp"
                 android:layout_marginTop="@dimen/_12sdp"
@@ -91,6 +92,12 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center">
+                    <ProgressBar
+                        android:id="@+id/progressLoaders"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
 
                     <com.google.android.exoplayer2.ui.PlayerView
                         android:id="@+id/exoDownloadPlayerView"
@@ -100,7 +107,7 @@
                         app:surface_type="texture_view" />
 
                     <ImageView
-                        android:id="@+id/pauseButton"
+                        android:id="@+id/pauseButtons"
                         android:layout_width="@dimen/_50sdp"
                         android:layout_height="@dimen/_50sdp"
                         android:layout_gravity="center"

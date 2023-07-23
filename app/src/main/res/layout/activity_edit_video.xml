@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/black"
+    android:orientation="vertical"
     tools:context=".activities.EditVideoActivity">
 
 
@@ -60,8 +60,8 @@
         android:id="@+id/clPreview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:gravity="center"
         android:layout_weight="1"
+        android:gravity="center"
         tools:ignore="NestedWeights">
 
         <androidx.cardview.widget.CardView
@@ -83,13 +83,12 @@
                 android:gravity="center">
 
 
-
                 <com.google.android.exoplayer2.ui.PlayerView
                     android:id="@+id/exoPlayerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:surface_type="texture_view"
-                    app:resize_mode="fit"/>
+                    app:resize_mode="fit"
+                    app:surface_type="texture_view" />
 
                 <ProgressBar
                     android:id="@+id/progressBar_exoplayer"
@@ -122,8 +121,6 @@
                     android:visibility="gone" />
 
 
-
-
                 <LinearLayout
                     android:id="@+id/rl_preview_control"
                     android:layout_width="match_parent"
@@ -131,8 +128,8 @@
                     android:layout_gravity="center"
                     android:background="#80F7931E"
                     android:gravity="center"
-                    android:visibility="gone"
                     android:orientation="vertical"
+                    android:visibility="gone"
 
                     >
 
@@ -190,7 +187,6 @@
                 </LinearLayout>
 
 
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -198,8 +194,7 @@
                     <RelativeLayout
                         android:id="@+id/remove"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        >
+                        android:layout_height="wrap_content">
 
                         <FrameLayout
                             android:layout_width="@dimen/_100sdp"
@@ -212,18 +207,20 @@
                                 android:layout_gravity="center"
                                 android:background="@drawable/bg_rounded_transparent"
                                 android:gravity="center">
+
                                 <pl.droidsonroids.gif.GifImageView
                                     android:id="@+id/watermark_top"
                                     android:layout_width="73dp"
                                     android:layout_height="24dp"
                                     android:layout_gravity="center"
                                     android:src="@drawable/watermark" />
+
                                 <ImageView
                                     android:layout_width="@dimen/_40sdp"
                                     android:layout_height="@dimen/_30sdp"
-                                    android:visibility="gone"
                                     android:layout_gravity="center"
-                                    android:src="@drawable/boozz_white" />
+                                    android:src="@drawable/boozz_white"
+                                    android:visibility="gone" />
 
 
                             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -240,8 +237,28 @@
 
                 </RelativeLayout>
 
-            </FrameLayout>
 
+                <FrameLayout
+                    android:id="@+id/loaderView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black"
+                    android:visibility="gone">
+
+                    <com.example.loadinganimation.LoadingAnimation
+                        android:id="@+id/loadingAnim"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@color/black"
+                        android:elevation="10dp"
+                        app:barType="@drawable/clock"
+                        app:boldText="false"
+                        app:enlarge="5"
+                        app:textColor="@color/purple_500"
+                        app:textSize="15sp" />
+                </FrameLayout>
+            </FrameLayout>
 
 
         </androidx.cardview.widget.CardView>
@@ -253,13 +270,12 @@
         android:layout_gravity="bottom"
         android:layout_marginHorizontal="25dp"
         android:gravity="center"
-        android:orientation="horizontal"
-      >
+        android:orientation="horizontal">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_image_list"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_70sdp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:clipToPadding="false"
             android:padding="5dp"

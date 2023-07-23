@@ -1,5 +1,6 @@
 package com.example.boozzapp.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -11,9 +12,9 @@ import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeCategoryAdapter
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
 import com.example.boozzapp.pojo.CategoryList
+import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.HomeCategoryPojo
 import com.example.boozzapp.pojo.HomeTemplate
-import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
@@ -22,6 +23,9 @@ import kotlinx.android.synthetic.main.activity_home.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class HomeActivity : BaseActivity() {
     var totalPage = 1
@@ -98,8 +102,53 @@ class HomeActivity : BaseActivity() {
             ivClose.performClick()
         }
 
+        val watermark_path: String = getZipDirectoryPath(activity) + getString(R.string.watermark)
+        val watermark_file = File(watermark_path)
+        if (!watermark_file.exists()) {
+            try {
+                generateWatermark()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+
         homeCategories()
 
+    }
+
+    @Throws(IOException::class)
+    private fun generateWatermark() {
+        val file = getZipDirectoryPath(activity) + getString(R.string.watermark)
+        try {
+            val inputStream = assets.open(getString(R.string.watermark))
+            try {
+                val outputStream = FileOutputStream(file)
+                try {
+                    val buf = ByteArray(1024)
+                    var len: Int
+                    while (inputStream.read(buf).also { len = it } > 0) {
+                        outputStream.write(buf, 0, len)
+                    }
+                } finally {
+                    outputStream.close()
+                }
+            } finally {
+                inputStream.close()
+            }
+        } catch (e: IOException) {
+            throw IOException("Could not open robot png", e)
+        }
+    }
+
+
+    private fun getZipDirectoryPath(mContext: Context): String? {
+        val externalDirectory = mContext.filesDir.absolutePath
+        val dir = File(
+            externalDirectory + File.separator +
+                    mContext.resources.getString(R.string.zip_directory)
+        )
+        if (!dir.exists()) dir.mkdirs()
+        return dir.absolutePath + File.separator
     }
 
 

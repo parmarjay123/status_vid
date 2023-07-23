@@ -72,8 +72,8 @@ class PreviewActivity : BaseActivity() {
 
 
         videoPojo.let {
+            showProgress()
             downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
-
         }
 
 
@@ -151,7 +151,7 @@ class PreviewActivity : BaseActivity() {
                     Log.i("TAG", "onDownloadComplete:  after" + getZipDirectoryPath()!!)
                     val unzipTask = UnZipFileFromURLs(this@PreviewActivity::getZipDirectoryPath)
                     unzipTask.execute(zipFilePath)
-                    llBottomMenu.isVisible=true
+                    dismissProgress()
 
 
                 }

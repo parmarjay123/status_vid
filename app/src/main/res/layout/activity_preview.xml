@@ -83,7 +83,7 @@
         android:background="@drawable/bg_rounded_transparent"
         android:gravity="center"
         android:orientation="horizontal"
-        android:visibility="gone"
+        android:visibility="visible"
         android:paddingVertical="@dimen/_10sdp">
 
         <LinearLayout
