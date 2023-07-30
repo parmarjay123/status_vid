@@ -68,6 +68,9 @@ class HomeActivity : BaseActivity() {
             llBottom.isVisible = false
         }
 
+        llSearch.setOnClickListener {
+            startActivity(Intent(activity,SearchActivity::class.java))
+        }
         llSetting.setOnClickListener {
             startActivity(Intent(activity, SettingActivity::class.java))
         }
