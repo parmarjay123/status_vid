@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
-import com.example.boozzapp.controls.CButton
 
 
 class CTextView : AppCompatTextView {
@@ -39,14 +38,14 @@ class CTextView : AppCompatTextView {
 
     private fun selectTypeface(context: Context, textStyle: Int): Typeface {
         when (textStyle) {
-            Typeface.BOLD -> return Typeface.createFromAsset(context.assets, "Lato-Bold.ttf")
+            Typeface.BOLD -> return Typeface.createFromAsset(context.assets, "Poppins-SemiBold.ttf")
             Typeface.NORMAL -> return Typeface.createFromAsset(
                 context.assets,
-                "Lato-Medium.ttf"
+                "Poppins-SemiBoldItalic.ttf"
             )// regular
             else -> return Typeface.createFromAsset(
                 context.assets,
-                "Lato-Regular.ttf"
+                "Poppins-Regular.ttf"
             )// regular
         }
     }

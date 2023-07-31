@@ -3,6 +3,7 @@ package com.example.boozzapp.app
 import androidx.multidex.MultiDexApplication
 import com.downloader.PRDownloader
 import com.downloader.PRDownloaderConfig
+import com.google.firebase.FirebaseApp
 
 class MyApplication : MultiDexApplication() {
     override fun onCreate() {
@@ -12,6 +13,8 @@ class MyApplication : MultiDexApplication() {
             .setConnectTimeout(30000)
             .build()
         PRDownloader.initialize(applicationContext, config)
+        FirebaseApp.initializeApp(applicationContext)
+
     }
     // ...
 }

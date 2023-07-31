@@ -12,13 +12,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.boozzapp.R
 import com.example.boozzapp.activities.EditVideoActivity
-import com.example.boozzapp.pojo.PartyModelCommandImages
+import com.example.boozzapp.pojo.ImageCommands
 import kotlinx.android.synthetic.main.row_images.view.*
 
 
 class TemplateImageAdapter(
     val activity: AppCompatActivity,
-    var data: ArrayList<PartyModelCommandImages>,
+    var data: ArrayList<ImageCommands>,
     val listener: EditVideoActivity.EditVideoActivityListener
 ) : RecyclerView.Adapter<TemplateImageAdapter.ViewHolder>() {
 

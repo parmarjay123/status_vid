@@ -8,7 +8,7 @@
     android:background="@color/app_background_color"
     tools:context=".activities.DownloadTemplateActivity">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
         android:background="@color/app_background_color"
@@ -19,46 +19,19 @@
             android:id="@+id/downloadTempBack"
             android:layout_width="@dimen/_24sdp"
             android:layout_height="@dimen/_24sdp"
-            android:layout_gravity="center"
+            android:layout_gravity="start"
             android:layout_marginStart="@dimen/_10sdp"
             android:background="@android:color/transparent"
             android:src="@drawable/back_icon"
             app:tint="@color/white" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:src="@drawable/confirm_icon"
-                app:tint="@color/black" />
-
-            <com.example.boozzapp.controls.CTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:text="@string/saved_in_gallery"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16sdp"
-                android:textStyle="bold" />
-
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
 
 
         <com.example.boozzapp.controls.CTextView
             android:id="@+id/tvHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="end"
             android:layout_marginEnd="@dimen/_15sdp"
             android:background="@drawable/bg_rounded_white"
             android:paddingHorizontal="@dimen/_7sdp"
@@ -69,7 +42,7 @@
             android:textStyle="bold" />
 
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </FrameLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

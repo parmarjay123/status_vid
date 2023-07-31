@@ -1,11 +1,15 @@
 package com.example.boozzapp.activities
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.view.ViewGroup
+import android.view.Window
 import androidx.core.view.isVisible
 import com.downloader.Error
 import com.downloader.OnDownloadListener
@@ -19,7 +23,10 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
+import kotlinx.android.synthetic.main.activity_edit_video.*
 import kotlinx.android.synthetic.main.activity_preview.*
+import kotlinx.android.synthetic.main.dialog_download.*
+import kotlinx.android.synthetic.main.dialog_watermark.*
 import java.io.File
 
 class PreviewActivity : BaseActivity() {
@@ -27,6 +34,8 @@ class PreviewActivity : BaseActivity() {
     private var isPlaying: Boolean = true
     private lateinit var videoPojo: ExploreTemplatesItem
     private var zipFilePath: String? = null
+    lateinit var holdDialog: Dialog
+    private var totalFileSize: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +45,6 @@ class PreviewActivity : BaseActivity() {
         videoPojo = intent.getParcelableExtra("videoPojo")!!
 
 
-        frameLoader.isVisible = true
         players = SimpleExoPlayer.Builder(activity).build()
         player.player = players
         player.useController = false
@@ -45,14 +53,16 @@ class PreviewActivity : BaseActivity() {
                 super.onPlaybackStateChanged(state)
                 when (state) {
                     ExoPlayer.STATE_READY -> {
-                        players.pause()
+                        players.play()
+                        progressBarPreview.isVisible = false
                     }
 
                     ExoPlayer.STATE_ENDED -> {
                         players.seekTo(0)
+                        players.play()
                     }
                     Player.STATE_BUFFERING -> {
-
+                        progressBarPreview.isVisible = true
                     }
                     Player.STATE_IDLE -> {
 
@@ -71,20 +81,6 @@ class PreviewActivity : BaseActivity() {
 
 
 
-        previewLoader.setProgressVector(resources.getDrawable(R.drawable.black_three_dot_circle))
-        previewLoader.setTextViewVisibility(true)
-        previewLoader.setTextStyle(true)
-        previewLoader.setTextColor(Color.WHITE)
-        previewLoader.setBackgroundColor(Color.BLACK)
-        previewLoader.setTextSize(12F)
-        previewLoader.setTextMsg("Downloading Video Please Wait...")
-        previewLoader.setEnlarge(5)
-
-
-        videoPojo.let {
-            frameLoader.isVisible = true
-            downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
-        }
 
 
         previewBack.setOnClickListener {
@@ -107,10 +103,12 @@ class PreviewActivity : BaseActivity() {
         }
 
         previewEdit.setOnClickListener {
-            activity.startActivity(
-                Intent(activity, EditVideoActivity::class.java)
-                    .putExtra("videoPojo", videoPojo)
-            )
+            players.pause()
+            showDownloadDialog()
+            videoPojo.let {
+                downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
+            }
+
         }
 
 
@@ -154,22 +152,31 @@ class PreviewActivity : BaseActivity() {
 
         PRDownloader.download(zipUrl, getZipDirectoryPath(), fileName)
             .build()
-            .setOnProgressListener {
+            .setOnProgressListener { progress ->
+                val progressPercent = progress.currentBytes * 100 / progress.totalBytes
+                holdDialog.progress_download_video.progress = progressPercent.toInt()
+
+                // Store the total file size for later use
+                totalFileSize = progress.totalBytes
             }
             .start(object : OnDownloadListener {
                 override fun onDownloadComplete() {
                     Log.i("TAG", "onDownloadComplete:  after" + getZipDirectoryPath()!!)
-                    val unzipTask = UnZipFileFromURLs(this@PreviewActivity::getZipDirectoryPath)
-                    unzipTask.execute(zipFilePath)
-                    frameLoader.isVisible = false
-                    llBottomMenu.isVisible = true
-                    players.play()
+                    holdDialog.dismiss()
+                    val unzipTask = UnZipFileFromURLs(zipFilePath!!, getZipDirectoryPath()!!) {
+                        // This block will be executed after unzipping is completed
+                        // Start the EditVideoActivity here
+                        activity.startActivity(
+                            Intent(activity, EditVideoActivity::class.java)
+                                .putExtra("videoPojo", videoPojo)
+                        )
+                    }
+                    unzipTask.execute()
 
 
                 }
 
                 override fun onError(error: Error) {
-                    frameLoader.isVisible = false
                     players.play()
 
                     Log.i(
@@ -181,20 +188,26 @@ class PreviewActivity : BaseActivity() {
             })
     }
 
-
     private class UnZipFileFromURLs(
-        private val getZipDirectoryPath: () -> String?
-    ) : AsyncTask<String?, String?, String?>() {
-        // Rest of the code...
-        override fun doInBackground(vararg p0: String?): String? {
+        private val zipFilePath: String,
+        private val destinationPath: String,
+        private val callback: () -> Unit
+    ) : AsyncTask<String, String, Boolean>() {
+
+        override fun doInBackground(vararg params: String?): Boolean {
             try {
-                PartyZipFileManager.unzip(p0[0], getZipDirectoryPath())
-                // Rest of the code...
+                PartyZipFileManager.unzip(zipFilePath, destinationPath)
+                return true
             } catch (e: Exception) {
                 e.printStackTrace()
-                return "Error"
+                return false
             }
-            return null
+        }
+
+        override fun onPostExecute(success: Boolean) {
+            super.onPostExecute(success)
+            // Call the callback to indicate that the unzipping is completed
+            callback()
         }
     }
 
@@ -209,6 +222,36 @@ class PreviewActivity : BaseActivity() {
         if (!dir.exists()) dir.mkdirs()
         return dir.absolutePath + File.separator
     }
+
+
+    fun showDownloadDialog() {
+        holdDialog = Dialog(activity)
+        holdDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        holdDialog.setContentView(R.layout.dialog_download)
+        holdDialog.progress_download_video.progress = 0
+
+        // Set the background of the dialog window to transparent
+        holdDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // Calculate the desired height of the dialog (e.g., half of the screen)
+        val windowHeight = activity.window.decorView.height
+        val dialogHeight = windowHeight / 2
+
+        // Set the dialog's window layout parameters
+        val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight)
+        holdDialog.window?.setLayout(layoutParams.width, layoutParams.height)
+
+        holdDialog.show()
+
+        holdDialog.btnCancel.setOnClickListener {
+            holdDialog.dismiss()
+            PRDownloader.cancelAll()
+
+        }
+
+
+    }
+
 }
 
 

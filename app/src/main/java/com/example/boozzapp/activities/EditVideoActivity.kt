@@ -30,14 +30,15 @@ import com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS
 import com.arthenica.mobileffmpeg.FFmpeg
 import com.arthenica.mobileffmpeg.Statistics
 import com.arthenica.mobileffmpeg.StatisticsCallback
+import com.dinuscxj.progressbar.CircleProgressBar
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.TemplateImageAdapter
 import com.example.boozzapp.controls.CustomDialog
 import com.example.boozzapp.pojo.ExploreTemplatesItem
-import com.example.boozzapp.pojo.PartyModelCommandImages
-import com.example.boozzapp.pojo.PartyModelStaticInputs
+import com.example.boozzapp.pojo.ImageCommands
+import com.example.boozzapp.pojo.StaticInputs
 import com.example.boozzapp.utils.StoreUserData
-import com.github.dhaval2404.imagepicker.ImagePicker
+import com.example.boozzapp.utils.mediapicker.Image.ImagePicker
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
@@ -74,10 +75,10 @@ class EditVideoActivity : BaseActivity() {
     private var isPlaying = true
 
     lateinit var templateImageAdapter: TemplateImageAdapter
-    private val imagesList: ArrayList<PartyModelCommandImages> = ArrayList()
-    lateinit var imageSelectedPojo: PartyModelCommandImages
-    private val stcInputList: ArrayList<PartyModelStaticInputs> =
-        ArrayList<PartyModelStaticInputs>()
+    private val imagesList: ArrayList<ImageCommands> = ArrayList()
+    lateinit var imageSelectedPojo: ImageCommands
+    private val stcInputList: ArrayList<StaticInputs> =
+        ArrayList<StaticInputs>()
     private var videoPath: String? = null
 
     private var isRemoveWaterMark = false
@@ -93,24 +94,21 @@ class EditVideoActivity : BaseActivity() {
     private var finalVideoPath = ""
     private var fileName: String? = null
     private var textDataArray: JSONArray? = null
-    private var filepathwithoutwater: String? = null
-    private val ffmpegcommandwithoutwater = ArrayList<String>()
-
 
     interface EditVideoActivityListener {
-        fun onImageChange(data: PartyModelCommandImages)
+        fun onImageChange(data: ImageCommands)
     }
 
     var onClickListener = object : EditVideoActivityListener {
-        override fun onImageChange(data: PartyModelCommandImages) {
+        override fun onImageChange(data: ImageCommands) {
             imageSelectedPojo = data
-            ImagePicker.with(activity)
-                .crop()                    //Crop image(Optional), Check Customization for more option
-                .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                .maxResultSize(
-                    1080, 1080
-                )    //Final image resolution will be less than 1080 x 1080(Optional)
-                .start()
+            ImagePicker.Builder(activity)
+                .directory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath)
+                .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                .allowMultipleImages(false)
+                .enableDebuggingMode(true)
+                .build()
         }
 
     }
@@ -133,16 +131,6 @@ class EditVideoActivity : BaseActivity() {
             getZipDirectoryPath(this) + zipFileName + File.separator + jsonFile
         performTaskWithCallback(jsonFilePath)
 
-
-        loadingAnim.setProgressVector(resources.getDrawable(R.drawable.black_three_dot_circle))
-        loadingAnim.setTextViewVisibility(true)
-        loadingAnim.setTextStyle(true)
-        loadingAnim.setTextColor(Color.WHITE)
-        loadingAnim.setBackgroundColor(Color.BLACK)
-        loadingAnim.setTextSize(12F)
-        loadingAnim.setTextMsg("Downloading Video Please Wait...")
-        loadingAnim.setEnlarge(5)
-
         try {
             outputVideo = getZipDirectoryPath(this) + zipFileName + File.separator + "output.mp4"
 
@@ -164,6 +152,10 @@ class EditVideoActivity : BaseActivity() {
         set.applyTo(clPreview)
 
         initializeExoPlayer()
+
+        bitmap_thumb = ThumbnailUtils.createVideoThumbnail(
+            outputVideo, MediaStore.Images.Thumbnails.MINI_KIND
+        )
 
         editBack.setOnClickListener { finish() }
         tvEditSongName.text = videoPojo.title
@@ -275,7 +267,7 @@ class EditVideoActivity : BaseActivity() {
                     getZipDirectoryPath(this) + zipFileName + File.separator + image_obj.getString("name")
 
                 imagesList.add(
-                    PartyModelCommandImages(
+                    ImageCommands(
                         image_obj.getString("name"),
                         image_obj.getInt("w"),
                         image_obj.getInt("h"),
@@ -305,7 +297,7 @@ class EditVideoActivity : BaseActivity() {
             textDataArray = rootJsonData!!.getJSONArray("texts")
 
             if (textDataArray != null && textDataArray!!.length() > 0) {
-                val modelCommandImages = PartyModelCommandImages("text", textDataArray!!)
+                val modelCommandImages = ImageCommands("text", textDataArray!!)
                 imagesList.add(modelCommandImages)
                 for (i in 0 until textDataArray!!.length()) {
                     val textObject = textDataArray!!.getJSONObject(i)
@@ -410,8 +402,8 @@ class EditVideoActivity : BaseActivity() {
         holdDialog.show()
 
         holdDialog.llRemoveWaterMark.setOnClickListener {
-            llImageList.isVisible=false
-            loaderView.isVisible = true
+            llImageList.isVisible = false
+            /// loaderView.isVisible = true
             isRemoveWaterMark = true
             exportVideo("export")
             holdDialog.dismiss()
@@ -420,8 +412,8 @@ class EditVideoActivity : BaseActivity() {
 
         holdDialog.ivCloseDialog.setOnClickListener {
             if (!isRemoveWaterMark && !fromWatermark) {
-                llImageList.isVisible=false
-                loaderView.isVisible = true
+                llImageList.isVisible = false
+                ///    loaderView.isVisible = true
                 saveVideo(outputVideo, "export")
             }
             holdDialog.dismiss()
@@ -448,7 +440,7 @@ class EditVideoActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         if (flagChanges) {
-            exo_thumb.visibility = View.VISIBLE
+            exo_thumb.isVisible = true
             remove.isVisible = true
             exo_thumb.setImageBitmap(bitmap_thumb)
             if (!flagExporting) {
@@ -458,7 +450,7 @@ class EditVideoActivity : BaseActivity() {
         } else {
             Log.i("VideoPlayer>>>", "not flagChanges")
             if (!isPlaying) {
-                exo_thumb.visibility = View.VISIBLE
+                exo_thumb.isVisible = true
                 exo_thumb.setImageBitmap(bitmap_thumb)
                 playPausePlayer(isPlaying)
             } else {
@@ -512,6 +504,8 @@ class EditVideoActivity : BaseActivity() {
                         //                        loadingAnimationUtils.dismiss();
                         pauseDuration = 0
                         playPausePlayer(isPlaying)
+
+
                     } else if (playbackState == Player.STATE_BUFFERING) {
                         progressBar_exoplayer.visibility = View.VISIBLE
                         //                        loadingAnimationUtils.show();
@@ -612,13 +606,17 @@ class EditVideoActivity : BaseActivity() {
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            val uri: Uri = data?.data!!
-            if (data.data != null) {
+
+        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val mPaths: ArrayList<String> =
+                data!!.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH)!!
+            if (!mPaths.isNullOrEmpty()) {
+                val imagePath = mPaths[0]
+
                 val updatedImageList = imagesList.mapNotNull {
                     if (imageSelectedPojo == it) {
-                        val imageName = uri.path?.let { path -> File(path).name }
-                        imageName?.let { name -> it.copy(imgName = name, imgPath = uri.path!!) }
+                        val imageName = imagePath.let { path -> File(path).name }
+                        imageName.let { name -> it.copy(imgName = name, imgPath = imagePath) }
                     } else {
                         it
                     }
@@ -631,6 +629,9 @@ class EditVideoActivity : BaseActivity() {
                 isPlaying = false
                 playPausePlayer(isPlaying)
                 progressBar_exoplayer.visibility = View.GONE
+                exoPlayerView.visibility = View.VISIBLE
+
+
 //                                                loadingAnimationUtils.dismiss();
                 //                                                loadingAnimationUtils.dismiss();
                 rl_preview_control.setVisibility(View.VISIBLE)
@@ -638,15 +639,10 @@ class EditVideoActivity : BaseActivity() {
                 flagChanges = true
 
             }
-
-
-            // Use Uri object instead of File to avoid storage permissions
-        } else if (resultCode == ImagePicker.RESULT_ERROR) {
-            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
         }
+
     }
+
 
     private fun exportVideo(exportType: String) {
         val time = System.currentTimeMillis()
@@ -691,43 +687,6 @@ class EditVideoActivity : BaseActivity() {
                 }
             }
 
-            /*     if (rootJsonData?.getJSONArray("texts") != null) {
-                     val textsArray = rootJsonData!!.getJSONArray("texts")
-
-                     // Update the text values with the provided array
-                     val textValues = arrayOf("Akshay") // Modify the textValues array as needed
-                     for (i in 0 until textsArray.length()) {
-                         val textData = textsArray.getJSONObject(i)
-                         val replaceKey = textData.getString("replace_key")
-                         if (textValues.size > i) {
-                             textData.put("value", textValues[i])
-                         }
-                     }
-
-                     // ... (existing code)
-
-                     // Add the drawtext filter and font path to the ffmpeg command
-                     val drawTextFilters = StringBuilder()
-                     val fontPath =
-                         "font/latoblack.ttf" // Assuming the font file is named "<font_name>.ttf"
-
-                     for (i in 0 until textsArray.length()) {
-                         val textData = textsArray.getJSONObject(i)
-                         val value = textData.getString("value")
-
-                     }
-
-                     val drawTextFilter =
-                         "drawtext=fontfile=$fontPath:text='$value':fontcolor=#543436:fontsize=50:x=(270-(text_w/2)):y=746"
-                     if (i != 0) drawTextFilters.append(",")
-                     drawTextFilters.append(drawTextFilter)
-                   //  ffmpegCmd.add("-vf")
-                     ffmpegCmd.add(drawTextFilters.toString())
-
-                 }*/
-
-
-            // for static inputs
             val static_inputs = rootJsonData!!.getJSONArray("static_inputs")
             for (i in 0 until static_inputs.length()) {
                 val st_in_obj = static_inputs.getJSONObject(i)
@@ -736,7 +695,7 @@ class EditVideoActivity : BaseActivity() {
                         "name"
                     )
                 stcInputList.add(
-                    PartyModelStaticInputs(
+                    StaticInputs(
                         st_in_obj.getString("name"),
                         path,
                         st_in_obj.getJSONArray("prefix"),
@@ -860,6 +819,7 @@ class EditVideoActivity : BaseActivity() {
                             if (video_total_dur != 0) {
                                 remove.isVisible = false
                                 tvExport.isVisible = false
+                                rl_export_video.background = ColorDrawable(Color.TRANSPARENT);
                                 val totalVideoDuration: Int = video_total_dur
                                 val completePercentage =
                                     BigDecimal(timeInMilliseconds).multiply(BigDecimal(100)).divide(
@@ -870,6 +830,7 @@ class EditVideoActivity : BaseActivity() {
                                 runOnUiThread {
 
                                     if ((completePercentage.toInt() > 5) && (completePercentage.toInt() < 100)) {
+
                                         cp_export_progress.progress = completePercentage.toInt()
                                     }
                                     if (completePercentage.toInt() == 100) {
@@ -891,7 +852,7 @@ class EditVideoActivity : BaseActivity() {
             flagExporting = true
             playPausePlayer(isPlaying)
             rl_preview_control.visibility = View.GONE
-
+            cp_export_progress.setStyle(CircleProgressBar.SOLID_LINE)
             cp_export_progress.progress = 1
             Handler().postDelayed({
                 cp_export_progress.progress = 5
@@ -1012,13 +973,13 @@ class EditVideoActivity : BaseActivity() {
         val srcFile = File(srcPath)
         val dstFile = File(dstPath)
         try {
-            llImageList.isVisible=true
-            loaderView.isVisible = false
+            llImageList.isVisible = true
+            ///  loaderView.isVisible = false
             copyFileToStorage(srcFile, dstFile, exportType)
             refreshGallery(activity, dstFile)
         } catch (e: java.lang.Exception) {
-            loaderView.isVisible = false
-            llImageList.isVisible=true
+            ///  loaderView.isVisible = false
+            llImageList.isVisible = true
 
         }
 
