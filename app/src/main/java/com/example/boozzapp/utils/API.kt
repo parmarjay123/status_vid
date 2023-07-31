@@ -39,6 +39,13 @@ interface API {
         @Field("page") page: Int
     ): Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("/api/v1/search")
+    fun searchData(
+        @Field("search") search: String,
+        @Field("page") page: Int
+    ): Call<ResponseBody>
+
 
     @FormUrlEncoded
     @POST("/api/v1/categoryWiseVideos")
