@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/app_background_color"
     tools:context=".activities.DownloadTemplateActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
-        android:background="@color/light_black"
+        android:background="@color/app_background_color"
         android:orientation="horizontal"
         android:paddingVertical="@dimen/_10sdp">
 
@@ -77,14 +78,14 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/_12sdp">
+            android:orientation="vertical">
 
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/llMain"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_300sdp"
+                android:layout_height="@dimen/_250sdp"
+                android:paddingHorizontal="@dimen/_12sdp"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:orientation="horizontal">
 
@@ -103,10 +104,9 @@
 
                     <com.google.android.exoplayer2.ui.PlayerView
                         android:id="@+id/exoDownloadPlayerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:resize_mode="fit"
-                        app:surface_type="texture_view" />
+                        android:layout_width="@dimen/_230sdp"
+                        android:layout_height="@dimen/_250sdp"
+                        app:resize_mode="fixed_width" />
 
                     <ImageView
                         android:id="@+id/pauseButtons"
@@ -119,9 +119,10 @@
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/_220sdp"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_gravity="center"
                     android:background="@drawable/bg_rounded_blue"
                     android:orientation="vertical"
                     android:padding="@dimen/_12sdp">
@@ -163,6 +164,7 @@
                 android:id="@+id/rvDownloadVideo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/row_explore_quote_list" />

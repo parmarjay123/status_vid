@@ -21,6 +21,7 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.util.Util
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_download_template.*
@@ -141,6 +142,7 @@ class DownloadTemplateActivity : BaseActivity() {
         players = SimpleExoPlayer.Builder(activity).build()
         exoDownloadPlayerView.player = players
         exoDownloadPlayerView.useController = false
+        exoDownloadPlayerView.resizeMode=AspectRatioFrameLayout.RESIZE_MODE_FIT
         players.addListener(object : Player.EventListener {
             override fun onPlaybackStateChanged(state: Int) {
                 super.onPlaybackStateChanged(state)
