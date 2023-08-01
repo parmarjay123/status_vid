@@ -48,11 +48,10 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.activity_edit_video.*
 import kotlinx.android.synthetic.main.activity_preview.*
+import kotlinx.android.synthetic.main.dialog_download.*
 import kotlinx.android.synthetic.main.dialog_watermark.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -94,6 +93,7 @@ class EditVideoActivity : BaseActivity() {
     private var finalVideoPath = ""
     private var fileName: String? = null
     private var textDataArray: JSONArray? = null
+    private lateinit var holdDialog: Dialog
 
     interface EditVideoActivityListener {
         fun onImageChange(data: ImageCommands)
@@ -218,6 +218,31 @@ class EditVideoActivity : BaseActivity() {
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
             params.addRule(RelativeLayout.ALIGN_PARENT_END)
         }
+    }
+
+
+    fun showDownloadDialog() {
+        holdDialog = Dialog(activity)
+        holdDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        holdDialog.setContentView(R.layout.dialog_download)
+        holdDialog.progress_download_video.progress = 0
+        holdDialog.setCanceledOnTouchOutside(false)
+
+        // Set the background of the dialog window to transparent
+        holdDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // Calculate the desired height of the dialog (e.g., half of the screen)
+        val windowHeight = activity.window.decorView.height
+        val dialogHeight = windowHeight / 2
+
+        // Set the dialog's window layout parameters
+        val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight)
+        holdDialog.window?.setLayout(layoutParams.width, layoutParams.height)
+
+        holdDialog.show()
+        holdDialog.btnCancel.isVisible = false
+
+
     }
 
     override fun onBackPressed() {
@@ -403,7 +428,7 @@ class EditVideoActivity : BaseActivity() {
 
         holdDialog.llRemoveWaterMark.setOnClickListener {
             llImageList.isVisible = false
-            /// loaderView.isVisible = true
+            //showDownloadDialog()
             isRemoveWaterMark = true
             exportVideo("export")
             holdDialog.dismiss()
@@ -411,9 +436,9 @@ class EditVideoActivity : BaseActivity() {
         }
 
         holdDialog.ivCloseDialog.setOnClickListener {
-            if (!isRemoveWaterMark && !fromWatermark) {
+            if (!fromWatermark) {
                 llImageList.isVisible = false
-                ///    loaderView.isVisible = true
+                //showDownloadDialog()
                 saveVideo(outputVideo, "export")
             }
             holdDialog.dismiss()
@@ -657,6 +682,7 @@ class EditVideoActivity : BaseActivity() {
 
 
     private fun executeCommand(filePath: String, exportType: String) {
+
         stcInputList.clear()
         val ffmpegCmd: MutableList<String> = ArrayList()
         try {
@@ -828,7 +854,9 @@ class EditVideoActivity : BaseActivity() {
                                         BigDecimal.ROUND_HALF_UP
                                     ).toString()
                                 runOnUiThread {
-
+                                    if (exportType.equals("export", ignoreCase = true)) {
+                                        pauseButton.isVisible = false
+                                    }
                                     if ((completePercentage.toInt() > 5) && (completePercentage.toInt() < 100)) {
 
                                         cp_export_progress.progress = completePercentage.toInt()
@@ -960,13 +988,39 @@ class EditVideoActivity : BaseActivity() {
 
 
     //Save video with different option...
-    private fun saveVideo(filePath: String, exportType: String) {
-        val file = File(getDownloadedPath(activity) + fileName)
-        if (!file.exists()) {
-            finalSaveVideo(filePath, file.path, exportType)
+    /* private fun saveVideo(filePath: String, exportType: String) {
+         val file = File(getDownloadedPath(activity) + fileName)
+         if (!file.exists()) {
+             finalSaveVideo(filePath, file.path, exportType)
 
+         }
+     }*/
+    // Assuming you have defined the progress_download_video ProgressBar in your dialog layout.
+    private fun saveVideo(filePath: String, exportType: String) {
+        CoroutineScope(Main).launch {
+            // Show the dialog and initialize progress to 0.
+            showDownloadDialog()
+
+            // Simulate download progress (Replace this with your actual download logic).
+            for (progress in 0..100) {
+                holdDialog.progress_download_video.progress = progress
+                delay(50) // Adjust this delay to control the progress update frequency.
+            }
+
+            // After the download is complete, dismiss the dialog.
+            holdDialog.dismiss()
+
+            // Process the downloaded video and handle it as needed.
+            val file = File(getDownloadedPath(activity) + fileName)
+            if (!file.exists()) {
+                finalSaveVideo(filePath, file.path, exportType)
+            }
+
+            // Refresh the gallery after processing the video.
+            //refreshGallery(activity, file)
         }
     }
+
 
     //For saving video...
     private fun finalSaveVideo(srcPath: String, dstPath: String, exportType: String) {
@@ -975,6 +1029,7 @@ class EditVideoActivity : BaseActivity() {
         try {
             llImageList.isVisible = true
             ///  loaderView.isVisible = false
+
             copyFileToStorage(srcFile, dstFile, exportType)
             refreshGallery(activity, dstFile)
         } catch (e: java.lang.Exception) {
@@ -994,6 +1049,7 @@ class EditVideoActivity : BaseActivity() {
             if (exportType.equals("export", ignoreCase = true)) {
                 Log.e("copyFileToStorage", "videoCountIncrement")
             }
+
             // }
         } catch (e: java.lang.Exception) {
             //  Log.e("CopyFailed>>>", Log.getStackTraceString(e));
@@ -1024,6 +1080,7 @@ class EditVideoActivity : BaseActivity() {
     }
 
     private fun refreshGallery(mContext: Activity, file: File) {
+        holdDialog.dismiss()
         val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         val contentUri = Uri.fromFile(file)
         mediaScanIntent.data = contentUri
