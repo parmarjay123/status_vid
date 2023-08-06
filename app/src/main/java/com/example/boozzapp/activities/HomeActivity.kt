@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeCategoryAdapter
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
+import com.example.boozzapp.controls.CustomDialog
 import com.example.boozzapp.pojo.CategoryList
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.HomeCategoryPojo
@@ -69,7 +70,7 @@ class HomeActivity : BaseActivity() {
         }
 
         llSearch.setOnClickListener {
-            startActivity(Intent(activity,SearchActivity::class.java))
+            startActivity(Intent(activity, SearchActivity::class.java))
         }
         llSetting.setOnClickListener {
             startActivity(Intent(activity, SettingActivity::class.java))
@@ -116,6 +117,23 @@ class HomeActivity : BaseActivity() {
         }
 
         homeCategories()
+
+    }
+
+    override fun onBackPressed() {
+        val alert = CustomDialog(activity)
+        alert.setCancelable(false)
+        alert.show()
+        alert.setTitle("Exit App")
+        alert.setMessage("Are you sure want to Exit App?")
+        alert.setPositiveButton("Yes") {
+            alert.dismiss()
+            super.onBackPressed()
+        }
+        alert.setNegativeButton("No") {
+            alert.dismiss()
+        }
+
 
     }
 

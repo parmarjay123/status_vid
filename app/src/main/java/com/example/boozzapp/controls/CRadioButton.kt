@@ -1,4 +1,4 @@
-package com.example.boozz_status_maker.controls
+package com.example.boozzapp.controls
 
 import android.annotation.TargetApi
 import android.content.Context

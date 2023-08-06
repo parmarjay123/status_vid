@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/black"
+    android:orientation="vertical"
     tools:context=".activities.PreviewActivity">
 
     <ImageView
         android:id="@+id/ivQuotesFullImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/_5sdp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:padding="@dimen/_5sdp" />
 
 
     <ImageView
@@ -35,16 +36,17 @@
         android:background="@drawable/bg_rounded_transparent"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingVertical="@dimen/_10sdp">
+        >
 
         <LinearLayout
+            android:id="@+id/llShare"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingVertical="@dimen/_10sdp"
             android:gravity="center">
 
             <ImageView
-                android:id="@+id/previewQuotesShare"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
@@ -53,17 +55,19 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/llDownload"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingVertical="@dimen/_10sdp"
             android:gravity="center">
 
             <ImageView
-                android:id="@+id/previewQuotesEdit"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
-                android:src="@drawable/edit_white_icon" />
+                android:src="@drawable/download"
+                app:tint="@color/white" />
         </LinearLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>

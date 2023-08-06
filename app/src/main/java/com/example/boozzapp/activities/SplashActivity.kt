@@ -1,6 +1,7 @@
 package com.example.boozzapp.activities
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -28,6 +29,16 @@ class SplashActivity : BaseActivity() {
         }
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+
+     /*   if (intent.data != null) {
+            var uri = Uri.parse(intent.data?.toString())
+            Log.i("ad", intent.data?.toString()!!)
+
+            if (uri.host == "buzzoo.in" && uri.getQueryParameter("id") != null) {
+                Log.i("TAG", "onCreate: "+uri.getQueryParameter("id"))
+            }
+        }*/
 
         Handler(Looper.getMainLooper()).postDelayed({
             if (!isActivityFinishing) {

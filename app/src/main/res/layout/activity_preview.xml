@@ -26,7 +26,6 @@
             android:layout_marginBottom="0dp" />
 
 
-
         <ProgressBar
             android:id="@+id/progressBarPreview"
             android:layout_width="match_parent"
@@ -85,17 +84,17 @@
         android:background="@drawable/bg_rounded_transparent"
         android:gravity="center"
         android:orientation="horizontal"
-        android:visibility="visible"
-        android:paddingVertical="@dimen/_10sdp">
+        android:visibility="visible">
 
         <LinearLayout
+            android:id="@+id/previewShare"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:paddingVertical="@dimen/_10sdp">
 
             <ImageView
-                android:id="@+id/previewShare"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
@@ -104,13 +103,14 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/previewEdit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:paddingVertical="@dimen/_10sdp">
 
             <ImageView
-                android:id="@+id/previewEdit"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"

@@ -1,7 +1,7 @@
 package com.example.boozzapp.activities
 
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -21,7 +21,6 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.util.Util
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_download_template.*
@@ -41,6 +40,7 @@ class DownloadTemplateActivity : BaseActivity() {
         setContentView(R.layout.activity_download_template)
         activity = this
         storeUserData = StoreUserData(activity)
+        exoDownloadPlayerView.setBackgroundColor(Color.BLACK)
 
         downloadTempBack.setOnClickListener { finish() }
 
@@ -50,6 +50,7 @@ class DownloadTemplateActivity : BaseActivity() {
             startActivity(intent)
             finish()
         }
+
 
         ivDownloadWtsApp.setOnClickListener {
             val videoUri: Uri? = intent.getParcelableExtra("uri")
@@ -137,12 +138,21 @@ class DownloadTemplateActivity : BaseActivity() {
             }
         }
 
+        ivDownloadShare.setOnClickListener {
+            val videoUri: Uri? = intent.getParcelableExtra("uri")
+            val savedVideoUri = videoUri?.let { it1 -> saveVideoToLocalStorage(it1) }
+
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "video/*"
+            shareIntent.putExtra(Intent.EXTRA_STREAM, savedVideoUri)
+            startActivity(Intent.createChooser(shareIntent, "Share Video"))
+        }
+
         val loader: ProgressBar = progressLoaders
         loader.isVisible = true
         players = SimpleExoPlayer.Builder(activity).build()
         exoDownloadPlayerView.player = players
         exoDownloadPlayerView.useController = false
-        exoDownloadPlayerView.resizeMode=AspectRatioFrameLayout.RESIZE_MODE_FIT
         players.addListener(object : Player.EventListener {
             override fun onPlaybackStateChanged(state: Int) {
                 super.onPlaybackStateChanged(state)

@@ -36,14 +36,16 @@ class PreviewActivity : BaseActivity() {
     private var zipFilePath: String? = null
     lateinit var holdDialog: Dialog
     private var totalFileSize: Long = 0
+    private var videoId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preview)
         activity = this
         storeUserData = StoreUserData(activity)
-        videoPojo = intent.getParcelableExtra("videoPojo")!!
 
+
+        videoPojo = intent.getParcelableExtra("videoPojo")!!
 
         players = SimpleExoPlayer.Builder(activity).build()
         player.player = players
@@ -79,10 +81,6 @@ class PreviewActivity : BaseActivity() {
         player.player!!.play()
         isPlaying = true
 
-
-
-
-
         previewBack.setOnClickListener {
             players.release()
             finish()
@@ -109,6 +107,15 @@ class PreviewActivity : BaseActivity() {
                 downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
             }
 
+        }
+
+        previewShare.setOnClickListener {
+            videoId = videoPojo.id.toString()
+            val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, dynamicUrl)
+            startActivity(Intent.createChooser(shareIntent, "Share via"))
         }
 
 
@@ -224,7 +231,7 @@ class PreviewActivity : BaseActivity() {
     }
 
 
-    fun showDownloadDialog() {
+    private fun showDownloadDialog() {
         holdDialog = Dialog(activity)
         holdDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         holdDialog.setContentView(R.layout.dialog_download)

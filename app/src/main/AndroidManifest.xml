@@ -26,8 +26,7 @@
         </activity>
         <activity
             android:name=".utils.mediapicker.Image.ImageActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:screenOrientation="portrait"
@@ -84,10 +83,9 @@
             android:name=".activities.PreviewActivity"
             android:exported="false"
             android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+
         </activity>
+
         <activity
             android:name=".activities.SearchActivity"
             android:exported="false"
@@ -108,10 +106,19 @@
             android:name=".activities.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="boozz.lyrical.ly.video.status.maker" />
             </intent-filter>
         </activity>
         <activity

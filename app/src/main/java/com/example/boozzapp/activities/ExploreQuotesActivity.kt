@@ -1,11 +1,15 @@
 package com.example.boozzapp.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.ExploreQuotesAdapter
-import com.example.boozzapp.pojo.*
+import com.example.boozzapp.pojo.ExploreQuotesPojo
+import com.example.boozzapp.pojo.ExploreQuotesTemplatesItem
+import com.example.boozzapp.pojo.QuoteCategoryList
+import com.example.boozzapp.pojo.QuotesCategory
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
@@ -105,9 +109,15 @@ class ExploreQuotesActivity : BaseActivity() {
         for (chip in chip) {
             val chipView =
                 LinearLayout.inflate(activity, R.layout.chip_layout, null) as Chip
-
             chipView.tag = chip
             chipView.text = chip.name
+            chipView.setOnClickListener {
+                activity.startActivity(
+                    Intent(activity, CategoryWiseQuotesActivity::class.java)
+                        .putExtra("sortBy", chip.sortBy).putExtra("categoryId", chip.id.toString())
+                        .putExtra("categoryTitle", chip.name.toString())
+                )
+            }
 
             chipGroup.addView(chipView)
         }

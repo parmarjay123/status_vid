@@ -1095,6 +1095,7 @@ class EditVideoActivity : BaseActivity() {
     }
 
 
+
     private fun getDownloadedPath(mContext: Context): String {
         val externalDirectory: String
         /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
