@@ -236,6 +236,7 @@ class PreviewActivity : BaseActivity() {
         // Calculate the desired height of the dialog (e.g., half of the screen)
         val windowHeight = activity.window.decorView.height
         val dialogHeight = windowHeight / 2
+        holdDialog.setCanceledOnTouchOutside(false)
 
         // Set the dialog's window layout parameters
         val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight)

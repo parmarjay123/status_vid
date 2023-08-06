@@ -217,8 +217,8 @@
 
                                 <pl.droidsonroids.gif.GifImageView
                                     android:id="@+id/watermark_top"
-                                    android:layout_width="73dp"
-                                    android:layout_height="24dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_gravity="center"
                                     android:src="@drawable/watermark" />
 

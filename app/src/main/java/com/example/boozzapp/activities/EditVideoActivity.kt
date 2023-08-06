@@ -436,7 +436,7 @@ class EditVideoActivity : BaseActivity() {
         }
 
         holdDialog.ivCloseDialog.setOnClickListener {
-            if (!fromWatermark) {
+            if (!fromWatermark && flagChanges) {
                 llImageList.isVisible = false
                 //showDownloadDialog()
                 saveVideo(outputVideo, "export")
