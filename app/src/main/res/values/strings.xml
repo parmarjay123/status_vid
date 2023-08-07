@@ -46,4 +46,8 @@
     <string name="media_picker_some_permission_is_denied">Some Permission is Denied</string>
     <string name="media_picker_you_need_to_grant_access_to">You need to grant access to</string>
     <string name="media_picker_read_Write_external_storage"><![CDATA[Read & Write External Storage]]></string>
+    <string name="privacy_policy_url">https://boozzvideostatusmaker.blogspot.com/2022/10/boozz-video-status-maker-privacy-policy.html</string>
+    <string name="insta_page_url">https://instagram.com/boozz.app?igshid=MzRlODBiNWFlZA==</string>
+    <string name="fb_page_url">https://www.facebook.com/boozzzv?mibextid=D4KYlr</string>
+    <string name="my_videos_new">My Videos</string>
 </resources>
