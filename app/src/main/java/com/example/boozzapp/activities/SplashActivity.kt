@@ -31,21 +31,27 @@ class SplashActivity : BaseActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
 
-     /*   if (intent.data != null) {
-            var uri = Uri.parse(intent.data?.toString())
-            Log.i("ad", intent.data?.toString()!!)
-
-            if (uri.host == "buzzoo.in" && uri.getQueryParameter("id") != null) {
-                Log.i("TAG", "onCreate: "+uri.getQueryParameter("id"))
-            }
-        }*/
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (!isActivityFinishing) {
-                startActivity(Intent(activity, HomeActivity::class.java))
+        if (intent.data != null) {
+            val uri = Uri.parse(intent.data?.toString())
+            if (uri.host == "template" && uri.getQueryParameter("id") != null) {
+                startActivity(
+                    Intent(activity, PreviewActivity::class.java).putExtra(
+                        "videoId",
+                        uri.getQueryParameter("id")
+                    )
+                )
                 finish()
             }
-        }, 1500)
+        } else {
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (!isActivityFinishing) {
+                    startActivity(Intent(activity, HomeActivity::class.java))
+                    finish()
+                }
+            }, 1500)
+        }
+
+
     }
 
     override fun onDestroy() {

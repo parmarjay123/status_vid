@@ -16,17 +16,24 @@ import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.example.boozzapp.R
 import com.example.boozzapp.pojo.ExploreTemplatesItem
+import com.example.boozzapp.pojo.TemplateDetailsPojo
 import com.example.boozzapp.utils.PartyZipFileManager
+import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_download_template.*
 import kotlinx.android.synthetic.main.activity_edit_video.*
 import kotlinx.android.synthetic.main.activity_preview.*
 import kotlinx.android.synthetic.main.dialog_download.*
 import kotlinx.android.synthetic.main.dialog_watermark.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Response
 import java.io.File
 
 class PreviewActivity : BaseActivity() {
@@ -37,15 +44,17 @@ class PreviewActivity : BaseActivity() {
     lateinit var holdDialog: Dialog
     private var totalFileSize: Long = 0
     private var videoId = ""
-
+    var hasShareVideo = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preview)
         activity = this
         storeUserData = StoreUserData(activity)
 
+        val intent = intent
+        hasShareVideo = intent?.extras?.getString("videoId") != null
 
-        videoPojo = intent.getParcelableExtra("videoPojo")!!
+
 
         players = SimpleExoPlayer.Builder(activity).build()
         player.player = players
@@ -73,13 +82,13 @@ class PreviewActivity : BaseActivity() {
             }
         })
 
-        tvSongName.text = videoPojo.title
-        val firstItem: MediaItem =
-            MediaItem.fromUri(Uri.parse(videoPojo.videoUrl))
-        player.player!!.setMediaItem(firstItem)
-        player.player!!.prepare()
-        player.player!!.play()
-        isPlaying = true
+        if (hasShareVideo) {
+            templateDetails()
+        } else {
+            videoPojo = intent.getParcelableExtra("videoPojo")!!
+            setPlayerData()
+        }
+
 
         previewBack.setOnClickListener {
             players.release()
@@ -121,6 +130,46 @@ class PreviewActivity : BaseActivity() {
 
     }
 
+    fun setPlayerData() {
+        tvSongName.text = videoPojo.title
+        val firstItem: MediaItem =
+            MediaItem.fromUri(Uri.parse(videoPojo.videoUrl))
+        player.player!!.setMediaItem(firstItem)
+        player.player!!.prepare()
+        player.player!!.play()
+        isPlaying = true
+    }
+
+    private fun templateDetails() {
+        showProgress()
+        val retrofitHelper = RetrofitHelper(activity)
+        val call: Call<ResponseBody> =
+            retrofitHelper.api().templateDetails(
+                intent?.extras?.getString("videoId")!!
+            )
+
+        retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
+            override fun onSuccess(body: Response<ResponseBody>) {
+                dismissProgress()
+                val responseString = body.body()!!.string()
+                Log.i("TAG", "exploreSuggestionList$responseString")
+                val suggestionsPojo =
+                    Gson().fromJson(responseString, TemplateDetailsPojo::class.java)
+                videoPojo = suggestionsPojo.data!!
+                setPlayerData()
+            }
+
+            override fun onError(code: Int, error: String) {
+                dismissProgress()
+                Log.i("Error", error)
+
+
+            }
+
+
+        })
+    }
+
 
     override fun onPause() {
         super.onPause()
@@ -148,7 +197,12 @@ class PreviewActivity : BaseActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        super.onBackPressed()
+        if (hasShareVideo) {
+            startActivity(Intent(activity, HomeActivity::class.java))
+            finish()
+        } else {
+            super.onBackPressed()
+        }
         players.release() // Release the player's resources
     }
 

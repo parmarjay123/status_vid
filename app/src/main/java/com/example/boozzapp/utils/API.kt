@@ -20,6 +20,12 @@ interface API {
     ): Call<ResponseBody>
 
 
+    @GET("/api/v1/templateDetails/{id}")
+    fun templateDetails(
+        @Path("id") id: String
+    ): Call<ResponseBody>
+
+
     @GET("/api/v1/quoteSuggestions")
     fun exploreQuotesSuggestions(
         @Header("Authorization") Authorization: String,
