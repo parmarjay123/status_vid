@@ -8,113 +8,122 @@
     android:orientation="vertical"
     tools:context=".activities.HomeActivity">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_16sdp">
-
-            <LinearLayout
-                android:id="@+id/llSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/bg_rounded_white"
-                android:gravity="start"
-                android:paddingHorizontal="@dimen/_22sdp"
-                android:paddingVertical="@dimen/_6sdp">
-
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/search_icon" />
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/boozz_title" />
-
-            <LinearLayout
-                android:id="@+id/llSetting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center"
-                android:background="@drawable/bg_rounded_white"
-                android:gravity="center"
-                android:paddingHorizontal="@dimen/_22sdp"
-                android:paddingVertical="@dimen/_6sdp">
-
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/setting_icon" />
-            </LinearLayout>
-
-
-        </FrameLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="25"
-            tools:listitem="@layout/row_category" />
-
+        android:layout_height="match_parent">
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_25sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.example.boozzapp.controls.CTextView
-                android:id="@+id/tvVideos"
-                android:layout_width="0dp"
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_16sdp">
+
+                <LinearLayout
+                    android:id="@+id/llSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/bg_rounded_white"
+                    android:gravity="start"
+                    android:paddingHorizontal="@dimen/_22sdp"
+                    android:paddingVertical="@dimen/_6sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/search_icon" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/boozz_title" />
+
+                <LinearLayout
+                    android:id="@+id/llSetting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+                    android:background="@drawable/bg_rounded_white"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_22sdp"
+                    android:paddingVertical="@dimen/_6sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/setting_icon" />
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCategories"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/videos"
-                android:textColor="@color/blue_text"
-                android:textSize="@dimen/_20sdp"
-                android:textStyle="bold" />
+                android:layout_marginTop="@dimen/_20sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="25"
+                tools:listitem="@layout/row_category" />
 
-            <com.example.boozzapp.controls.CTextView
-                android:id="@+id/tvQuotes"
-                android:layout_width="0dp"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="@string/quotes"
-                android:textColor="@color/light_blue_text"
-                android:textSize="@dimen/_20sdp"
-                android:textStyle="bold" />
+                android:layout_marginHorizontal="@dimen/_25sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
 
+                <com.example.boozzapp.controls.CTextView
+                    android:id="@+id/tvVideos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/videos"
+                    android:textColor="@color/blue_text"
+                    android:textSize="@dimen/_20sdp"
+                    android:textStyle="bold" />
+
+                <com.example.boozzapp.controls.CTextView
+                    android:id="@+id/tvQuotes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="@string/quotes"
+                    android:textColor="@color/light_blue_text"
+                    android:textSize="@dimen/_20sdp"
+                    android:textStyle="bold" />
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHomeList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/row_home_list" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvHomeList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"
-            tools:listitem="@layout/row_home_list" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     <FrameLayout
         android:id="@+id/flBottom"

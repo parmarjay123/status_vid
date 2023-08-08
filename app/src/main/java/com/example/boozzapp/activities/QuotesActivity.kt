@@ -36,6 +36,12 @@ class QuotesActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
 
 
+        quotesSwipeToRefresh.setOnRefreshListener {
+            page = 1
+            quotesCategory()
+        }
+
+
         ivQuotesBack.setOnClickListener { finish() }
 
         llQuotesFilter.setOnClickListener {
@@ -60,6 +66,7 @@ class QuotesActivity : BaseActivity() {
 
 
     private fun quotesCategory() {
+        quotesSwipeToRefresh?.isRefreshing = false
         showProgress()
         val retrofitHelper = RetrofitHelper(activity)
         val call: Call<ResponseBody> =
@@ -90,6 +97,7 @@ class QuotesActivity : BaseActivity() {
 
             override fun onError(code: Int, error: String) {
                 dismissProgress()
+                quotesTemplateList()
                 Log.i("Error", error)
             }
 

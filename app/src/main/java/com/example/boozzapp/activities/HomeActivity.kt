@@ -43,6 +43,12 @@ class HomeActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
+
+        swipeRefreshLayout.setOnRefreshListener {
+            page=1
+            homeCategories()
+        }
+
         tvQuotes.setOnClickListener {
             it.isClickable = false
             activity.startActivity(Intent(activity, QuotesActivity::class.java))
@@ -182,7 +188,6 @@ class HomeActivity : BaseActivity() {
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
             override fun onSuccess(body: Response<ResponseBody>) {
-
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
                 val categoryPojo = Gson().fromJson(responseString, HomeCategoryPojo::class.java)
@@ -201,7 +206,7 @@ class HomeActivity : BaseActivity() {
             }
 
             override fun onError(code: Int, error: String) {
-
+                homeTemplateList(sortBy)
                 Log.i("Error", error)
             }
 
@@ -211,6 +216,7 @@ class HomeActivity : BaseActivity() {
 
     private fun homeTemplateList(sort_by: String) {
         if (page == 1)
+            swipeRefreshLayout?.isRefreshing = false
             showProgress()
         val retrofitHelper = RetrofitHelper(activity)
         val call: Call<ResponseBody> =
