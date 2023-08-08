@@ -8,7 +8,14 @@ plugins {
 
 android {
     compileSdk 34
-
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file("keystore.jks")
+            storePassword = "123456"
+            keyAlias = "BoozzApp"
+            keyPassword = "123456"
+        }
+    }
     defaultConfig {
         applicationId "boozz.lyrical.ly.video.status.maker"
         minSdk 21
@@ -18,12 +25,14 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
+
     }
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
