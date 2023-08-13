@@ -81,6 +81,7 @@ class EditVideoActivity : BaseActivity() {
     private var videoPath: String? = null
 
     private var isRemoveWaterMark = false
+    private var isFromExport = false
     private var isCreated = false
 
     private var audioGap: Long = 0
@@ -91,7 +92,7 @@ class EditVideoActivity : BaseActivity() {
     private var fileNameInstaCrop: String? = null
     private var bitmap_thumb: Bitmap? = null
     private var finalVideoPath = ""
-    private var fileName: String? = null
+    private var fileName: String? = ""
     private var textDataArray: JSONArray? = null
     private lateinit var holdDialog: Dialog
 
@@ -161,10 +162,21 @@ class EditVideoActivity : BaseActivity() {
         tvEditSongName.text = videoPojo.title
 
         ivCloseWatermark.setOnClickListener {
-            showDialog(true)
+            if (flagChanges) {
+                isFromExport = false
+                showWatermarkDialog()
+            }
         }
         tvExport.setOnClickListener {
-            showDialog(false)
+            isFromExport = true
+            if (!isRemoveWaterMark && flagChanges) {
+                showWatermarkDialog()
+            } else {
+                llImageList.isVisible = false
+                //showDownloadDialog()
+                saveVideo(outputVideo, "export")
+            }
+
         }
 
         clPreview.setOnClickListener {
@@ -408,7 +420,7 @@ class EditVideoActivity : BaseActivity() {
         return dir.absolutePath + File.separator
     }
 
-    fun showDialog(fromWatermark: Boolean) {
+    fun showWatermarkDialog() {
         val holdDialog = Dialog(activity)
         holdDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         holdDialog.setContentView(R.layout.dialog_watermark)
@@ -436,7 +448,7 @@ class EditVideoActivity : BaseActivity() {
         }
 
         holdDialog.ivCloseDialog.setOnClickListener {
-            if (!fromWatermark && flagChanges) {
+            if (isFromExport) {
                 llImageList.isVisible = false
                 //showDownloadDialog()
                 saveVideo(outputVideo, "export")
@@ -750,6 +762,7 @@ class EditVideoActivity : BaseActivity() {
                     ffmpegCmd.add(replaceKeyWords(str_m.getString(i)))
                 }
             }
+
             if (!isRemoveWaterMark) {
                 val img_count = imagesList.size
                 val startc_input_count: Int = stcInputList.size
@@ -840,6 +853,11 @@ class EditVideoActivity : BaseActivity() {
                         return
                     }
                     runOnUiThread {
+                        if (isRemoveWaterMark) {
+                            processmessage.text = "Removing watermark....Please wait a moment!"
+                        } else {
+                            processmessage.text = "Crafting your video… Please wait a moment!"
+                        }
                         val timeInMilliseconds: Int = statistics.time
                         if (timeInMilliseconds > 0) {
                             if (video_total_dur != 0) {
@@ -860,10 +878,12 @@ class EditVideoActivity : BaseActivity() {
                                     if ((completePercentage.toInt() > 5) && (completePercentage.toInt() < 100)) {
 
                                         cp_export_progress.progress = completePercentage.toInt()
+                                        exo_thumb.imageAlpha = 128
                                     }
                                     if (completePercentage.toInt() == 100) {
                                         remove.isVisible = true
                                         tvExport.isVisible = true
+                                        exo_thumb.imageAlpha = 255
                                     }
                                     Log.i(
                                         "FFMPEG>>>", String.format(
@@ -892,13 +912,13 @@ class EditVideoActivity : BaseActivity() {
                         Log.d(
                             Config.TAG, "Finished command : ffmpeg " + Arrays.toString(command)
                         )
-                        llWaterMark.isEnabled = true
-                        llWaterMark.visibility = View.GONE
+                        remove.isEnabled = true
+                        remove.visibility = View.GONE
                         if (!isRemoveWaterMark) {
-                            llWaterMark.visibility = View.VISIBLE
-                            llWaterMark.isEnabled = true
+                            remove.visibility = View.VISIBLE
+                            remove.isEnabled = true
                         } else {
-                            llWaterMark.visibility = View.GONE
+                            remove.visibility = View.GONE
                         }
                         val file: File = File(getDownloadedPath(activity) + fileNameInstaCrop)
                         if (file.exists()) file.delete()
@@ -917,7 +937,7 @@ class EditVideoActivity : BaseActivity() {
                         releasePlayer()
                         initializeExoPlayer()
                         deleteAllVideo()
-                        flagChanges = false
+                        // flagChanges = false
                         flagExporting = false
                         Handler().postDelayed({
                             runOnUiThread(object : Runnable {
@@ -999,25 +1019,29 @@ class EditVideoActivity : BaseActivity() {
     private fun saveVideo(filePath: String, exportType: String) {
         CoroutineScope(Main).launch {
             // Show the dialog and initialize progress to 0.
-            showDownloadDialog()
+            if (isFromExport) {
+                showDownloadDialog()
 
-            // Simulate download progress (Replace this with your actual download logic).
-            for (progress in 0..100) {
-                holdDialog.progress_download_video.progress = progress
-                delay(50) // Adjust this delay to control the progress update frequency.
+                // Simulate download progress (Replace this with your actual download logic).
+                for (progress in 0..100) {
+                    holdDialog.progress_download_video.progress = progress
+                    delay(50) // Adjust this delay to control the progress update frequency.
+                }
+
+                // After the download is complete, dismiss the dialog.
+                holdDialog.dismiss()
             }
-
-            // After the download is complete, dismiss the dialog.
-            holdDialog.dismiss()
-
             // Process the downloaded video and handle it as needed.
-            val file = File(getDownloadedPath(activity) + fileName)
-            if (!file.exists()) {
-                finalSaveVideo(filePath, file.path, exportType)
+            if (fileName?.isEmpty() == true) {
+                val time = System.currentTimeMillis()
+                fileName = "Boozz_$time.mp4"
             }
+            val file = File(getDownloadedPath(activity) + fileName)
 
-            // Refresh the gallery after processing the video.
-            //refreshGallery(activity, file)
+
+            finalSaveVideo(filePath, file.path, exportType)
+
+
         }
     }
 
@@ -1080,20 +1104,29 @@ class EditVideoActivity : BaseActivity() {
     }
 
     private fun refreshGallery(mContext: Activity, file: File) {
-        holdDialog.dismiss()
+
+        if (holdDialog != null && holdDialog.isShowing()) {
+            holdDialog.dismiss();
+        }
+
         val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         val contentUri = Uri.fromFile(file)
         mediaScanIntent.data = contentUri
-        startActivity(
-            Intent(this, DownloadTemplateActivity::class.java).putExtra(
-                "uri",
-                contentUri
+
+        if (isFromExport) {
+            startActivity(
+                Intent(this, DownloadTemplateActivity::class.java).putExtra(
+                    "uri",
+                    contentUri
+                )
             )
-        )
+        } else {
+            player?.play()
+        }
+
         mContext.sendBroadcast(mediaScanIntent)
 
     }
-
 
 
     private fun getDownloadedPath(mContext: Context): String {
@@ -1138,7 +1171,8 @@ class EditVideoActivity : BaseActivity() {
                     jsonObject.getString("replace_key"), jsonObject.getString("replaced_value")
                 )
                 str_new = str_new.replace(
-                    "{folder_path}", (getZipDirectoryPath(activity) + zipFileName + File.separator)
+                    "{folder_path}",
+                    (getZipDirectoryPath(activity) + zipFileName + File.separator)
                 )
             } catch (e: JSONException) {
                 Log.e("textJson>>>", Log.getStackTraceString(e))

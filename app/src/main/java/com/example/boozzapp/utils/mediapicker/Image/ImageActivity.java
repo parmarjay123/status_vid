@@ -1,6 +1,6 @@
 package com.example.boozzapp.utils.mediapicker.Image;
 
-import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static com.example.boozzapp.utils.mediapicker.Image.ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -23,11 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.example.boozzapp.R;
@@ -46,9 +46,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Alhazmy13 on 10/26/15.
@@ -285,7 +283,7 @@ public class ImageActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ImageTags.IntentCode.CAMERA_REQUEST:
-                        startCropActivity(destination.getPath());
+                    startCropActivity(destination.getPath());
                     break;
 
                 case ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO:
@@ -301,7 +299,7 @@ public class ImageActivity extends AppCompatActivity {
                 default:
                     break;
             }
-        }  else {
+        } else {
             Intent intent = new Intent();
             intent.setAction("net.alhazmy13.mediapicker.rxjava.image.service");
             intent.putExtra(ImageTags.Tags.PICK_ERROR, "user did not select any image");
@@ -364,7 +362,73 @@ public class ImageActivity extends AppCompatActivity {
         finish();
     }
 
+    private boolean hasPermission(String permission) {
+        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
     private void pickImageWrapper() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            List<String> permissionsList = new ArrayList<>();
+
+            if (Build.VERSION.SDK_INT >= 33) {
+                permissionsList.add(Manifest.permission.READ_MEDIA_IMAGES);
+
+            }else{
+                if (!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    permissionsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                }
+
+            }
+            if ((mImgConfig.mode == ImagePicker.Mode.CAMERA || mImgConfig.mode == ImagePicker.Mode.CAMERA_AND_GALLERY) &&
+                    !hasPermission(Manifest.permission.CAMERA)
+            ) {
+                permissionsList.add(Manifest.permission.CAMERA);
+            }
+
+
+
+            if (!permissionsList.isEmpty()) {
+                requestPermissions(
+                        permissionsList.toArray(new String[permissionsList.size()]),
+                        REQUEST_CODE_ASK_PERMISSIONS
+                );
+            } else {
+                pickImage();
+            }
+        } else {
+            pickImage();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String[] permissions,
+            @NonNull int[] grantResults
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CODE_ASK_PERMISSIONS) {
+            // Check if all permissions are granted
+            boolean allPermissionsGranted = true;
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    break;
+                }
+            }
+
+            if (allPermissionsGranted) {
+                // All required permissions granted, proceed with your logic
+                pickImage();
+            } else {
+                // Some permissions were denied, handle accordingly (show a message, etc.)
+            }
+        }
+    }
+
+
+   /* private void pickImageWrapper() {
         if (Build.VERSION.SDK_INT >= 23) {
             List<String> permissionsNeeded = new ArrayList<>();
 
@@ -413,7 +477,7 @@ public class ImageActivity extends AppCompatActivity {
         } else {
             pickImage();
         }
-    }
+    }*/
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(this)
@@ -433,35 +497,35 @@ public class ImageActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS:
-                Map<String, Integer> perms = new HashMap<>();
-                // Initial
-                perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
-                perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
-                // Fill with results
-                for (int i = 0; i < permissions.length; i++)
-                    perms.put(permissions[i], grantResults[i]);
-                // Check for ACCESS_FINE_LOCATION
-                if (perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                        && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    // All Permissions Granted
-                    pickImage();
-                } else {
-                    // Permission Denied
-                    Toast.makeText(ImageActivity.this, getString(R.string.media_picker_some_permission_is_denied), Toast.LENGTH_SHORT)
-                            .show();
-                    onBackPressed();
-                }
+    /*  @Override
+      public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+          switch (requestCode) {
+              case ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS:
+                  Map<String, Integer> perms = new HashMap<>();
+                  // Initial
+                  perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
+                  perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+                  // Fill with results
+                  for (int i = 0; i < permissions.length; i++)
+                      perms.put(permissions[i], grantResults[i]);
+                  // Check for ACCESS_FINE_LOCATION
+                  if (perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                          && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                      // All Permissions Granted
+                      pickImage();
+                  } else {
+                      // Permission Denied
+                      Toast.makeText(ImageActivity.this, getString(R.string.media_picker_some_permission_is_denied), Toast.LENGTH_SHORT)
+                              .show();
+                      onBackPressed();
+                  }
 
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
+                  break;
+              default:
+                  super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+          }
+      }
+  */
     private static class CompressImageTask extends AsyncTask<Void, Void, Void> {
 
         private final ImageConfig mImgConfig;
