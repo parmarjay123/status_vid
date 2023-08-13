@@ -1,5 +1,6 @@
 package com.example.boozzapp.activities
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -12,6 +13,7 @@ import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.ExploreVideoAdapter
+import com.example.boozzapp.adapter.SuggestedVideoAdapter
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.ExploreVideoPojo
 import com.example.boozzapp.utils.Constants
@@ -115,18 +117,7 @@ class DownloadTemplateActivity : BaseActivity() {
             if (videoUri!=null){
                 val savedVideoUri = videoUri?.let { it1 -> saveVideoToLocalStorage(it1) }
                 if (savedVideoUri != null) {
-                    shareToStories(savedVideoUri)
-
-
-                    /*   if (isWhatsAppInstalled()) {
-
-                       } else {
-                           Toast.makeText(
-                               activity,
-                               "Whats App is not Installed, Please Install it first.",
-                               Toast.LENGTH_LONG
-                           ).show()
-                       }*/
+                    shareVideoToFacebook(savedVideoUri)
 
                 }
             }else{
@@ -262,12 +253,6 @@ class DownloadTemplateActivity : BaseActivity() {
         intent.setDataAndType(videoUri, "video/*")
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         startActivity(intent)
-        /*if (intent.resolveActivity(packageManager) != null) {
-
-        } else {
-            // Instagram is not installed on the device or no app can handle the intent
-            // Handle this case appropriately
-        }*/
     }
 
     private fun shareToStories(videoUri: Uri) {
@@ -294,15 +279,23 @@ class DownloadTemplateActivity : BaseActivity() {
             val chooser = Intent.createChooser(targetShareIntents.removeAt(0), "Share video to Stories")
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetShareIntents.toTypedArray())
             startActivity(chooser)
-        } else {
-            // Instagram and Facebook are not installed on the device or no app can handle the intent
-            // Handle this case appropriately
         }
     }
 
+    private fun shareVideoToFacebook(videoUri: Uri) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "video/*"
+        intent.putExtra(Intent.EXTRA_STREAM, videoUri)
+        intent.setPackage("com.facebook.katana") // Use the Facebook app's package name
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-
-
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            // Facebook app is not installed, handle accordingly
+            Toast.makeText(this, "Facebook app is not installed", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun isWhatsAppInstalled(): Boolean {
         val intent = Intent(Intent.ACTION_SENDTO)
@@ -326,7 +319,7 @@ class DownloadTemplateActivity : BaseActivity() {
                 Log.i("TAG", "exploreSuggestionList$responseString")
                 val suggestionsPojo = Gson().fromJson(responseString, ExploreVideoPojo::class.java)
                 suggestionsPojo.data!!.templates?.let { downloadVideoSuggestionList.addAll(it) }
-                val exploreVideoListAdapter = ExploreVideoAdapter(
+                val exploreVideoListAdapter = SuggestedVideoAdapter(
                     activity,
                     downloadVideoSuggestionList,
                 )
