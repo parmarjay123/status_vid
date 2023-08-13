@@ -215,9 +215,12 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun homeTemplateList(sort_by: String) {
+        swipeRefreshLayout?.isRefreshing = false
+
         if (page == 1)
-            swipeRefreshLayout?.isRefreshing = false
             showProgress()
+
+
         val retrofitHelper = RetrofitHelper(activity)
         val call: Call<ResponseBody> =
             retrofitHelper.api().homeTemplates(
