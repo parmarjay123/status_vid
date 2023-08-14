@@ -25,9 +25,13 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_download_template.*
 import kotlinx.android.synthetic.main.activity_edit_video.*
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_preview.*
 import kotlinx.android.synthetic.main.dialog_download.*
 import kotlinx.android.synthetic.main.dialog_watermark.*
@@ -50,6 +54,23 @@ class PreviewActivity : BaseActivity() {
         setContentView(R.layout.activity_preview)
         activity = this
         storeUserData = StoreUserData(activity)
+
+        val adRequest = AdRequest.Builder().build()
+        previewVideoBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adPreviewVideoLoadingText.isVisible = false
+                previewVideoBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adPreviewVideoLoadingText.isVisible = false
+                previewVideoBannerAdView.isVisible = true
+
+            }
+        }
+        previewVideoBannerAdView.loadAd(adRequest)
 
         val intent = intent
         hasShareVideo = intent?.extras?.getString("videoId") != null

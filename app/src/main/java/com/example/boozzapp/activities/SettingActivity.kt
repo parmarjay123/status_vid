@@ -5,9 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import kotlinx.android.synthetic.main.activity_setting.*
 
 class SettingActivity : BaseActivity() {
@@ -17,10 +22,31 @@ class SettingActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
+
+        val adRequest = AdRequest.Builder().build()
+        adLoadingText.visibility = View.VISIBLE
+
+        settingBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adLoadingText.isVisible = false
+                settingBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adLoadingText.isVisible = false
+                settingBannerAdView.isVisible = true
+
+            }
+        }
+        settingBannerAdView.loadAd(adRequest)
+
+
         ivSettingBack.setOnClickListener { finish() }
 
         llMyVideo.setOnClickListener {
-            activity.startActivity(Intent(activity,MyVideoActivity::class.java))
+            activity.startActivity(Intent(activity, MyVideoActivity::class.java))
         }
 
         llShareApp.setOnClickListener {

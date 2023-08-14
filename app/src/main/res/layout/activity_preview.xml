@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginHorizontal="25dp"
-        android:layout_marginBottom="@dimen/_50sdp"
+        android:layout_marginBottom="@dimen/_52sdp"
         android:background="@drawable/bg_rounded_transparent"
         android:gravity="center"
         android:orientation="horizontal"
@@ -122,6 +122,27 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
-        android:layout_gravity="bottom" />
+        android:background="@color/light_black"
+        android:layout_gravity="bottom" >
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/previewVideoBannerAdView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-4706162076647622/9958172803"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/adPreviewVideoLoadingText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Loading ad..."
+            android:textColor="@color/white"
+            android:visibility="visible" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </FrameLayout>

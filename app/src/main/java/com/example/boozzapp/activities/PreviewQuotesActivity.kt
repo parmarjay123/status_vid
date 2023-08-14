@@ -14,13 +14,18 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.example.boozzapp.R
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import kotlinx.android.synthetic.main.activity_preview_quotes.*
+import kotlinx.android.synthetic.main.activity_qutoes.*
 import kotlinx.android.synthetic.main.dialog_download.*
 import java.io.File
 import java.text.SimpleDateFormat
@@ -36,6 +41,23 @@ class PreviewQuotesActivity : BaseActivity() {
         setContentView(R.layout.activity_preview_quotes)
         activity = this
         storeUserData = StoreUserData(activity)
+
+        val adRequest = AdRequest.Builder().build()
+        previewBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adPreviewLoadingText.isVisible = false
+                previewBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adPreviewLoadingText.isVisible = false
+                previewBannerAdView.isVisible = true
+
+            }
+        }
+        previewBannerAdView.loadAd(adRequest)
 
         if (intent.getStringExtra("imageURL") != null) {
             image = intent.getStringExtra("imageURL")

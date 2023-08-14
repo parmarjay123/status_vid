@@ -16,8 +16,12 @@ import com.example.boozzapp.pojo.QuotesTemplatesItem
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_qutoes.*
+import kotlinx.android.synthetic.main.activity_setting.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -35,6 +39,22 @@ class QuotesActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
+        val adRequest = AdRequest.Builder().build()
+        quotesBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adQuotesLoadingText.isVisible = false
+                quotesBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adQuotesLoadingText.isVisible = false
+                quotesBannerAdView.isVisible = true
+
+            }
+        }
+        quotesBannerAdView.loadAd(adRequest)
 
         quotesSwipeToRefresh.setOnRefreshListener {
             page = 1

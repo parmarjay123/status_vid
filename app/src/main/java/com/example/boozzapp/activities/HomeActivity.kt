@@ -19,8 +19,12 @@ import com.example.boozzapp.pojo.HomeTemplate
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.activity_setting.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -45,6 +49,22 @@ class HomeActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
+        val adRequest = AdRequest.Builder().build()
+        homeBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adHomeLoadingText.isVisible = false
+                homeBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adHomeLoadingText.isVisible = false
+                homeBannerAdView.isVisible = true
+
+            }
+        }
+        homeBannerAdView.loadAd(adRequest)
 
         swipeRefreshLayout.setOnRefreshListener {
             page = 1
@@ -263,7 +283,7 @@ class HomeActivity : BaseActivity() {
 
                     for ((index, template) in pojo.data.templates!!.withIndex()) {
                         template?.let { newItems.add(it) }
-                        if ((index + 1) %  4== 0 && index != pojo.data.templates.size - 1) {
+                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
                             newItems.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }

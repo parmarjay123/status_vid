@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
     tools:context=".activities.SettingActivity">
@@ -36,7 +37,8 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="@dimen/_10sdp"
         android:background="@color/app_background_color"
         android:orientation="vertical">
@@ -193,8 +195,24 @@
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/settingBannerAdView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_gravity="bottom"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-4706162076647622/9481560466"
+        android:visibility="gone"/>
+
+
+    <TextView
+        android:id="@+id/adLoadingText"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_gravity="center"
+        android:text="Loading ad..."
+        android:visibility="visible" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -13,6 +13,7 @@
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -124,51 +125,92 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-
     <FrameLayout
         android:id="@+id/flBottom"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp">
 
-        android:paddingHorizontal="@dimen/_25sdp">
-
-        <LinearLayout
-            android:id="@+id/llFilter"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/bg_rounded_blue"
-            android:gravity="center"
-            android:paddingHorizontal="@dimen/_25sdp"
-            android:paddingVertical="@dimen/_7sdp">
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="@dimen/_16sdp"
-                android:layout_height="@dimen/_16sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/filter_icon" />
-        </LinearLayout>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_25sdp">
 
-        <LinearLayout
-            android:id="@+id/llTopArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:background="@drawable/bg_rounded_blue"
-            android:gravity="center"
-            android:paddingHorizontal="@dimen/_25sdp"
-            android:visibility="gone"
-            android:paddingVertical="@dimen/_7sdp">
+                <LinearLayout
+                    android:id="@+id/llFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/bg_rounded_blue"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_25sdp"
+                    android:paddingVertical="@dimen/_7sdp">
 
-            <ImageView
-                android:layout_width="@dimen/_16sdp"
-                android:layout_height="@dimen/_16sdp"
-                android:layout_gravity="center"
-                android:src="@drawable/up_white_icon" />
-        </LinearLayout>
+                    <ImageView
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/filter_icon" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:id="@+id/llTopArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+                    android:background="@drawable/bg_rounded_blue"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_25sdp"
+                    android:paddingVertical="@dimen/_7sdp"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/up_white_icon" />
+                </LinearLayout>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/white">
+
+                <com.google.android.gms.ads.AdView
+                    android:id="@+id/homeBannerAdView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:adSize="BANNER"
+                    app:adUnitId="ca-app-pub-4706162076647622/9481560466"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/adHomeLoadingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Loading ad..."
+                    android:visibility="visible" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
 
     </FrameLayout>
