@@ -219,8 +219,6 @@ class HomeActivity : BaseActivity() {
 
         if (page == 1)
             showProgress()
-
-
         val retrofitHelper = RetrofitHelper(activity)
         val call: Call<ResponseBody> =
             retrofitHelper.api().homeTemplates(

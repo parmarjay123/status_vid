@@ -50,4 +50,14 @@
     <string name="insta_page_url">https://instagram.com/boozz.app?igshid=MzRlODBiNWFlZA==</string>
     <string name="fb_page_url">https://www.facebook.com/boozzzv?mibextid=D4KYlr</string>
     <string name="my_videos_new">My Videos</string>
+
+    <!--Here Facebook Ads IDs-->
+    <string name="fb_app_id"></string>
+    <string name="fb_client_token"></string>
+
+
+    <!--Here Google Ads IDs-->
+    <string name="app_id">ca-app-pub-4706162076647622~3543975526</string>
+
+
 </resources>
