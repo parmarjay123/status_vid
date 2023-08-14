@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeCategoryAdapter
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
+import com.example.boozzapp.adscontrollers.NativeAdItem
 import com.example.boozzapp.controls.CustomDialog
 import com.example.boozzapp.pojo.CategoryList
-import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.HomeCategoryPojo
 import com.example.boozzapp.pojo.HomeTemplate
 import com.example.boozzapp.utils.Constants
@@ -34,8 +34,10 @@ class HomeActivity : BaseActivity() {
     lateinit var adapter: HomeTemplatesAdapter
     var homeCategoryList = ArrayList<CategoryList?>()
 
-    var list = ArrayList<ExploreTemplatesItem?>()
+    //var list = ArrayList<ExploreTemplatesItem?>()
     var sortBy = "newest"
+    val updatedList: MutableList<Any?> = mutableListOf()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +47,7 @@ class HomeActivity : BaseActivity() {
 
 
         swipeRefreshLayout.setOnRefreshListener {
-            page=1
+            page = 1
             homeCategories()
         }
 
@@ -148,19 +150,15 @@ class HomeActivity : BaseActivity() {
         val file = getZipDirectoryPath(activity) + getString(R.string.watermark)
         try {
             val inputStream = assets.open(getString(R.string.watermark))
-            try {
+            inputStream.use { inputStream ->
                 val outputStream = FileOutputStream(file)
-                try {
+                outputStream.use { outputStream ->
                     val buf = ByteArray(1024)
                     var len: Int
-                    while (inputStream.read(buf).also { len = it } > 0) {
+                    while (inputStream.read(buf).also { it.also { len = it } } > 0) {
                         outputStream.write(buf, 0, len)
                     }
-                } finally {
-                    outputStream.close()
                 }
-            } finally {
-                inputStream.close()
             }
         } catch (e: IOException) {
             throw IOException("Could not open robot png", e)
@@ -219,62 +217,70 @@ class HomeActivity : BaseActivity() {
 
         if (page == 1)
             showProgress()
+
         val retrofitHelper = RetrofitHelper(activity)
-        val call: Call<ResponseBody> =
-            retrofitHelper.api().homeTemplates(
-                sort_by, page
-            )
+        val call: Call<ResponseBody> = retrofitHelper.api().homeTemplates(sort_by, page)
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
             override fun onSuccess(body: Response<ResponseBody>) {
+
                 if (page == 1)
                     dismissProgress()
-                val responseString = body.body()!!.string()
-                Log.i("TAG", "homeTemplateList$responseString")
 
-                val pojo =
-                    Gson().fromJson(responseString, HomeTemplate::class.java)
+                val responseString = body.body()!!.string()
+                val pojo = Gson().fromJson(responseString, HomeTemplate::class.java)
                 totalPage = pojo.data!!.total_page!!.toInt()
 
                 if (page == 1) {
-                    list.clear()
-                    list.addAll(pojo.data.templates!!)
-
-                    adapter =
-                        HomeTemplatesAdapter(activity, list, rvHomeList)
+                    updatedList.clear()
+                    for ((index, template) in pojo.data.templates!!.withIndex()) {
+                        template?.let { updatedList.add(it) }
+                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                            updatedList.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
+                    adapter = HomeTemplatesAdapter(activity, updatedList, rvHomeList)
                     activity.rvHomeList.adapter = adapter
-                    adapter.setOnLoadMoreListener(object :
-                        HomeTemplatesAdapter.OnLoadMoreListener {
+
+                    adapter.setOnLoadMoreListener(object : HomeTemplatesAdapter.OnLoadMoreListener {
                         override fun onLoadMore() {
                             if (page < totalPage) {
-                                list.add(null)
+                                updatedList.add(null)
                                 Handler(Looper.getMainLooper()).postDelayed({
-                                    adapter.notifyItemInserted(list.size - 1)
-                                    adapter.notifyItemRangeChanged(list.size - 1, list.size)
+                                    adapter.notifyItemInserted(updatedList.size - 1)
+                                    adapter.notifyItemRangeChanged(
+                                        updatedList.size - 1,
+                                        updatedList.size
+                                    )
                                     page += 1
                                     homeTemplateList(sort_by)
-
                                 }, 1000)
                             }
                         }
-
                     })
                 } else {
-                    list.removeAt(list.size - 1)
-                    list.addAll(pojo.data.templates!!)
+                    val newItems = mutableListOf<Any?>()
 
-                    adapter.notifyItemRemoved(list.size - 1)
-                    adapter.notifyItemRangeChanged(list.size - 1, list.size)
+                    for ((index, template) in pojo.data.templates!!.withIndex()) {
+                        template?.let { newItems.add(it) }
+                        if ((index + 1) %  4== 0 && index != pojo.data.templates.size - 1) {
+                            newItems.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
 
+                    updatedList.removeAt(updatedList.size - 1) // Remove the loading item
+                    updatedList.addAll(newItems) // Add new data
+                    adapter.notifyDataSetChanged() // Notify data change
+
+                    adapter.setLoaded()
                 }
-                adapter.setLoaded()
 
+                adapter.setLoaded()
             }
 
             override fun onError(code: Int, error: String) {
                 dismissProgress()
                 Log.i("error", error)
-
             }
         })
     }

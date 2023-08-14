@@ -58,6 +58,7 @@
 
     <!--Here Google Ads IDs-->
     <string name="app_id">ca-app-pub-4706162076647622~3543975526</string>
+    <string name="gl_native_Videolist">ca-app-pub-4706162076647622/3711801378</string>
 
 
 </resources>

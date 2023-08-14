@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
 import com.example.boozzapp.adapter.SearchCategoryAdapter
+import com.example.boozzapp.adscontrollers.NativeAdItem
 import com.example.boozzapp.pojo.*
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
@@ -29,6 +30,8 @@ class SearchActivity : BaseActivity() {
     var page = 1
     var list = ArrayList<ExploreTemplatesItem?>()
     lateinit var adapter: HomeTemplatesAdapter
+    val updatedList: MutableList<Any?> = mutableListOf()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -138,36 +141,49 @@ class SearchActivity : BaseActivity() {
                 
                 totalPage = pojo.totalPage!!.toInt()
 
-                if (page == 1) {
-                    list.clear()
-                    list.addAll(pojo.data!!)
 
-                    adapter =
-                        HomeTemplatesAdapter(activity, list, rvSearchTemplateList)
+                if (page == 1) {
+                    updatedList.clear()
+                    for ((index, template) in pojo.data!!.withIndex()) {
+                        template?.let { updatedList.add(it) }
+                        if ((index + 1) % 4 == 0 && index != pojo.data.size - 1) {
+                            updatedList.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
+                    adapter = HomeTemplatesAdapter(activity, updatedList, rvSearchTemplateList)
                     activity.rvSearchTemplateList.adapter = adapter
-                    adapter.setOnLoadMoreListener(object :
-                        HomeTemplatesAdapter.OnLoadMoreListener {
+
+                    adapter.setOnLoadMoreListener(object : HomeTemplatesAdapter.OnLoadMoreListener {
                         override fun onLoadMore() {
                             if (page < totalPage) {
-                                list.add(null)
+                                updatedList.add(null)
                                 Handler(Looper.getMainLooper()).postDelayed({
-                                    adapter.notifyItemInserted(list.size - 1)
-                                    adapter.notifyItemRangeChanged(list.size - 1, list.size)
+                                    adapter.notifyItemInserted(updatedList.size - 1)
+                                    adapter.notifyItemRangeChanged(
+                                        updatedList.size - 1,
+                                        updatedList.size
+                                    )
                                     page += 1
                                     homeTemplateList(searchText)
-
                                 }, 1000)
                             }
                         }
-
                     })
                 } else {
-                    list.removeAt(list.size - 1)
-                    list.addAll(pojo.data!!)
+                    val newItems = mutableListOf<Any?>()
 
-                    adapter.notifyItemRemoved(list.size - 1)
-                    adapter.notifyItemRangeChanged(list.size - 1, list.size)
+                    for ((index, template) in pojo.data!!.withIndex()) {
+                        template?.let { newItems.add(it) }
+                        if ((index + 1) %  4== 0 && index != pojo.data.size - 1) {
+                            newItems.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
 
+                    updatedList.removeAt(updatedList.size - 1) // Remove the loading item
+                    updatedList.addAll(newItems) // Add new data
+                    adapter.notifyDataSetChanged() // Notify data change
+
+                    adapter.setLoaded()
                 }
                 adapter.setLoaded()
 
