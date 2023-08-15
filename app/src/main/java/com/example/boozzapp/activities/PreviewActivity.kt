@@ -26,6 +26,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
 import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
@@ -246,7 +247,7 @@ class PreviewActivity : BaseActivity() {
             .start(object : OnDownloadListener {
                 override fun onDownloadComplete() {
                     Log.i("TAG", "onDownloadComplete:  after" + getZipDirectoryPath()!!)
-                    holdDialog.dismiss()
+                     holdDialog.dismiss()
                     val unzipTask = UnZipFileFromURLs(zipFilePath!!, getZipDirectoryPath()!!) {
                         // This block will be executed after unzipping is completed
                         // Start the EditVideoActivity here
@@ -321,6 +322,36 @@ class PreviewActivity : BaseActivity() {
         val windowHeight = activity.window.decorView.height
         val dialogHeight = windowHeight / 2
         holdDialog.setCanceledOnTouchOutside(false)
+        holdDialog.nativeADs.isVisible = true
+
+        val adUnitId = getString(R.string.GL_Tamplate_Create_Native)
+
+        var adLoader = AdLoader.Builder(activity, adUnitId)
+            .forNativeAd { nativeAd ->
+                // Populate the adView with the native ad properties
+                holdDialog.nativeADs.setNativeAd(nativeAd)
+                holdDialog.nativeADs.removeAllViews()
+
+            }
+            .withAdListener(object : AdListener() {
+                override fun onAdLoaded() {
+                    holdDialog.tvLoad.isVisible = false
+                    holdDialog.nativeADs.isVisible = true
+                    // Ad loaded successfully
+                    Log.d("NativeAd", "Ad loaded successfully")
+                }
+
+                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    holdDialog.tvLoad.isVisible = true
+                    holdDialog.nativeADs.isVisible = false
+                    // Ad failed to load
+                    Log.d("NativeAd", "Ad failed to load. Error code: ${loadAdError.code}")
+                    Log.e("NativeAd", "Error message: ${loadAdError.message}")
+                }
+            })
+            .build()
+        val adRequest = AdRequest.Builder().build()
+        adLoader.loadAd(adRequest)
 
         // Set the dialog's window layout parameters
         val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight)
@@ -329,6 +360,7 @@ class PreviewActivity : BaseActivity() {
         holdDialog.show()
 
         holdDialog.btnCancel.setOnClickListener {
+            holdDialog.nativeADs.removeAllViews()
             holdDialog.dismiss()
             PRDownloader.cancelAll()
 

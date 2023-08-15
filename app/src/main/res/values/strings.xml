@@ -62,6 +62,8 @@
     <string name="GL_SerchList_Native">ca-app-pub-4706162076647622/9613723720</string>
     <string name="GL_Setting_MyVideoList_Native">ca-app-pub-4706162076647622/1072587409</string>
     <string name="GL_InQuote_list_Native">ca-app-pub-4706162076647622/3159996018</string>
+    <string name="GL_INcatagory_Tamplatelist_Native">ca-app-pub-4706162076647622/9102641731</string>
+    <string name="GL_Tamplate_Create_Native">ca-app-pub-4706162076647622/6018927795</string>
 
     <!--Banner Ads IDs-->
     <string name="GL_Setting_Banner">ca-app-pub-4706162076647622/9481560466</string>

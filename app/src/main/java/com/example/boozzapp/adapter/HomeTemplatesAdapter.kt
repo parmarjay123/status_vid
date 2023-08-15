@@ -3,21 +3,10 @@ package com.example.boozzapp.adapter
 
 import NativeAdItem
 import android.content.Intent
-import android.graphics.Typeface
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,8 +15,6 @@ import com.example.boozzapp.R
 import com.example.boozzapp.activities.PreviewActivity
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.google.android.gms.ads.nativead.MediaView
-import com.google.android.gms.ads.nativead.NativeAd
-import com.google.android.gms.ads.nativead.NativeAdView
 import kotlinx.android.synthetic.main.raw_video_native.view.*
 import kotlinx.android.synthetic.main.row_home_list.view.*
 
@@ -160,7 +147,11 @@ class HomeTemplatesAdapter(
                         holder.itemView.findViewById<View>(R.id.ad_advertiser)
                     holder.itemView.rladView.isVisible = true
                     holder.itemView.rlNoadView.isVisible = false
-                    BaseAdapterNative().populateGoogleNativeAdView(nativeAd, holder.itemView.ad_view,activity)
+                    BaseAdapterNative().populateGoogleNativeAdView(
+                        nativeAd,
+                        holder.itemView.ad_view,
+                        activity
+                    )
 
                 }
             }

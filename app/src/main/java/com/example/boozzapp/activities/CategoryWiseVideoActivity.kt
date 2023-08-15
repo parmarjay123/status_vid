@@ -1,5 +1,6 @@
 package com.example.boozzapp.activities
 
+import NativeAdItem
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,9 +25,9 @@ class CategoryWiseVideoActivity : BaseActivity() {
     var totalPage = 1
     var page = 1
     lateinit var adapter: CategoryWiseVideoAdapter
-    var list = ArrayList<ExploreTemplatesItem?>()
     var sortBy = ""
     private var categoryID = ""
+    val list: MutableList<Any?> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,7 +111,12 @@ class CategoryWiseVideoActivity : BaseActivity() {
                 }
                 if (page == 1) {
                     list.clear()
-                    list.addAll(pojo.data.templates)
+                    for ((index, template) in pojo.data.templates!!.withIndex()) {
+                        template?.let { list.add(it) }
+                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                            list.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
 
                     adapter =
                         CategoryWiseVideoAdapter(activity, list, rvCategoriesWiseVideo)
@@ -132,14 +138,21 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
                     })
                 } else {
-                    list.removeAt(list.size - 1)
-                    list.addAll(pojo.data.templates)
+                    val newItems = mutableListOf<Any?>()
 
-                    adapter.notifyItemRemoved(list.size - 1)
-                    adapter.notifyItemRangeChanged(list.size - 1, list.size)
+                    for ((index, template) in pojo.data.templates.withIndex()) {
+                        template?.let { newItems.add(it) }
+                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                            newItems.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
 
+                    list.removeAt(list.size - 1) // Remove the loading item
+                    list.addAll(newItems) // Add new data
+                    adapter.notifyDataSetChanged() // Notify data change
+
+                    adapter.setLoaded()
                 }
-                adapter.setLoaded()
 
             }
 
