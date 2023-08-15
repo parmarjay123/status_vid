@@ -1,5 +1,6 @@
 package com.example.boozzapp.activities
 
+import NativeAdItem
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -7,7 +8,6 @@ import android.util.Log
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.QuotesTemplatesAdapter
 import com.example.boozzapp.pojo.QuotesTemplate
-import com.example.boozzapp.pojo.QuotesTemplatesItem
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.google.gson.Gson
@@ -20,9 +20,9 @@ class CategoryWiseQuotesActivity : BaseActivity() {
     var totalPage = 1
     var page = 1
     lateinit var adapter: QuotesTemplatesAdapter
-    var list = ArrayList<QuotesTemplatesItem?>()
     var sortBy = ""
     private var categoryID = ""
+    val list: MutableList<Any?> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,10 +80,18 @@ class CategoryWiseQuotesActivity : BaseActivity() {
                 totalPage = pojo.data!!.total_page!!.toInt()
                 if (page == 1) {
                     list.clear()
-                    list.addAll(pojo.data.templates!!)
+                    for ((index, template) in pojo.data.templates!!.withIndex()) {
+                        template?.let { list.add(it) }
+                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                            list.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
 
                     adapter =
-                        QuotesTemplatesAdapter(activity, list, rvQuotesCategoriesWiseVideo)
+                        QuotesTemplatesAdapter(
+                            activity, list, rvQuotesCategoriesWiseVideo,
+                            activity.getString(R.string.GL_InQuote_list_Native)
+                        )
                     activity.rvQuotesCategoriesWiseVideo.adapter = adapter
                     adapter.setOnLoadMoreListener(object :
                         QuotesTemplatesAdapter.OnLoadMoreListener {
@@ -102,14 +110,20 @@ class CategoryWiseQuotesActivity : BaseActivity() {
 
                     })
                 } else {
-                    list.removeAt(list.size - 1)
-                    list.addAll(pojo.data.templates!!)
+                    val newItems = mutableListOf<Any?>()
+                    for ((index, template) in pojo.data.templates!!.withIndex()) {
+                        template?.let { newItems.add(it) }
+                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                            newItems.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
 
-                    adapter.notifyItemRemoved(list.size - 1)
-                    adapter.notifyItemRangeChanged(list.size - 1, list.size)
+                    list.removeAt(list.size - 1) // Remove the loading item
+                    list.addAll(newItems) // Add new data
+                    adapter.notifyDataSetChanged() // Notify data change
 
+                    adapter.setLoaded()
                 }
-                adapter.setLoaded()
 
             }
 

@@ -1,5 +1,6 @@
 package com.example.boozzapp.activities
 
+import NativeAdItem
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,7 +13,6 @@ import com.example.boozzapp.adapter.QuotesTemplatesAdapter
 import com.example.boozzapp.pojo.QuoteCategoryList
 import com.example.boozzapp.pojo.QuotesCategory
 import com.example.boozzapp.pojo.QuotesTemplate
-import com.example.boozzapp.pojo.QuotesTemplatesItem
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
@@ -21,7 +21,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_qutoes.*
-import kotlinx.android.synthetic.main.activity_setting.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -31,7 +30,8 @@ class QuotesActivity : BaseActivity() {
     var page = 1
     lateinit var adapter: QuotesTemplatesAdapter
     var quotesCategoryList = ArrayList<QuoteCategoryList?>()
-    var list = ArrayList<QuotesTemplatesItem?>()
+    val list: MutableList<Any?> = mutableListOf()
+
     var sortBy = "newest"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,10 +144,19 @@ class QuotesActivity : BaseActivity() {
                 totalPage = pojo.data!!.total_page!!.toInt()
                 if (page == 1) {
                     list.clear()
-                    list.addAll(pojo.data.templates!!)
-
+                    for ((index, template) in pojo.data.templates!!.withIndex()) {
+                        template?.let { list.add(it) }
+                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                            list.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
                     adapter =
-                        QuotesTemplatesAdapter(activity, list, rvQuotesList)
+                        QuotesTemplatesAdapter(
+                            activity,
+                            list,
+                            rvQuotesList,
+                            activity.getString(R.string.GL_InQuote_list_Native)
+                        )
                     activity.rvQuotesList.adapter = adapter
                     adapter.setOnLoadMoreListener(object :
                         QuotesTemplatesAdapter.OnLoadMoreListener {
@@ -166,14 +175,21 @@ class QuotesActivity : BaseActivity() {
 
                     })
                 } else {
-                    list.removeAt(list.size - 1)
-                    list.addAll(pojo.data.templates!!)
+                    val newItems = mutableListOf<Any?>()
+                    for ((index, template) in pojo.data.templates!!.withIndex()) {
+                        template?.let { newItems.add(it) }
+                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                            newItems.add(NativeAdItem()) // Add a marker for the native ad
+                        }
+                    }
 
-                    adapter.notifyItemRemoved(list.size - 1)
-                    adapter.notifyItemRangeChanged(list.size - 1, list.size)
+                    list.removeAt(list.size - 1) // Remove the loading item
+                    list.addAll(newItems) // Add new data
+                    adapter.notifyDataSetChanged() // Notify data change
+
+                    adapter.setLoaded()
 
                 }
-                adapter.setLoaded()
 
             }
 

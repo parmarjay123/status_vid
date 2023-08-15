@@ -1,5 +1,6 @@
 package com.example.boozzapp.activities
 
+import NativeAdItem
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -10,7 +11,8 @@ import kotlinx.android.synthetic.main.activity_my_video.*
 import java.io.File
 
 class MyVideoActivity : BaseActivity() {
-    private val videoList = ArrayList<File>()
+    private val videoList: MutableList<Any?> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_video)
@@ -23,8 +25,9 @@ class MyVideoActivity : BaseActivity() {
 
     private fun loadVideoList() {
 
-        val externalDirectory: String = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            .toString()
+        val externalDirectory: String =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                .toString()
 
         val videoDirectoryName = "Boozz_Status_Maker"
         val videoDirectory = File(externalDirectory, videoDirectoryName)
@@ -34,11 +37,15 @@ class MyVideoActivity : BaseActivity() {
             if (files != null) {
                 videoList.clear()
                 videoList.addAll(files.toList())
-                val myVideoAdapter= MyVideoAdapter(activity,videoList)
-                activity.rvMyVideos.adapter=myVideoAdapter
+                for ((index, fileData) in files.withIndex()) {
+                    fileData?.let { videoList.add(it) }
+                    if ((index + 1) % 4 == 0 && index != files.size - 1) {
+                        videoList.add(NativeAdItem()) // Add a marker for the native ad
+                    }
+                }
+                val myVideoAdapter = MyVideoAdapter(activity, videoList)
+                activity.rvMyVideos.adapter = myVideoAdapter
 
-                Log.d("TAG1", "loadVideoList:$videoList ")
-                Log.d("TAG1", "loadVideoList:$files ")
             } else {
                 Log.d("TAG2", "No files found in the directory")
             }

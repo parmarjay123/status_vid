@@ -54,13 +54,14 @@
     <!--Here Facebook Ads IDs-->
     <string name="fb_app_id">511315357511616</string>
     <string name="facebook_client_token">7087a35412356cb4c5130113d20505ba</string>
-    <string name="fb_native_dashboard_video_list">511315357511616_664757165500767</string>
 
 
     <!--Here Google Ads IDs-->
     <string name="app_id">ca-app-pub-4706162076647622~3543975526</string>
     <string name="GL_DashbordTamplatelist_Native">ca-app-pub-4706162076647622/3584336145</string>
     <string name="GL_SerchList_Native">ca-app-pub-4706162076647622/9613723720</string>
+    <string name="GL_Setting_MyVideoList_Native">ca-app-pub-4706162076647622/1072587409</string>
+    <string name="GL_InQuote_list_Native">ca-app-pub-4706162076647622/3159996018</string>
 
 
 </resources>
