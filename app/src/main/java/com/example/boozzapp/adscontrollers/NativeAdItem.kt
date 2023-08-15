@@ -1,26 +1,27 @@
-package com.example.boozzapp.adscontrollers
-
 import android.content.Context
+import com.facebook.ads.NativeAd
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAd as GoogleNativeAd
 
 class NativeAdItem {
-    var nativeAd: NativeAd? = null
+    var nativeAd: GoogleNativeAd? = null
 
-    fun loadNativeAd(context: Context, adUnitId: String) {
-        val builder = AdLoader.Builder(context, adUnitId)
-            .forNativeAd { ad: NativeAd ->
+    fun loadAds(context: Context, adUnitId: String) {
+        // Load Google native ad
+        val googleAdLoader = AdLoader.Builder(context, adUnitId)
+            .forNativeAd { ad ->
                 nativeAd = ad
             }
             .withAdListener(object : AdListener() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    print("AdError${adError}")
                 }
             })
-        val adLoader = builder.build()
-        adLoader.loadAd(AdRequest.Builder().build())
+            .build()
+        googleAdLoader.loadAd(AdRequest.Builder().build())
     }
+
+
 }

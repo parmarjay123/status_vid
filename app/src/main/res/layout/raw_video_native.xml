@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="230dp"
     android:layout_margin="10dp"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_video_thumb"
+        android:id="@+id/cv_video_thumb_google"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:padding="10dp"
+        android:visibility="visible"
         app:cardBackgroundColor="#fff"
         app:cardCornerRadius="10dp"
         app:cardElevation="6dp">
@@ -38,7 +40,8 @@
                     android:background="@drawable/bg_video_list_native_ad"
                     android:gravity="center"
                     android:minHeight="100dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/rladtext"
@@ -205,13 +208,14 @@
                 <RelativeLayout
                     android:id="@+id/rlNoadView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                   android:layout_marginHorizontal="@dimen/_8sdp"
                     android:background="@drawable/bg_video_list_no_ad"
                     android:gravity="center"
                     android:minHeight="100dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
 
                     <TextView
@@ -231,5 +235,8 @@
             </LinearLayout>
 
         </com.google.android.gms.ads.nativead.NativeAdView>
+
+
     </androidx.cardview.widget.CardView>
+
 </LinearLayout>

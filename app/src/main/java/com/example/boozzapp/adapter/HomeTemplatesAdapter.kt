@@ -1,6 +1,7 @@
 package com.example.boozzapp.adapter
 
 
+import NativeAdItem
 import android.content.Intent
 import android.graphics.Typeface
 import android.text.SpannableString
@@ -11,7 +12,10 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -20,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
 import com.example.boozzapp.activities.PreviewActivity
-import com.example.boozzapp.adscontrollers.NativeAdItem
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
@@ -33,6 +36,7 @@ class HomeTemplatesAdapter(
     val activity: AppCompatActivity,
     private val itemsWithAds: MutableList<Any?> = mutableListOf(),
     recyclerView: RecyclerView,
+    var nativeAdType: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var mOnLoadMoreListener: OnLoadMoreListener? = null
@@ -68,7 +72,10 @@ class HomeTemplatesAdapter(
     private fun preloadNativeAds() {
         for (item in itemsWithAds) {
             if (item is NativeAdItem) {
-                item.loadNativeAd(activity, activity.getString(R.string.gl_native_Videolist))
+                item.loadAds(
+                    activity,
+                    nativeAdType,
+                )
             }
         }
     }
@@ -127,17 +134,32 @@ class HomeTemplatesAdapter(
                 val nativeAdItem = itemsWithAds[position] as NativeAdItem
                 val nativeAd = nativeAdItem.nativeAd
                 if (nativeAd == null) {
-                    nativeAdItem.loadNativeAd(activity, activity.getString(R.string.gl_native_Videolist))
+                    nativeAdItem.loadAds(
+                        activity,
+                        nativeAdType,
+                    )
+
                 } else {
-                    holder.itemView.ad_view.mediaView = holder.itemView.findViewById<MediaView>(R.id.ad_media)
-                    holder.itemView.ad_view.headlineView = holder.itemView.findViewById<View>(R.id.ad_headline)
-                    holder.itemView.ad_view.bodyView = holder.itemView.findViewById<View>(R.id.ad_body)
-                    holder.itemView.ad_view.callToActionView = holder.itemView.findViewById<View>(R.id.ad_call_to_action)
-                    holder.itemView.ad_view.iconView = holder.itemView.findViewById<View>(R.id.ad_icon)
-                    holder.itemView.ad_view.priceView = holder.itemView.findViewById<View>(R.id.ad_price)
-                    holder.itemView.ad_view.starRatingView = holder.itemView.findViewById<View>(R.id.ad_stars)
-                    holder.itemView.ad_view.storeView = holder.itemView.findViewById<View>(R.id.ad_store)
-                    holder.itemView.ad_view.advertiserView = holder.itemView.findViewById<View>(R.id.ad_advertiser)
+                    holder.itemView.ad_view.mediaView =
+                        holder.itemView.findViewById<MediaView>(R.id.ad_media)
+                    holder.itemView.ad_view.headlineView =
+                        holder.itemView.findViewById<View>(R.id.ad_headline)
+                    holder.itemView.ad_view.bodyView =
+                        holder.itemView.findViewById<View>(R.id.ad_body)
+                    holder.itemView.ad_view.callToActionView =
+                        holder.itemView.findViewById<View>(R.id.ad_call_to_action)
+                    holder.itemView.ad_view.iconView =
+                        holder.itemView.findViewById<View>(R.id.ad_icon)
+                    holder.itemView.ad_view.priceView =
+                        holder.itemView.findViewById<View>(R.id.ad_price)
+                    holder.itemView.ad_view.starRatingView =
+                        holder.itemView.findViewById<View>(R.id.ad_stars)
+                    holder.itemView.ad_view.storeView =
+                        holder.itemView.findViewById<View>(R.id.ad_store)
+                    holder.itemView.ad_view.advertiserView =
+                        holder.itemView.findViewById<View>(R.id.ad_advertiser)
+                    holder.itemView.rladView.isVisible = true
+                    holder.itemView.rlNoadView.isVisible = false
                     populateGoogleNativeAdView(nativeAd, holder.itemView.ad_view)
 
                 }
@@ -221,8 +243,6 @@ class HomeTemplatesAdapter(
         } catch (e: Exception) {
         }
     }
-
-
 
 
     private fun makeExpandable(

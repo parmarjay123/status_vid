@@ -1,5 +1,6 @@
 package com.example.boozzapp.activities
 
+import NativeAdItem
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeCategoryAdapter
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
-import com.example.boozzapp.adscontrollers.NativeAdItem
 import com.example.boozzapp.controls.CustomDialog
 import com.example.boozzapp.pojo.CategoryList
 import com.example.boozzapp.pojo.HomeCategoryPojo
@@ -259,7 +259,7 @@ class HomeActivity : BaseActivity() {
                             updatedList.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }
-                    adapter = HomeTemplatesAdapter(activity, updatedList, rvHomeList)
+                    adapter = HomeTemplatesAdapter(activity, updatedList, rvHomeList,activity.getString(R.string.GL_DashbordTamplatelist_Native))
                     activity.rvHomeList.adapter = adapter
 
                     adapter.setOnLoadMoreListener(object : HomeTemplatesAdapter.OnLoadMoreListener {

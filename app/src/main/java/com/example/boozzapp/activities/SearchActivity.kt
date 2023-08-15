@@ -1,5 +1,6 @@
 package com.example.boozzapp.activities
 
+import NativeAdItem
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,14 +11,15 @@ import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
 import com.example.boozzapp.adapter.SearchCategoryAdapter
-import com.example.boozzapp.adscontrollers.NativeAdItem
-import com.example.boozzapp.pojo.*
+import com.example.boozzapp.pojo.CategoryList
+import com.example.boozzapp.pojo.ExploreTemplatesItem
+import com.example.boozzapp.pojo.HomeCategoryPojo
+import com.example.boozzapp.pojo.SearchPojo
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.example.boozzapp.utils.Utils
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_search.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -31,7 +33,6 @@ class SearchActivity : BaseActivity() {
     var list = ArrayList<ExploreTemplatesItem?>()
     lateinit var adapter: HomeTemplatesAdapter
     val updatedList: MutableList<Any?> = mutableListOf()
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,11 +60,11 @@ class SearchActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val newText = s.toString()
-                if (newText.isEmpty()){
+                if (newText.isEmpty()) {
                     list.clear()
-                    rvSearchCategoryList.isVisible=true
-                    rvSearchTemplateList.isVisible=false
-                    tvNoDataFound.isVisible=false
+                    rvSearchCategoryList.isVisible = true
+                    rvSearchTemplateList.isVisible = false
+                    tvNoDataFound.isVisible = false
                 }
 
             }
@@ -126,19 +127,19 @@ class SearchActivity : BaseActivity() {
 
                 val pojo =
                     Gson().fromJson(responseString, SearchPojo::class.java)
-                if (pojo.status==false){
-                    tvNoDataFound.isVisible=true
-                    rvSearchCategoryList.isVisible=true
-                    rvSearchTemplateList.isVisible=false
+                if (pojo.status == false) {
+                    tvNoDataFound.isVisible = true
+                    rvSearchCategoryList.isVisible = true
+                    rvSearchTemplateList.isVisible = false
 
                     list.clear()
                     return
-                }else{
-                    tvNoDataFound.isVisible=false
-                    rvSearchCategoryList.isVisible=false
-                    rvSearchTemplateList.isVisible=true
+                } else {
+                    tvNoDataFound.isVisible = false
+                    rvSearchCategoryList.isVisible = false
+                    rvSearchTemplateList.isVisible = true
                 }
-                
+
                 totalPage = pojo.totalPage!!.toInt()
 
 
@@ -150,7 +151,12 @@ class SearchActivity : BaseActivity() {
                             updatedList.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }
-                    adapter = HomeTemplatesAdapter(activity, updatedList, rvSearchTemplateList)
+                    adapter = HomeTemplatesAdapter(
+                        activity,
+                        updatedList,
+                        rvSearchTemplateList,
+                        activity.getString(R.string.GL_SerchList_Native)
+                    )
                     activity.rvSearchTemplateList.adapter = adapter
 
                     adapter.setOnLoadMoreListener(object : HomeTemplatesAdapter.OnLoadMoreListener {
@@ -174,7 +180,7 @@ class SearchActivity : BaseActivity() {
 
                     for ((index, template) in pojo.data!!.withIndex()) {
                         template?.let { newItems.add(it) }
-                        if ((index + 1) %  4== 0 && index != pojo.data.size - 1) {
+                        if ((index + 1) % 4 == 0 && index != pojo.data.size - 1) {
                             newItems.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }

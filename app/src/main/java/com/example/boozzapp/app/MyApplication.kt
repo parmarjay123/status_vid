@@ -22,12 +22,15 @@ class MyApplication : MultiDexApplication() {
             .setReadTimeout(30000)
             .setConnectTimeout(30000)
             .build()
+        FacebookSdk.sdkInitialize(applicationContext)
+
         PRDownloader.initialize(applicationContext, config)
         FirebaseApp.initializeApp(applicationContext)
         //        setAutoLogAppEventsEnabled(true);
 
         FacebookSdk.setAutoInitEnabled(true)
         FacebookSdk.fullyInitialize()
+
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
