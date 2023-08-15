@@ -54,28 +54,9 @@ class PreviewActivity : BaseActivity() {
         setContentView(R.layout.activity_preview)
         activity = this
         storeUserData = StoreUserData(activity)
-
-        val adRequest = AdRequest.Builder().build()
-        previewVideoBannerAdView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                adPreviewVideoLoadingText.isVisible = false
-                previewVideoBannerAdView.isVisible = true
-            }
-
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                super.onAdFailedToLoad(loadAdError)
-                adPreviewVideoLoadingText.isVisible = false
-                previewVideoBannerAdView.isVisible = true
-
-            }
-        }
-        previewVideoBannerAdView.loadAd(adRequest)
-
+        setupAd()
         val intent = intent
         hasShareVideo = intent?.extras?.getString("videoId") != null
-
-
 
         players = SimpleExoPlayer.Builder(activity).build()
         player.player = players
@@ -151,6 +132,26 @@ class PreviewActivity : BaseActivity() {
 
     }
 
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        previewVideoBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adPreviewVideoLoadingText.isVisible = false
+                previewVideoBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adPreviewVideoLoadingText.isVisible = true
+                previewVideoBannerAdView.isVisible = false
+
+            }
+        }
+        previewVideoBannerAdView.loadAd(adRequest)
+    }
+
     fun setPlayerData() {
         tvSongName.text = videoPojo.title
         val firstItem: MediaItem =
@@ -203,6 +204,7 @@ class PreviewActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        setupAd()
         if (Util.SDK_INT > 23) {
             if (player != null) {
                 player.onResume()

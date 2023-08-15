@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.CategoryWiseVideoAdapter
-import com.example.boozzapp.pojo.HomeTemplate
 import com.example.boozzapp.pojo.ExploreTemplatesItem
+import com.example.boozzapp.pojo.HomeTemplate
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_categorywise_video.*
 import okhttp3.ResponseBody
@@ -32,6 +36,8 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
         ivCategoryBack.setOnClickListener { finish() }
 
+        setupAd()
+
         if (intent.getStringExtra("categoryTitle") != null && intent.getStringExtra("categoryTitle") != "") {
             tvCategoryName.text = intent.getStringExtra("categoryTitle").toString()
         }
@@ -52,6 +58,30 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        setupAd()
+    }
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        VideoCategoryBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adVideoCategoryLoadingText.isVisible = false
+                VideoCategoryBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adVideoCategoryLoadingText.isVisible = true
+                VideoCategoryBannerAdView.isVisible = false
+
+            }
+        }
+        VideoCategoryBannerAdView.loadAd(adRequest)
+    }
+
     private fun categoryWiseVideo() {
         if (page == 1)
             showProgress()
@@ -70,7 +100,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
                 val pojo =
                     Gson().fromJson(responseString, HomeTemplate::class.java)
-                if (pojo.data?.pageSize.isNullOrEmpty()){
+                if (pojo.data?.pageSize.isNullOrEmpty()) {
                     return
                 }
                 totalPage = pojo.data!!.total_page!!.toInt()

@@ -46,7 +46,11 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import kotlinx.android.synthetic.main.activity_edit_video.*
+import kotlinx.android.synthetic.main.activity_explore.*
 import kotlinx.android.synthetic.main.activity_preview.*
 import kotlinx.android.synthetic.main.dialog_download.*
 import kotlinx.android.synthetic.main.dialog_watermark.*
@@ -120,6 +124,9 @@ class EditVideoActivity : BaseActivity() {
         setContentView(R.layout.activity_edit_video)
         activity = this
         storeUserData = StoreUserData(activity)
+
+        setupAd()
+
         videoPojo = intent.getParcelableExtra("videoPojo")!!
 
         dataSourceFactory = buildDataSourceFactory()
@@ -232,6 +239,24 @@ class EditVideoActivity : BaseActivity() {
         }
     }
 
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        MakingVideoBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adMakingVideoLoadingText.isVisible = false
+                MakingVideoBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adMakingVideoLoadingText.isVisible = true
+                MakingVideoBannerAdView.isVisible = false
+
+            }
+        }
+        MakingVideoBannerAdView.loadAd(adRequest)
+    }
 
     fun showDownloadDialog() {
         holdDialog = Dialog(activity)
@@ -476,6 +501,7 @@ class EditVideoActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        setupAd()
         if (flagChanges) {
             exo_thumb.isVisible = true
             remove.isVisible = true

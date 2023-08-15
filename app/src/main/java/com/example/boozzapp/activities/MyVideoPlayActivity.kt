@@ -3,8 +3,12 @@ package com.example.boozzapp.activities
 import android.net.Uri
 import android.os.Bundle
 import android.widget.MediaController
+import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import kotlinx.android.synthetic.main.activity_my_video_play.*
 
 class MyVideoPlayActivity : BaseActivity() {
@@ -16,6 +20,7 @@ class MyVideoPlayActivity : BaseActivity() {
 
         ivMyVideoPlayBack.setOnClickListener { finish() }
 
+        setupAd()
 
         val videoPath = intent.getStringExtra("videoPath")
 
@@ -32,5 +37,29 @@ class MyVideoPlayActivity : BaseActivity() {
         }
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupAd()
+    }
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        myVideoPlayBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adMyVideoPlayLoadingText.isVisible = false
+                myVideoPlayBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adMyVideoPlayLoadingText.isVisible = true
+                myVideoPlayBannerAdView.isVisible = false
+
+            }
+        }
+        myVideoPlayBannerAdView.loadAd(adRequest)
     }
 }

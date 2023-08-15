@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.ExploreQuotesAdapter
 import com.example.boozzapp.pojo.ExploreQuotesPojo
@@ -13,6 +14,9 @@ import com.example.boozzapp.pojo.QuotesCategory
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_quotes_category_list.*
@@ -32,9 +36,32 @@ class ExploreQuotesActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
 
         ivQuoteCatBack.setOnClickListener { finish() }
-
-
+        setupAd()
         exploreSuggestionList()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupAd()
+    }
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        quoteExploreBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adQuoteExploreLoadingText.isVisible = false
+                quoteExploreBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adQuoteExploreLoadingText.isVisible = true
+                quoteExploreBannerAdView.isVisible = false
+
+            }
+        }
+        quoteExploreBannerAdView.loadAd(adRequest)
     }
 
     private fun exploreSuggestionList() {

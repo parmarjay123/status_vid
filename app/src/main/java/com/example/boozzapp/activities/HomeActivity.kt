@@ -48,24 +48,7 @@ class HomeActivity : BaseActivity() {
         setContentView(R.layout.activity_home)
         activity = this
         storeUserData = StoreUserData(activity)
-
-        val adRequest = AdRequest.Builder().build()
-        homeBannerAdView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                adHomeLoadingText.isVisible = false
-                homeBannerAdView.isVisible = true
-            }
-
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                super.onAdFailedToLoad(loadAdError)
-                adHomeLoadingText.isVisible = false
-                homeBannerAdView.isVisible = true
-
-            }
-        }
-        homeBannerAdView.loadAd(adRequest)
-
+        setupAd()
         swipeRefreshLayout.setOnRefreshListener {
             page = 1
             homeCategories()
@@ -146,6 +129,30 @@ class HomeActivity : BaseActivity() {
 
         homeCategories()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupAd()
+    }
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        homeBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adHomeLoadingText.isVisible = false
+                homeBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adHomeLoadingText.isVisible = true
+                homeBannerAdView.isVisible = false
+
+            }
+        }
+        homeBannerAdView.loadAd(adRequest)
     }
 
     override fun onBackPressed() {
@@ -259,7 +266,12 @@ class HomeActivity : BaseActivity() {
                             updatedList.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }
-                    adapter = HomeTemplatesAdapter(activity, updatedList, rvHomeList,activity.getString(R.string.GL_DashbordTamplatelist_Native))
+                    adapter = HomeTemplatesAdapter(
+                        activity,
+                        updatedList,
+                        rvHomeList,
+                        activity.getString(R.string.GL_DashbordTamplatelist_Native)
+                    )
                     activity.rvHomeList.adapter = adapter
 
                     adapter.setOnLoadMoreListener(object : HomeTemplatesAdapter.OnLoadMoreListener {

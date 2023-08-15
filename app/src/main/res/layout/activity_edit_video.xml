@@ -91,7 +91,6 @@
                     app:surface_type="texture_view" />
 
 
-
                 <ProgressBar
                     android:id="@+id/progressBar_exoplayer"
                     android:layout_width="match_parent"
@@ -272,6 +271,26 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"
+        android:background="@color/white">
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/MakingVideoBannerAdView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:adSize="BANNER"
+            app:adUnitId="@string/GL_Tamplate_Making_Banner" />
+
+        <TextView
+            android:id="@+id/adMakingVideoLoadingText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Loading ad..."
+            android:visibility="visible" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
 </LinearLayout>

@@ -39,22 +39,7 @@ class QuotesActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
-        val adRequest = AdRequest.Builder().build()
-        quotesBannerAdView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                adQuotesLoadingText.isVisible = false
-                quotesBannerAdView.isVisible = true
-            }
-
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                super.onAdFailedToLoad(loadAdError)
-                adQuotesLoadingText.isVisible = false
-                quotesBannerAdView.isVisible = true
-
-            }
-        }
-        quotesBannerAdView.loadAd(adRequest)
+        setupAd()
 
         quotesSwipeToRefresh.setOnRefreshListener {
             page = 1
@@ -84,6 +69,29 @@ class QuotesActivity : BaseActivity() {
         quotesCategory()
     }
 
+    override fun onResume() {
+        super.onResume()
+        setupAd()
+    }
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        quotesBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adQuotesLoadingText.isVisible = false
+                quotesBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adQuotesLoadingText.isVisible = true
+                quotesBannerAdView.isVisible = false
+
+            }
+        }
+        quotesBannerAdView.loadAd(adRequest)
+    }
 
     private fun quotesCategory() {
         quotesSwipeToRefresh?.isRefreshing = false

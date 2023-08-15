@@ -41,13 +41,39 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCategoriesWiseVideo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_gravity="center"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         tools:listitem="@layout/row_home_list" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_gravity="bottom"
+        android:background="@color/white">
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/VideoCategoryBannerAdView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:adSize="BANNER"
+            app:adUnitId="@string/GL_Catagory_Banner" />
+
+        <TextView
+            android:id="@+id/adVideoCategoryLoadingText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Loading ad..."
+            android:visibility="visible" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

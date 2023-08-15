@@ -195,9 +195,9 @@
                     android:id="@+id/homeBannerAdView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     app:adSize="BANNER"
-                    app:adUnitId="ca-app-pub-4706162076647622/9481560466"
-                    android:visibility="gone"/>
+                    app:adUnitId="@string/GL_Dashbord_Banner" />
 
                 <TextView
                     android:id="@+id/adHomeLoadingText"

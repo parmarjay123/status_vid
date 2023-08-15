@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-4706162076647622/6561589944"
+            app:adUnitId="@string/GL_InQuotepreview_Banner"
             android:visibility="gone"/>
 
         <TextView

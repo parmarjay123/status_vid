@@ -22,28 +22,9 @@ class SettingActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
-
-        val adRequest = AdRequest.Builder().build()
-        adLoadingText.visibility = View.VISIBLE
-
-        settingBannerAdView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                adLoadingText.isVisible = false
-                settingBannerAdView.isVisible = true
-            }
-
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                super.onAdFailedToLoad(loadAdError)
-                adLoadingText.isVisible = false
-                settingBannerAdView.isVisible = true
-
-            }
-        }
-        settingBannerAdView.loadAd(adRequest)
-
-
         ivSettingBack.setOnClickListener { finish() }
+
+        setupAd()
 
         llMyVideo.setOnClickListener {
             activity.startActivity(Intent(activity, MyVideoActivity::class.java))
@@ -80,6 +61,32 @@ class SettingActivity : BaseActivity() {
         ivFacebook.setOnClickListener {
             openFacebookPage(activity)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupAd()
+    }
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        adLoadingText.visibility = View.VISIBLE
+
+        settingBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adLoadingText.isVisible = false
+                settingBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adLoadingText.isVisible = true
+                settingBannerAdView.isVisible = false
+
+            }
+        }
+        settingBannerAdView.loadAd(adRequest)
     }
 
     private fun openPlayStoreForRating(context: Context) {

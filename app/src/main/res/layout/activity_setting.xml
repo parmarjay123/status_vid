@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
     tools:context=".activities.SettingActivity">
@@ -38,8 +38,8 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginTop="@dimen/_10sdp"
+        android:layout_weight="1"
         android:background="@color/app_background_color"
         android:orientation="vertical">
 
@@ -160,8 +160,6 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-
-
         <com.example.boozzapp.controls.CTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -202,9 +200,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
         android:layout_gravity="bottom"
+        android:visibility="gone"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-4706162076647622/9481560466"
-        android:visibility="gone"/>
+        app:adUnitId="@string/GL_Setting_Banner" />
 
 
     <TextView

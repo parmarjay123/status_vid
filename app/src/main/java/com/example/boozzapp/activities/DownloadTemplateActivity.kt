@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
-import com.example.boozzapp.adapter.ExploreVideoAdapter
 import com.example.boozzapp.adapter.SuggestedVideoAdapter
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.ExploreVideoPojo
@@ -24,6 +23,9 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_download_template.*
 import okhttp3.ResponseBody
@@ -44,6 +46,8 @@ class DownloadTemplateActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
         exoDownloadPlayerView.setBackgroundColor(Color.BLACK)
 
+        setupBannerAd()
+
         downloadTempBack.setOnClickListener { finish() }
 
         tvHome.setOnClickListener {
@@ -56,24 +60,24 @@ class DownloadTemplateActivity : BaseActivity() {
 
         ivDownloadWtsApp.setOnClickListener {
             val videoUri: Uri? = intent.getParcelableExtra("uri")
-            if (videoUri!=null){
+            if (videoUri != null) {
                 val savedVideoUri = videoUri?.let { it1 -> saveVideoToLocalStorage(it1) }
                 if (savedVideoUri != null) {
                     shareVideoToWhatsApp(savedVideoUri)
 
 
-                 /*   if (isWhatsAppInstalled()) {
+                    /*   if (isWhatsAppInstalled()) {
 
-                    } else {
-                        Toast.makeText(
-                            activity,
-                            "Whats App is not Installed, Please Install it first.",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }*/
+                       } else {
+                           Toast.makeText(
+                               activity,
+                               "Whats App is not Installed, Please Install it first.",
+                               Toast.LENGTH_LONG
+                           ).show()
+                       }*/
 
                 }
-            }else{
+            } else {
                 Toast.makeText(
                     activity,
                     "Something Went Wrong...",
@@ -86,7 +90,7 @@ class DownloadTemplateActivity : BaseActivity() {
 
         ivDownloadInsta.setOnClickListener {
             val videoUri: Uri? = intent.getParcelableExtra("uri")
-            if (videoUri!=null){
+            if (videoUri != null) {
                 val savedVideoUri = videoUri?.let { it1 -> saveVideoToLocalStorage(it1) }
                 if (savedVideoUri != null) {
                     shareToInstagramStories(savedVideoUri)
@@ -103,7 +107,7 @@ class DownloadTemplateActivity : BaseActivity() {
                        }*/
 
                 }
-            }else{
+            } else {
                 Toast.makeText(
                     activity,
                     "Something Went Wrong...",
@@ -114,13 +118,13 @@ class DownloadTemplateActivity : BaseActivity() {
 
         ivDownloadFB.setOnClickListener {
             val videoUri: Uri? = intent.getParcelableExtra("uri")
-            if (videoUri!=null){
+            if (videoUri != null) {
                 val savedVideoUri = videoUri?.let { it1 -> saveVideoToLocalStorage(it1) }
                 if (savedVideoUri != null) {
                     shareVideoToFacebook(savedVideoUri)
 
                 }
-            }else{
+            } else {
                 Toast.makeText(
                     activity,
                     "Something Went Wrong...",
@@ -210,12 +214,33 @@ class DownloadTemplateActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        setupBannerAd()
         if (Util.SDK_INT > 23) {
             if (exoDownloadPlayerView != null) {
                 exoDownloadPlayerView.onResume()
             }
 
         }
+    }
+
+    private fun setupBannerAd() {
+        val adRequest = AdRequest.Builder().build()
+
+        DownloadVideoBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adDownloadVideoLoadingText.isVisible = false
+                DownloadVideoBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adDownloadVideoLoadingText.isVisible = true
+                DownloadVideoBannerAdView.isVisible = false
+            }
+        }
+
+        DownloadVideoBannerAdView.loadAd(adRequest)
     }
 
     private fun saveVideoToLocalStorage(videoUri: Uri): Uri? {
@@ -276,7 +301,8 @@ class DownloadTemplateActivity : BaseActivity() {
         }
 
         if (targetShareIntents.isNotEmpty()) {
-            val chooser = Intent.createChooser(targetShareIntents.removeAt(0), "Share video to Stories")
+            val chooser =
+                Intent.createChooser(targetShareIntents.removeAt(0), "Share video to Stories")
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, targetShareIntents.toTypedArray())
             startActivity(chooser)
         }

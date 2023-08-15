@@ -5,11 +5,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.QuotesTemplatesAdapter
 import com.example.boozzapp.pojo.QuotesTemplate
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_categorywise_quotes.*
 import okhttp3.ResponseBody
@@ -29,6 +33,8 @@ class CategoryWiseQuotesActivity : BaseActivity() {
         setContentView(R.layout.activity_categorywise_quotes)
         activity = this
         storeUserData = StoreUserData(activity)
+
+        setupBannerAd()
 
         ivQuotesCategoryBack.setOnClickListener { finish() }
 
@@ -51,6 +57,30 @@ class CategoryWiseQuotesActivity : BaseActivity() {
         quotesTemplateList()
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupBannerAd()
+    }
+
+    private fun setupBannerAd() {
+        val adRequest = AdRequest.Builder().build()
+        quoteCategoryBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adQuoteCategoryLoadingText.isVisible = false
+                quoteCategoryBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adQuoteCategoryLoadingText.isVisible = true
+                quoteCategoryBannerAdView.isVisible = false
+
+            }
+        }
+        quoteCategoryBannerAdView.loadAd(adRequest)
     }
 
     private fun quotesTemplateList() {

@@ -2,6 +2,7 @@ package com.example.boozzapp.activities
 
 import android.os.Bundle
 import android.util.Log
+import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.ExploreVideoAdapter
 import com.example.boozzapp.adapter.HomeCategoryListAdapter
@@ -12,6 +13,9 @@ import com.example.boozzapp.pojo.HomeCategoryPojo
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_explore.*
 import okhttp3.ResponseBody
@@ -29,8 +33,9 @@ class ExploreActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
-
         ivVideoCatBack.setOnClickListener { finish() }
+
+        setupAd()
 
         if (intent.getStringExtra("sortBy") != null) {
             sort_by = intent.getStringExtra("sortBy").toString()
@@ -38,6 +43,30 @@ class ExploreActivity : BaseActivity() {
 
         exploreSuggestionList()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupAd()
+    }
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        ExploreBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adExploreLoadingText.isVisible = false
+                ExploreBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adExploreLoadingText.isVisible = true
+                ExploreBannerAdView.isVisible = false
+
+            }
+        }
+        ExploreBannerAdView.loadAd(adRequest)
     }
 
     private fun exploreSuggestionList() {

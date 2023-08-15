@@ -130,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-4706162076647622/9958172803"
+            app:adUnitId="@string/GL_Playtamplate_Banner"
             android:visibility="gone"/>
 
         <TextView

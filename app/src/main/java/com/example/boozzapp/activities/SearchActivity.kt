@@ -19,6 +19,9 @@ import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.example.boozzapp.utils.Utils
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_search.*
 import okhttp3.ResponseBody
@@ -40,7 +43,7 @@ class SearchActivity : BaseActivity() {
         setContentView(R.layout.activity_search)
         activity = this
         storeUserData = StoreUserData(activity)
-
+        setupAd()
         searchCategories()
 
         ivSearchBack.setOnClickListener { finish() }
@@ -73,6 +76,30 @@ class SearchActivity : BaseActivity() {
 
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupAd()
+    }
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        SearchBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adSearchLoadingText.isVisible = false
+                SearchBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adSearchLoadingText.isVisible = true
+                SearchBannerAdView.isVisible = false
+
+            }
+        }
+        SearchBannerAdView.loadAd(adRequest)
     }
 
 

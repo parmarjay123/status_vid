@@ -25,7 +25,6 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import kotlinx.android.synthetic.main.activity_preview_quotes.*
-import kotlinx.android.synthetic.main.activity_qutoes.*
 import kotlinx.android.synthetic.main.dialog_download.*
 import java.io.File
 import java.text.SimpleDateFormat
@@ -42,22 +41,7 @@ class PreviewQuotesActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
-        val adRequest = AdRequest.Builder().build()
-        previewBannerAdView.adListener = object : AdListener() {
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                adPreviewLoadingText.isVisible = false
-                previewBannerAdView.isVisible = true
-            }
-
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                super.onAdFailedToLoad(loadAdError)
-                adPreviewLoadingText.isVisible = false
-                previewBannerAdView.isVisible = true
-
-            }
-        }
-        previewBannerAdView.loadAd(adRequest)
+        setupAd()
 
         if (intent.getStringExtra("imageURL") != null) {
             image = intent.getStringExtra("imageURL")
@@ -77,6 +61,29 @@ class PreviewQuotesActivity : BaseActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setupAd()
+    }
+
+    private fun setupAd() {
+        val adRequest = AdRequest.Builder().build()
+        previewBannerAdView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                adPreviewLoadingText.isVisible = false
+                previewBannerAdView.isVisible = true
+            }
+
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                super.onAdFailedToLoad(loadAdError)
+                adPreviewLoadingText.isVisible = true
+                previewBannerAdView.isVisible = false
+
+            }
+        }
+        previewBannerAdView.loadAd(adRequest)
+    }
 
     private fun downloadQuote(imageUrl: String?, isShare: Boolean) {
         // Show download dialog

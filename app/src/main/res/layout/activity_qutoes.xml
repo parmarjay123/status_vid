@@ -115,7 +115,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <LinearLayout
                     android:id="@+id/llQuotesTopArrow"
@@ -147,9 +147,9 @@
                     android:id="@+id/quotesBannerAdView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     app:adSize="BANNER"
-                    app:adUnitId="ca-app-pub-4706162076647622/7034047447"
-                    android:visibility="gone"/>
+                    app:adUnitId="@string/GL_InQuote_Banner" />
 
                 <TextView
                     android:id="@+id/adQuotesLoadingText"
@@ -162,10 +162,6 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-
-
 
 
     </FrameLayout>

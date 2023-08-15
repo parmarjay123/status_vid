@@ -63,5 +63,20 @@
     <string name="GL_Setting_MyVideoList_Native">ca-app-pub-4706162076647622/1072587409</string>
     <string name="GL_InQuote_list_Native">ca-app-pub-4706162076647622/3159996018</string>
 
+    <!--Banner Ads IDs-->
+    <string name="GL_Setting_Banner">ca-app-pub-4706162076647622/9481560466</string>
+    <string name="GL_Playtamplate_Banner">ca-app-pub-4706162076647622/9958172803</string>
+    <string name="GL_Dashbord_Banner">ca-app-pub-4706162076647622/4782438562</string>
+    <string name="GL_InQuotepreview_Banner">ca-app-pub-4706162076647622/6561589944</string>
+    <string name="GL_InQuote_Banner">ca-app-pub-4706162076647622/7034047447</string>
+    <string name="GL_Setting_MyVideoList_Banner">ca-app-pub-4706162076647622/4614632195</string>
+    <string name="Gl_Setting_MyvideoPreview_Banner">ca-app-pub-4706162076647622/6215789797</string>
+    <string name="GL_Quote_Catagory_Banner">ca-app-pub-4706162076647622/9533832672</string>
+    <string name="GL_Quote_Explore_Screen_Banner">ca-app-pub-4706162076647622/7337299773</string>
+    <string name="GL_InExplore_Banner">ca-app-pub-4706162076647622/1396893179</string>
+    <string name="GL_Tamplate_Making_Banner">ca-app-pub-4706162076647622/9294213423</string>
+    <string name="GL_Catagory_Banner">ca-app-pub-4706162076647622/6755679995</string>
+    <string name="GL_VideoSave_Banner">ca-app-pub-4706162076647622/2160144656</string>
+    <string name="GL_Serch_Banner">ca-app-pub-4706162076647622/9444588360</string>
 
 </resources>
