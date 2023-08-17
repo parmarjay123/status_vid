@@ -56,6 +56,9 @@ class ExploreQuotesActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: ExploreQuotes${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: ExploreQuotes${loadAdError.code} ")
+
                 adQuoteExploreLoadingText.isVisible = true
                 quoteExploreBannerAdView.isVisible = false
 

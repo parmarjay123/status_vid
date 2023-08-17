@@ -77,6 +77,9 @@ class PreviewQuotesActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: previewQuotes${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: previewQuotes${loadAdError.code} ")
+
                 adPreviewLoadingText.isVisible = true
                 previewBannerAdView.isVisible = false
 

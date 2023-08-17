@@ -151,7 +151,7 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="@dimen/banner_height"
         android:layout_gravity="bottom"
         android:background="@color/white">
 

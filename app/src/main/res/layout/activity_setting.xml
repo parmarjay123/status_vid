@@ -198,7 +198,7 @@
     <com.google.android.gms.ads.AdView
         android:id="@+id/settingBannerAdView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="@dimen/banner_height"
         android:layout_gravity="bottom"
         android:visibility="gone"
         app:adSize="BANNER"
@@ -210,6 +210,7 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_50sdp"
         android:layout_gravity="center"
+        android:gravity="center"
         android:text="Loading ad..."
         android:visibility="visible" />
 

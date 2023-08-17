@@ -145,6 +145,9 @@ class PreviewActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: Preview${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: Preview${loadAdError.code} ")
+
                 adPreviewVideoLoadingText.isVisible = true
                 previewVideoBannerAdView.isVisible = false
 

@@ -139,7 +139,7 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="@dimen/banner_height"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@color/white">
 

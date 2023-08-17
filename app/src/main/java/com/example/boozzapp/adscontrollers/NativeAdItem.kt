@@ -1,5 +1,5 @@
 import android.content.Context
-import com.facebook.ads.NativeAd
+import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -17,6 +17,8 @@ class NativeAdItem {
             }
             .withAdListener(object : AdListener() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.i("TAG", "onAdFailedToLoadNativeAd Message: ${adError.message} ")
+                    Log.i("TAG", "onAdFailedToLoadNativeAd: Code ${adError.code} ")
                 }
             })
             .build()

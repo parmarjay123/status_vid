@@ -75,6 +75,9 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: VideoCategory${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: VideoCategory${loadAdError.code} ")
+
                 adVideoCategoryLoadingText.isVisible = true
                 VideoCategoryBannerAdView.isVisible = false
 

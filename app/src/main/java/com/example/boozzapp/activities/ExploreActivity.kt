@@ -61,6 +61,9 @@ class ExploreActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: Explore${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: Explore${loadAdError.code} ")
+
                 adExploreLoadingText.isVisible = true
                 ExploreBannerAdView.isVisible = false
 

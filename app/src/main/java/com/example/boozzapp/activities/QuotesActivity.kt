@@ -85,6 +85,9 @@ class QuotesActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: Quotes${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: Quotes${loadAdError.code} ")
+
                 adQuotesLoadingText.isVisible = true
                 quotesBannerAdView.isVisible = false
 

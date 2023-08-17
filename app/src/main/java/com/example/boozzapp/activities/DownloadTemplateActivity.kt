@@ -235,6 +235,9 @@ class DownloadTemplateActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: DownloadTemp${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: DownloadTemp${loadAdError.code} ")
+
                 adDownloadVideoLoadingText.isVisible = true
                 DownloadVideoBannerAdView.isVisible = false
             }

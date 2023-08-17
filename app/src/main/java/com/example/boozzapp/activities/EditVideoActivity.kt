@@ -250,6 +250,9 @@ class EditVideoActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: EditVideo${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: EditVideo${loadAdError.code} ")
+
                 adMakingVideoLoadingText.isVisible = true
                 MakingVideoBannerAdView.isVisible = false
 

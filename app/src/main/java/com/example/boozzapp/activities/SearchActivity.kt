@@ -94,6 +94,9 @@ class SearchActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: search${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: search${loadAdError.code} ")
+
                 adSearchLoadingText.isVisible = true
                 SearchBannerAdView.isVisible = false
 

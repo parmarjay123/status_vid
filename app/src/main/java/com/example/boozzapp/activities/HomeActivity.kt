@@ -147,6 +147,8 @@ class HomeActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: HomeScreen${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: HomeScreen${loadAdError.code} ")
                 adHomeLoadingText.isVisible = true
                 homeBannerAdView.isVisible = false
 

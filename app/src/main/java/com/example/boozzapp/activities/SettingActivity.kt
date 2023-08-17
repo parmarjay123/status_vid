@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -81,6 +82,9 @@ class SettingActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: setting${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: setting${loadAdError.code} ")
+
                 adLoadingText.isVisible = true
                 settingBannerAdView.isVisible = false
 

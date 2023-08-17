@@ -2,6 +2,7 @@ package com.example.boozzapp.activities
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.MediaController
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
@@ -55,6 +56,9 @@ class MyVideoPlayActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: MyVideoPlay${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: MyVideoPlay${loadAdError.code} ")
+
                 adMyVideoPlayLoadingText.isVisible = true
                 myVideoPlayBannerAdView.isVisible = false
 

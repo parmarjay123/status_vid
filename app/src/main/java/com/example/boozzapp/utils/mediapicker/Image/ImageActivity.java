@@ -269,6 +269,7 @@ public class ImageActivity extends AppCompatActivity {
     private void startCropActivity(String imagePath) {
         Uri imageUri = Uri.fromFile(new File(imagePath));
         CropImage.activity(imageUri)
+                .setAspectRatio(512,512)
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
     }

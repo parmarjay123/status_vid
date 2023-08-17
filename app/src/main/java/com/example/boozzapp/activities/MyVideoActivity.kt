@@ -44,6 +44,9 @@ class MyVideoActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: MyVideo${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: MyVideo${loadAdError.code} ")
+
                 adMyVideoLoadingText.isVisible = true
                 myVideoBannerAdView.isVisible = false
 

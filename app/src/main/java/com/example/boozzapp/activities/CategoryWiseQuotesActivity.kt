@@ -75,6 +75,9 @@ class CategoryWiseQuotesActivity : BaseActivity() {
 
             override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                 super.onAdFailedToLoad(loadAdError)
+                Log.i("TAG", "onAdFailedToLoad: QuotesCategory${loadAdError.message} ")
+                Log.i("TAG", "onAdFailedToLoad: QuotesCategory${loadAdError.code} ")
+
                 adQuoteCategoryLoadingText.isVisible = true
                 quoteCategoryBannerAdView.isVisible = false
 
