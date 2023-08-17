@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginHorizontal="25dp"
-        android:layout_marginBottom="@dimen/_52sdp"
+        android:layout_marginBottom="@dimen/_65sdp"
         android:background="@drawable/bg_rounded_transparent"
         android:gravity="center"
         android:orientation="horizontal"

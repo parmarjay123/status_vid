@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_marginHorizontal="25dp"
-        android:layout_marginBottom="@dimen/_52sdp"
+        android:layout_marginBottom="@dimen/_67sdp"
         android:background="@drawable/bg_rounded_transparent"
         android:gravity="center"
         android:orientation="horizontal"
@@ -122,7 +122,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="@dimen/banner_height"
-        android:background="@color/light_black"
+        android:background="@color/white"
         android:layout_gravity="bottom" >
 
         <com.google.android.gms.ads.AdView
@@ -140,7 +140,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="Loading ad..."
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:visibility="visible" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
