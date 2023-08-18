@@ -148,7 +148,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone"
-                    app:adSize="BANNER"
+                     app:adSize="LARGE_BANNER"
                     app:adUnitId="@string/GL_InQuote_Banner" />
 
                 <TextView

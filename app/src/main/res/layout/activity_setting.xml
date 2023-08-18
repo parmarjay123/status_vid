@@ -201,7 +201,7 @@
         android:layout_height="@dimen/banner_height"
         android:layout_gravity="bottom"
         android:visibility="gone"
-        app:adSize="BANNER"
+         app:adSize="LARGE_BANNER"
         app:adUnitId="@string/GL_Setting_Banner" />
 
 
