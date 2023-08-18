@@ -54,6 +54,7 @@
     <!--Here Facebook Ads IDs-->
     <string name="fb_app_id">511315357511616</string>
     <string name="facebook_client_token">7087a35412356cb4c5130113d20505ba</string>
+    <string name="FB_DashbordTamplate_Inter">511315357511616_664756555500828</string>
 
 
     <!--Here Google Ads IDs-->
@@ -80,5 +81,10 @@
     <string name="GL_Catagory_Banner">ca-app-pub-4706162076647622/6755679995</string>
     <string name="GL_VideoSave_Banner">ca-app-pub-4706162076647622/2160144656</string>
     <string name="GL_Serch_Banner">ca-app-pub-4706162076647622/9444588360</string>
+
+
+    <!--Interestitial Ads IDs-->
+    <string name="GL_DashbordTamplate_Inter">ca-app-pub-4706162076647622/4650576621</string>
+
 
 </resources>

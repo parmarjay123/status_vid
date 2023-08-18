@@ -58,7 +58,7 @@
             android:id="@+id/myVideoBannerAdView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-             app:adSize="LARGE_BANNER"
+             app:adSize="BANNER"
             app:adUnitId="@string/GL_Setting_MyVideoList_Banner"
             android:visibility="gone"/>
 

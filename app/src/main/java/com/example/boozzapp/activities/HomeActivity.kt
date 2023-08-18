@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeCategoryAdapter
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
+import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.controls.CustomDialog
 import com.example.boozzapp.pojo.CategoryList
 import com.example.boozzapp.pojo.HomeCategoryPojo
@@ -19,12 +20,9 @@ import com.example.boozzapp.pojo.HomeTemplate
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_home.*
-import kotlinx.android.synthetic.main.activity_setting.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -32,16 +30,16 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+
 class HomeActivity : BaseActivity() {
     var totalPage = 1
     var page = 1
     lateinit var adapter: HomeTemplatesAdapter
     var homeCategoryList = ArrayList<CategoryList?>()
 
-    //var list = ArrayList<ExploreTemplatesItem?>()
     var sortBy = "newest"
     val updatedList: MutableList<Any?> = mutableListOf()
-
+    lateinit var interstitialAdsHandler: InterstitialAdsHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,7 +127,35 @@ class HomeActivity : BaseActivity() {
 
         homeCategories()
 
+
+        interstitialAdsHandler = InterstitialAdsHandler(
+            this,
+            getString(R.string.GL_DashbordTamplate_Inter),
+            getString(R.string.FB_DashbordTamplate_Inter)
+        )
+        interstitialAdsHandler.loadInterstitialAds()
+        interstitialAdsHandler.setAdListener(object :
+            InterstitialAdsHandler.InterstitialAdListeners {
+            override fun onAdClosed() {
+                Log.i("TAG", "onAdClosed: " + "closed")
+                // Called when the ad is closed
+            }
+
+            override fun onAdDismissed() {
+                Log.i("TAG", "onAdClosed: " + "closed")
+                // Called when the ad is dismissed
+            }
+        })
+
+
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        interstitialAdsHandler.onDestroy()
+
+    }
+
 
     override fun onResume() {
         super.onResume()

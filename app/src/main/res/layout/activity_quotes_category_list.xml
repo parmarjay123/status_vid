@@ -98,7 +98,7 @@
             android:id="@+id/quoteExploreBannerAdView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-             app:adSize="LARGE_BANNER"
+             app:adSize="BANNER"
             app:adUnitId="@string/GL_Quote_Explore_Screen_Banner"
             android:visibility="gone"/>
 

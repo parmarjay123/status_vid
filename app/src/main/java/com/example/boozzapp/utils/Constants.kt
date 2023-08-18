@@ -29,6 +29,7 @@ object Constants {
     const val IS_PAYMENT_PENDING = "IS_PAYMENT_PENDING"
     const val AMOUNT = "AMOUNT"
     const val PROFILE_IMG = "PROFILE_IMG"
+    const val ADS_COUNT_DASHBOARD_CLICK = "ADS_COUNT"
 }
 
 /**
