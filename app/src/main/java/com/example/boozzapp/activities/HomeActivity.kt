@@ -40,6 +40,7 @@ class HomeActivity : BaseActivity() {
     var sortBy = "newest"
     val updatedList: MutableList<Any?> = mutableListOf()
     lateinit var interstitialAdsHandler: InterstitialAdsHandler
+    var isQuoteClick = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,11 +54,8 @@ class HomeActivity : BaseActivity() {
         }
 
         tvQuotes.setOnClickListener {
-            it.isClickable = false
-            activity.startActivity(Intent(activity, QuotesActivity::class.java))
-            Handler(Looper.getMainLooper()).postDelayed({
-                it.isClickable = true
-            }, 500)
+            isQuoteClick = true
+            interstitialAdsHandler.showNextAd()
         }
 
         llFilter.setOnClickListener {
@@ -127,7 +125,19 @@ class HomeActivity : BaseActivity() {
 
         homeCategories()
 
+        showInterestitialAds()
 
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (::interstitialAdsHandler.isInitialized) {
+            interstitialAdsHandler.onDestroy()
+        }
+    }
+
+    fun showInterestitialAds() {
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_DashbordTamplate_Inter),
@@ -137,16 +147,17 @@ class HomeActivity : BaseActivity() {
         interstitialAdsHandler.setAdListener(object :
             InterstitialAdsHandler.InterstitialAdListeners {
             override fun onAdClosed() {
-                Log.i("TAG", "onAdClosed: " + "closed")
-                // Called when the ad is closed
+                if (isQuoteClick) {
+                    activity.startActivity(Intent(activity, QuotesActivity::class.java))
+                }
             }
 
             override fun onAdDismissed() {
-                Log.i("TAG", "onAdClosed: " + "closed")
-                // Called when the ad is dismissed
+                if (isQuoteClick) {
+                    activity.startActivity(Intent(activity, QuotesActivity::class.java))
+                }
             }
         })
-
 
     }
 
@@ -290,7 +301,7 @@ class HomeActivity : BaseActivity() {
                     updatedList.clear()
                     for ((index, template) in pojo.data.templates!!.withIndex()) {
                         template?.let { updatedList.add(it) }
-                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                        if ((index + 1) % 6 == 0 && index != pojo.data.templates.size - 1) {
                             updatedList.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }
@@ -323,7 +334,7 @@ class HomeActivity : BaseActivity() {
 
                     for ((index, template) in pojo.data.templates!!.withIndex()) {
                         template?.let { newItems.add(it) }
-                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                        if ((index + 1) % 6 == 0 && index != pojo.data.templates.size - 1) {
                             newItems.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }

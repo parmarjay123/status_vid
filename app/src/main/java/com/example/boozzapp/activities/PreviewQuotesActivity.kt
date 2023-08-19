@@ -20,6 +20,8 @@ import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.example.boozzapp.R
+import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
+import com.example.boozzapp.utils.SessionManager
 import com.example.boozzapp.utils.StoreUserData
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -35,11 +37,16 @@ class PreviewQuotesActivity : BaseActivity() {
     private var holdDialog: Dialog? = null
     private var downloadedImageFile: File? = null
 
+    private var activityOpenCount: Int = 0
+    private lateinit var sessionManager: SessionManager
+    lateinit var interstitialAdsHandler: InterstitialAdsHandler
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preview_quotes)
         activity = this
         storeUserData = StoreUserData(activity)
+        sessionManager = SessionManager(activity)
 
         setupAd()
 
@@ -59,11 +66,65 @@ class PreviewQuotesActivity : BaseActivity() {
                 downloadQuote(image, true)
             }
         }
+
+        showInterestitialSecondTap()
     }
 
     override fun onResume() {
         super.onResume()
         setupAd()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::interstitialAdsHandler.isInitialized) {
+            interstitialAdsHandler.onDestroy()
+        }
+    }
+
+
+    fun showInterestitialSecondTap() {
+        if (sessionManager.isNewSession()) {
+            storeUserData.setInt(
+                com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
+                0
+            )
+            sessionManager.updateSessionStartTime()
+        }
+        activityOpenCount =
+            storeUserData.getInt(com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK)
+        if (activityOpenCount == 1) {
+            interstitialAdsHandler = InterstitialAdsHandler(
+                this,
+                getString(R.string.GL_INQuotecatagory_Inter_2TAP),
+                getString(R.string.FB_INQuotecatagory_Inter_2Tap)
+            )
+            interstitialAdsHandler.loadInterstitialAds()
+            interstitialAdsHandler.setAdListener(object :
+                InterstitialAdsHandler.InterstitialAdListeners {
+                override fun onAdClosed() {
+                    Log.i("TAG", "onAdClosed: " + "closed")
+                    // Called when the ad is closed
+                }
+
+                override fun onAdDismissed() {
+                    Log.i("TAG", "onAdClosed: " + "closed")
+                    // Called when the ad is dismissed
+                }
+            })
+
+            storeUserData.setInt(
+                com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
+                0
+            )
+
+        } else {
+            activityOpenCount++
+            storeUserData.setInt(
+                com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
+                activityOpenCount
+            )
+        }
     }
 
     private fun setupAd() {

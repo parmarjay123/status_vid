@@ -157,7 +157,7 @@ class QuotesActivity : BaseActivity() {
                     list.clear()
                     for ((index, template) in pojo.data.templates!!.withIndex()) {
                         template?.let { list.add(it) }
-                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                        if ((index + 1) % 6 == 0 && index != pojo.data.templates.size - 1) {
                             list.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }
@@ -189,7 +189,7 @@ class QuotesActivity : BaseActivity() {
                     val newItems = mutableListOf<Any?>()
                     for ((index, template) in pojo.data.templates!!.withIndex()) {
                         template?.let { newItems.add(it) }
-                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                        if ((index + 1) % 6 == 0 && index != pojo.data.templates.size - 1) {
                             newItems.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }

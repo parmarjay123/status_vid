@@ -15,6 +15,7 @@ import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
 import com.example.boozzapp.R
+import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.TemplateDetailsPojo
 import com.example.boozzapp.utils.PartyZipFileManager
@@ -50,12 +51,19 @@ class PreviewActivity : BaseActivity() {
     private var totalFileSize: Long = 0
     private var videoId = ""
     var hasShareVideo = false
+    private var fromShare = false
+    private var fromDownload = false
+    lateinit var interstitialAdsHandler: InterstitialAdsHandler
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preview)
         activity = this
         storeUserData = StoreUserData(activity)
+
         setupAd()
+        showInterestitialAds()
+
         val intent = intent
         hasShareVideo = intent?.extras?.getString("videoId") != null
 
@@ -67,7 +75,6 @@ class PreviewActivity : BaseActivity() {
                 super.onPlaybackStateChanged(state)
                 when (state) {
                     ExoPlayer.STATE_READY -> {
-                        players.play()
                         progressBarPreview.isVisible = false
                     }
 
@@ -113,23 +120,83 @@ class PreviewActivity : BaseActivity() {
         }
 
         previewEdit.setOnClickListener {
-            players.pause()
-            showDownloadDialog()
-            videoPojo.let {
-                downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
-            }
-
+            fromDownload = true
+            interstitialAdsHandler.showNextAd()
         }
 
         previewShare.setOnClickListener {
-            videoId = videoPojo.id.toString()
-            val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, dynamicUrl)
-            startActivity(Intent.createChooser(shareIntent, "Share via"))
+            fromShare = true
+            interstitialAdsHandler.showNextAd()
         }
 
+
+    }
+
+    fun showInterestitialAds() {
+
+        interstitialAdsHandler = InterstitialAdsHandler(
+            this,
+            getString(R.string.GL_In_CatagoryTamplate_Inter_1Tap),
+            getString(R.string.FB_In_CatagoryTamplate_Inter_1Tap)
+        )
+        interstitialAdsHandler.loadInterstitialAds()
+        interstitialAdsHandler.setAdListener(object :
+            InterstitialAdsHandler.InterstitialAdListeners {
+            override fun onAdClosed() {
+                Log.i("TAG", "onAdClosed: " + "closed")
+                // Called when the ad is closed
+                // players.play()
+                if (fromDownload) {
+                    players.pause()
+                    showDownloadDialog()
+                    videoPojo.let {
+                        downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
+                    }
+                } else if (fromShare) {
+                    videoId = videoPojo.id.toString()
+                    val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.type = "text/plain"
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, dynamicUrl)
+                    startActivity(Intent.createChooser(shareIntent, "Share via"))
+                } else {
+                    players.play()
+
+                }
+
+                fromShare = false
+                fromDownload = false
+
+            }
+
+            override fun onAdDismissed() {
+                Log.i("TAG", "onAdClosed: " + "closed")
+                // Called when the ad is dismissed
+                if (fromDownload) {
+                    players.pause()
+                    showDownloadDialog()
+                    videoPojo.let {
+                        downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
+                    }
+                } else if (fromShare) {
+                    videoId = videoPojo.id.toString()
+                    val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.type = "text/plain"
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, dynamicUrl)
+                    startActivity(Intent.createChooser(shareIntent, "Share via"))
+                } else {
+                    players.play()
+
+                }
+
+                fromShare = false
+                fromDownload = false
+
+
+
+            }
+        })
 
     }
 
@@ -208,6 +275,7 @@ class PreviewActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+
         setupAd()
         if (Util.SDK_INT > 23) {
             if (player != null) {
@@ -220,6 +288,8 @@ class PreviewActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         PRDownloader.cancelAll()
+        interstitialAdsHandler.onDestroy()
+
     }
 
     @Deprecated("Deprecated in Java")
@@ -250,7 +320,7 @@ class PreviewActivity : BaseActivity() {
             .start(object : OnDownloadListener {
                 override fun onDownloadComplete() {
                     Log.i("TAG", "onDownloadComplete:  after" + getZipDirectoryPath()!!)
-                     holdDialog.dismiss()
+                    holdDialog.dismiss()
                     val unzipTask = UnZipFileFromURLs(zipFilePath!!, getZipDirectoryPath()!!) {
                         // This block will be executed after unzipping is completed
                         // Start the EditVideoActivity here

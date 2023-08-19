@@ -57,8 +57,17 @@ class InterstitialAdsHandler(
                 }
             })
     }
+    fun showNextAd() {
+        if (mGoogleInterstitialAd != null) {
+            showGoogleInterstitialAd()
+        } else if (mFacebookInterstitialAd != null) {
+            mFacebookInterstitialAd!!.show()
+        } else {
+            loadInterstitialAds()
+        }
+    }
 
-    private fun showGoogleInterstitialAd() {
+    fun showGoogleInterstitialAd() {
         mGoogleInterstitialAd?.let {
             it.show(context)
             mGoogleInterstitialAd?.fullScreenContentCallback =

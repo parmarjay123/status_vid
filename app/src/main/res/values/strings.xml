@@ -55,6 +55,10 @@
     <string name="fb_app_id">511315357511616</string>
     <string name="facebook_client_token">7087a35412356cb4c5130113d20505ba</string>
     <string name="FB_DashbordTamplate_Inter">511315357511616_664756555500828</string>
+    <string name="FB_INQuotecatagory_Inter_2Tap">511315357511616_511980844111734</string>
+    <string name="FB_In_CatagoryTamplate_Inter_1Tap">511315357511616_664758872167263</string>
+    <string name="FB_InQuote_List_Inter">511315357511616_664752545501229</string>
+    <string name="FB_Catagory_Inter">511315357511616_664758525500631</string>
 
 
     <!--Here Google Ads IDs-->
@@ -85,6 +89,10 @@
 
     <!--Interestitial Ads IDs-->
     <string name="GL_DashbordTamplate_Inter">ca-app-pub-4706162076647622/4650576621</string>
+    <string name="GL_INQuotecatagory_Inter_2TAP">ca-app-pub-4706162076647622/3835354257</string>
+    <string name="GL_In_CatagoryTamplate_Inter_1Tap">ca-app-pub-4706162076647622/8068761668</string>
+    <string name="GL_InQuote_List_Inter">ca-app-pub-4706162076647622/9275383195</string>
+    <string name="GL_Catagory_Inter">ca-app-pub-4706162076647622/7789560060</string>
 
 
 </resources>

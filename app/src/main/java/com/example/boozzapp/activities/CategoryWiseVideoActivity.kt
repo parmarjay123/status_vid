@@ -8,9 +8,10 @@ import android.util.Log
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.CategoryWiseVideoAdapter
-import com.example.boozzapp.pojo.ExploreTemplatesItem
+import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.pojo.HomeTemplate
 import com.example.boozzapp.utils.RetrofitHelper
+import com.example.boozzapp.utils.SessionManager
 import com.example.boozzapp.utils.StoreUserData
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -28,12 +29,15 @@ class CategoryWiseVideoActivity : BaseActivity() {
     var sortBy = ""
     private var categoryID = ""
     val list: MutableList<Any?> = mutableListOf()
-
+    private var activityOpenCount: Int = 0
+    private lateinit var sessionManager: SessionManager
+    lateinit var interstitialAdsHandler: InterstitialAdsHandler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categorywise_video)
         activity = this
         storeUserData = StoreUserData(activity)
+        sessionManager = SessionManager(activity)
 
         ivCategoryBack.setOnClickListener { finish() }
 
@@ -56,7 +60,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
         Log.i("TAG", "onCreate:$categoryID ")
         categoryWiseVideo()
 
-
+        showInterestitialSecondTap()
     }
 
     override fun onResume() {
@@ -84,6 +88,58 @@ class CategoryWiseVideoActivity : BaseActivity() {
             }
         }
         VideoCategoryBannerAdView.loadAd(adRequest)
+    }
+
+
+    private fun showInterestitialSecondTap() {
+        if (sessionManager.isNewSession()) {
+            storeUserData.setInt(
+                com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
+                0
+            )
+            sessionManager.updateSessionStartTime()
+        }
+        activityOpenCount =
+            storeUserData.getInt(com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK)
+        if (activityOpenCount == 1) {
+            interstitialAdsHandler = InterstitialAdsHandler(
+                this,
+                getString(R.string.GL_Catagory_Inter),
+                getString(R.string.FB_Catagory_Inter)
+            )
+            interstitialAdsHandler.loadInterstitialAds()
+            interstitialAdsHandler.setAdListener(object :
+                InterstitialAdsHandler.InterstitialAdListeners {
+                override fun onAdClosed() {
+                    Log.i("TAG", "onAdClosed: " + "closed")
+                    // Called when the ad is closed
+                }
+
+                override fun onAdDismissed() {
+                    Log.i("TAG", "onAdClosed: " + "closed")
+                    // Called when the ad is dismissed
+                }
+            })
+
+            storeUserData.setInt(
+                com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
+                0
+            )
+
+        } else {
+            activityOpenCount++
+            storeUserData.setInt(
+                com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
+                activityOpenCount
+            )
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::interstitialAdsHandler.isInitialized) {
+            interstitialAdsHandler.onDestroy()
+        }
     }
 
     private fun categoryWiseVideo() {
@@ -116,7 +172,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
                     list.clear()
                     for ((index, template) in pojo.data.templates!!.withIndex()) {
                         template?.let { list.add(it) }
-                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                        if ((index + 1) % 6 == 0 && index != pojo.data.templates.size - 1) {
                             list.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }
@@ -145,7 +201,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
                     for ((index, template) in pojo.data.templates.withIndex()) {
                         template?.let { newItems.add(it) }
-                        if ((index + 1) % 4 == 0 && index != pojo.data.templates.size - 1) {
+                        if ((index + 1) % 6 == 0 && index != pojo.data.templates.size - 1) {
                             newItems.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }

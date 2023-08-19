@@ -177,7 +177,7 @@ class SearchActivity : BaseActivity() {
                     updatedList.clear()
                     for ((index, template) in pojo.data!!.withIndex()) {
                         template?.let { updatedList.add(it) }
-                        if ((index + 1) % 4 == 0 && index != pojo.data.size - 1) {
+                        if ((index + 1) % 6 == 0 && index != pojo.data.size - 1) {
                             updatedList.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }
@@ -210,7 +210,7 @@ class SearchActivity : BaseActivity() {
 
                     for ((index, template) in pojo.data!!.withIndex()) {
                         template?.let { newItems.add(it) }
-                        if ((index + 1) % 4 == 0 && index != pojo.data.size - 1) {
+                        if ((index + 1) % 6 == 0 && index != pojo.data.size - 1) {
                             newItems.add(NativeAdItem()) // Add a marker for the native ad
                         }
                     }

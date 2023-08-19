@@ -71,7 +71,7 @@ class MyVideoActivity : BaseActivity() {
                 videoList.addAll(files.toList())
                 for ((index, fileData) in files.withIndex()) {
                     fileData?.let { videoList.add(it) }
-                    if ((index + 1) % 4 == 0 && index != files.size - 1) {
+                    if ((index + 1) % 6 == 0 && index != files.size - 1) {
                         videoList.add(NativeAdItem()) // Add a marker for the native ad
                     }
                 }
