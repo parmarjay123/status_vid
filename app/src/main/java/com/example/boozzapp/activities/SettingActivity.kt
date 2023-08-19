@@ -47,6 +47,7 @@ class SettingActivity : BaseActivity() {
 
         llRateApp.setOnClickListener {
             rateApp = true
+            showProgress()
             interstitialAdsHandler.showNextAd()
         }
 
@@ -87,12 +88,12 @@ class SettingActivity : BaseActivity() {
 
     private fun setupAd() {
         val adRequest = AdRequest.Builder().build()
-        adLoadingText.visibility = View.VISIBLE
+        adSearchLoadingText.visibility = View.VISIBLE
 
         settingBannerAdView.adListener = object : AdListener() {
             override fun onAdLoaded() {
                 super.onAdLoaded()
-                adLoadingText.isVisible = false
+                adSearchLoadingText.isVisible = false
                 settingBannerAdView.isVisible = true
             }
 
@@ -101,7 +102,7 @@ class SettingActivity : BaseActivity() {
                 Log.i("TAG", "onAdFailedToLoad: setting${loadAdError.message} ")
                 Log.i("TAG", "onAdFailedToLoad: setting${loadAdError.code} ")
 
-                adLoadingText.isVisible = true
+                adSearchLoadingText.isVisible = true
                 settingBannerAdView.isVisible = false
 
             }

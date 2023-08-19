@@ -60,7 +60,7 @@
             android:id="@+id/quoteCategoryBannerAdView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-             app:adSize="BANNER"
+            app:adSize="SMART_BANNER"
             app:adUnitId="@string/GL_Quote_Catagory_Banner"
             android:visibility="gone"/>
 

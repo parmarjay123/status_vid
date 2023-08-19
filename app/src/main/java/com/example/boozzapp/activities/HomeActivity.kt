@@ -47,7 +47,6 @@ class HomeActivity : BaseActivity() {
         setContentView(R.layout.activity_home)
         activity = this
         storeUserData = StoreUserData(activity)
-        setupAd()
         swipeRefreshLayout.setOnRefreshListener {
             page = 1
             homeCategories()
@@ -124,10 +123,14 @@ class HomeActivity : BaseActivity() {
         }
 
         homeCategories()
-
         showInterestitialAds()
+        setupAd()
 
+    }
 
+    override fun onResume() {
+        super.onResume()
+        setupAd()
     }
 
     override fun onPause() {
@@ -137,7 +140,13 @@ class HomeActivity : BaseActivity() {
         }
     }
 
-    fun showInterestitialAds() {
+    override fun onDestroy() {
+        super.onDestroy()
+        interstitialAdsHandler.onDestroy()
+
+    }
+
+    private fun showInterestitialAds() {
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_DashbordTamplate_Inter),
@@ -159,18 +168,6 @@ class HomeActivity : BaseActivity() {
             }
         })
 
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        interstitialAdsHandler.onDestroy()
-
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        setupAd()
     }
 
     private fun setupAd() {

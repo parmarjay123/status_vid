@@ -122,16 +122,16 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="@dimen/banner_height"
-        android:background="@color/white"
-        android:layout_gravity="bottom" >
+        android:layout_gravity="bottom"
+        android:background="@color/white">
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/previewVideoBannerAdView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-             app:adSize="BANNER"
-            app:adUnitId="@string/GL_Playtamplate_Banner"
-            android:visibility="gone"/>
+            android:visibility="gone"
+           app:adSize="SMART_BANNER"
+            app:adUnitId="@string/GL_Playtamplate_Banner" />
 
         <TextView
             android:id="@+id/adPreviewVideoLoadingText"
