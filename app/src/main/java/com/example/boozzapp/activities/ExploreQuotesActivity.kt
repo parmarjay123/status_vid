@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.ExploreQuotesAdapter
+import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.pojo.ExploreQuotesPojo
 import com.example.boozzapp.pojo.ExploreQuotesTemplatesItem
 import com.example.boozzapp.pojo.QuoteCategoryList
@@ -27,6 +28,7 @@ import retrofit2.Response
 class ExploreQuotesActivity : BaseActivity() {
     var quotesCategoryList = ArrayList<QuoteCategoryList?>()
     var exploreVideoSuggestionList = ArrayList<ExploreQuotesTemplatesItem?>()
+    lateinit var interstitialAdsHandler: InterstitialAdsHandler
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +38,7 @@ class ExploreQuotesActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
 
         ivQuoteCatBack.setOnClickListener { finish() }
+        showInterestitialAds()
         setupAd()
         exploreSuggestionList()
     }
@@ -44,6 +47,39 @@ class ExploreQuotesActivity : BaseActivity() {
         super.onResume()
         setupAd()
     }
+
+    override fun onPause() {
+        super.onPause()
+        if (::interstitialAdsHandler.isInitialized) {
+            interstitialAdsHandler.onDestroy()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        interstitialAdsHandler.onDestroy()
+
+    }
+
+
+    fun showInterestitialAds() {
+        interstitialAdsHandler = InterstitialAdsHandler(
+            this,
+            getString(R.string.GL_Explore_Quotes_Inter),
+            getString(R.string.FB_Explore_Quotes_Inter)
+        )
+        interstitialAdsHandler.loadInterstitialAds()
+        interstitialAdsHandler.setAdListener(object :
+            InterstitialAdsHandler.InterstitialAdListeners {
+            override fun onAdClosed() {
+            }
+
+            override fun onAdDismissed() {
+            }
+        })
+
+    }
+
 
     private fun setupAd() {
         val adRequest = AdRequest.Builder().build()

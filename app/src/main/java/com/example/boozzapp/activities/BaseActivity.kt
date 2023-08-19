@@ -1,7 +1,6 @@
 package com.example.boozzapp.activities
 
 import android.content.Intent
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.boozzapp.controls.CustomDialog
 import com.example.boozzapp.controls.CustomProgressDialog
@@ -36,19 +35,19 @@ open class BaseActivity : AppCompatActivity() {
             }
         }
     }
-     fun showAlert(message: String, finish: Boolean, java: Class<*>) {
-         alert = CustomDialog(activity)
-         alert.setCancelable(false)
-         alert.show()
-         alert.setMessage(message)
-         alert.setPositiveButton("ok") {
-             alert.dismiss()
-             if (finish) {
-                 startActivity(Intent(activity, java))
-             }
-         }
-     }
 
+    fun showAlert(message: String, finish: Boolean, java: Class<*>) {
+        alert = CustomDialog(activity)
+        alert.setCancelable(false)
+        alert.show()
+        alert.setMessage(message)
+        alert.setPositiveButton("ok") {
+            alert.dismiss()
+            if (finish) {
+                startActivity(Intent(activity, java))
+            }
+        }
+    }
 
 
     fun showAlert(title: String, message: String) {

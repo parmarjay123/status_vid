@@ -51,7 +51,7 @@
     <string name="fb_page_url">https://www.facebook.com/boozzzv?mibextid=D4KYlr</string>
     <string name="my_videos_new">My Videos</string>
 
-    <!--Here Facebook Ads IDs-->
+    <!--Here Facebook Interstitial Ads IDs-->
     <string name="fb_app_id">511315357511616</string>
     <string name="facebook_client_token">7087a35412356cb4c5130113d20505ba</string>
     <string name="FB_DashbordTamplate_Inter">511315357511616_664756555500828</string>
@@ -59,6 +59,11 @@
     <string name="FB_In_CatagoryTamplate_Inter_1Tap">511315357511616_664758872167263</string>
     <string name="FB_InQuote_List_Inter">511315357511616_664752545501229</string>
     <string name="FB_Catagory_Inter">511315357511616_664758525500631</string>
+    <string name="FB_Setting_Inter">511315357511616_511980070778478</string>
+    <string name="FB_Serch_Inter">511315357511616_511980184111800</string>
+    <string name="FB_VideoSave_Share_Inter">511315357511616_664754972167653</string>
+    <string name="FB_Explore_Inter">511315357511616_511976990778786</string>
+    <string name="FB_Explore_Quotes_Inter">511315357511616_511976990778786</string>
 
 
     <!--Here Google Ads IDs-->
@@ -87,12 +92,17 @@
     <string name="GL_Serch_Banner">ca-app-pub-4706162076647622/9444588360</string>
 
 
-    <!--Interestitial Ads IDs-->
+    <!--Interstitial Ads IDs-->
     <string name="GL_DashbordTamplate_Inter">ca-app-pub-4706162076647622/4650576621</string>
     <string name="GL_INQuotecatagory_Inter_2TAP">ca-app-pub-4706162076647622/3835354257</string>
     <string name="GL_In_CatagoryTamplate_Inter_1Tap">ca-app-pub-4706162076647622/8068761668</string>
     <string name="GL_InQuote_List_Inter">ca-app-pub-4706162076647622/9275383195</string>
     <string name="GL_Catagory_Inter">ca-app-pub-4706162076647622/7789560060</string>
+    <string name="GL_Setting_Inter">ca-app-pub-4706162076647622/7949557764</string>
+    <string name="GL_Serch_Inter">ca-app-pub-4706162076647622/2313818206</string>
+    <string name="GL_VideoSave_Share_Inter">ca-app-pub-4706162076647622/5111425838</string>
+    <string name="GL_Explore_Inter">ca-app-pub-4706162076647622/2084973097</string>
+    <string name="GL_Explore_Quotes_Inter">ca-app-pub-4706162076647622/2084973097</string>
 
 
 </resources>

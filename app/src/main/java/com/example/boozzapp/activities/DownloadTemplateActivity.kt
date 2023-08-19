@@ -13,6 +13,7 @@ import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.SuggestedVideoAdapter
+import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.ExploreVideoPojo
 import com.example.boozzapp.utils.Constants
@@ -38,6 +39,9 @@ class DownloadTemplateActivity : BaseActivity() {
     var downloadVideoSuggestionList = ArrayList<ExploreTemplatesItem?>()
     lateinit var players: SimpleExoPlayer
     private var isPlaying: Boolean = true
+    lateinit var interstitialAdsHandler: InterstitialAdsHandler
+    var goToHome = false;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,16 +49,15 @@ class DownloadTemplateActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
         exoDownloadPlayerView.setBackgroundColor(Color.BLACK)
-
+        showInterestitialAds()
         setupBannerAd()
 
         downloadTempBack.setOnClickListener { finish() }
 
         tvHome.setOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            finish()
+            goToHome = true
+            interstitialAdsHandler.showNextAd()
+
         }
 
 
@@ -202,16 +205,6 @@ class DownloadTemplateActivity : BaseActivity() {
 
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        if (Util.SDK_INT > 23) {
-            if (exoDownloadPlayerView != null) {
-                exoDownloadPlayerView.player!!.pause()
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         setupBannerAd()
@@ -221,6 +214,56 @@ class DownloadTemplateActivity : BaseActivity() {
             }
 
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (Util.SDK_INT > 23) {
+            if (exoDownloadPlayerView != null) {
+                exoDownloadPlayerView.player!!.pause()
+            }
+        }
+        if (::interstitialAdsHandler.isInitialized) {
+            interstitialAdsHandler.onDestroy()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        interstitialAdsHandler.onDestroy()
+
+    }
+
+    fun showInterestitialAds() {
+        interstitialAdsHandler = InterstitialAdsHandler(
+            this,
+            getString(R.string.GL_VideoSave_Share_Inter),
+            getString(R.string.FB_VideoSave_Share_Inter)
+        )
+        interstitialAdsHandler.loadInterstitialAds()
+        interstitialAdsHandler.setAdListener(object :
+            InterstitialAdsHandler.InterstitialAdListeners {
+            override fun onAdClosed() {
+                if (goToHome) {
+                    val intent = Intent(activity, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+                goToHome = false
+            }
+
+            override fun onAdDismissed() {
+                if (goToHome) {
+                    val intent = Intent(activity, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                }
+                goToHome = false
+            }
+        })
+
     }
 
     private fun setupBannerAd() {

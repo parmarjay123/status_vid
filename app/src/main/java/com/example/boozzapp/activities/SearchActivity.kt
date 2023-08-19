@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
 import com.example.boozzapp.adapter.SearchCategoryAdapter
+import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.pojo.CategoryList
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.HomeCategoryPojo
@@ -29,6 +30,7 @@ import retrofit2.Call
 import retrofit2.Response
 
 class SearchActivity : BaseActivity() {
+    lateinit var interstitialAdsHandler: InterstitialAdsHandler
     var homeCategoryList = ArrayList<CategoryList?>()
     var sortBy = "newest"
     var totalPage = 1
@@ -43,6 +45,7 @@ class SearchActivity : BaseActivity() {
         setContentView(R.layout.activity_search)
         activity = this
         storeUserData = StoreUserData(activity)
+        showInterestitialAds()
         setupAd()
         searchCategories()
 
@@ -83,6 +86,19 @@ class SearchActivity : BaseActivity() {
         setupAd()
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (::interstitialAdsHandler.isInitialized) {
+            interstitialAdsHandler.onDestroy()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        interstitialAdsHandler.onDestroy()
+
+    }
+
     private fun setupAd() {
         val adRequest = AdRequest.Builder().build()
         SearchBannerAdView.adListener = object : AdListener() {
@@ -103,6 +119,24 @@ class SearchActivity : BaseActivity() {
             }
         }
         SearchBannerAdView.loadAd(adRequest)
+    }
+
+    fun showInterestitialAds() {
+        interstitialAdsHandler = InterstitialAdsHandler(
+            this,
+            getString(R.string.GL_Serch_Inter),
+            getString(R.string.FB_Serch_Inter)
+        )
+        interstitialAdsHandler.loadInterstitialAds()
+        interstitialAdsHandler.setAdListener(object :
+            InterstitialAdsHandler.InterstitialAdListeners {
+            override fun onAdClosed() {
+            }
+
+            override fun onAdDismissed() {
+            }
+        })
+
     }
 
 

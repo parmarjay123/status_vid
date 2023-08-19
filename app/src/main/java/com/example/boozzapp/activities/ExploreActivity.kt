@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.ExploreVideoAdapter
 import com.example.boozzapp.adapter.HomeCategoryListAdapter
+import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.pojo.CategoryList
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.ExploreVideoPojo
@@ -26,6 +27,8 @@ class ExploreActivity : BaseActivity() {
     var homeCategoryList = ArrayList<CategoryList?>()
     var exploreVideoSuggestionList = ArrayList<ExploreTemplatesItem?>()
     var sort_by = ""
+    lateinit var interstitialAdsHandler: InterstitialAdsHandler
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +37,7 @@ class ExploreActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
 
         ivVideoCatBack.setOnClickListener { finish() }
-
+        showInterestitialAds()
         setupAd()
 
         if (intent.getStringExtra("sortBy") != null) {
@@ -49,6 +52,38 @@ class ExploreActivity : BaseActivity() {
         super.onResume()
         setupAd()
     }
+
+    override fun onPause() {
+        super.onPause()
+        if (::interstitialAdsHandler.isInitialized) {
+            interstitialAdsHandler.onDestroy()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        interstitialAdsHandler.onDestroy()
+
+    }
+
+    fun showInterestitialAds() {
+        interstitialAdsHandler = InterstitialAdsHandler(
+            this,
+            getString(R.string.GL_Explore_Inter),
+            getString(R.string.FB_Explore_Inter)
+        )
+        interstitialAdsHandler.loadInterstitialAds()
+        interstitialAdsHandler.setAdListener(object :
+            InterstitialAdsHandler.InterstitialAdListeners {
+            override fun onAdClosed() {
+            }
+
+            override fun onAdDismissed() {
+            }
+        })
+
+    }
+
 
     private fun setupAd() {
         val adRequest = AdRequest.Builder().build()
@@ -71,6 +106,7 @@ class ExploreActivity : BaseActivity() {
         }
         ExploreBannerAdView.loadAd(adRequest)
     }
+
 
     private fun exploreSuggestionList() {
         showProgress()

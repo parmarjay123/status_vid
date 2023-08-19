@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
+import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.utils.StoreUserData
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -17,6 +18,13 @@ import com.google.android.gms.ads.LoadAdError
 import kotlinx.android.synthetic.main.activity_setting.*
 
 class SettingActivity : BaseActivity() {
+    lateinit var interstitialAdsHandler: InterstitialAdsHandler
+    var myVideo = false
+    var shareApp = false
+    var rateApp = false
+    var checkUpdate = false
+    var privacyPolicy = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
@@ -24,37 +32,32 @@ class SettingActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
 
         ivSettingBack.setOnClickListener { finish() }
-
+        showInterestitialAds()
         setupAd()
 
         llMyVideo.setOnClickListener {
-            activity.startActivity(Intent(activity, MyVideoActivity::class.java))
+            myVideo = true
+            interstitialAdsHandler.showNextAd()
         }
 
         llShareApp.setOnClickListener {
-            val shareAppIntent = Intent(Intent.ACTION_SEND)
-            shareAppIntent.type = "text/plain"
-            shareAppIntent.putExtra(
-                Intent.EXTRA_TEXT,
-                "Check out this awesome app: https://play.google.com/store/apps/details?id=your.package.name"
-            )
-
-            val chooserIntent = Intent.createChooser(shareAppIntent, "Share via")
-            if (shareAppIntent.resolveActivity(packageManager) != null) {
-                startActivity(chooserIntent)
-            }
+            shareApp = true
+            interstitialAdsHandler.showNextAd()
         }
 
         llRateApp.setOnClickListener {
-            openPlayStoreForRating(activity)
+            rateApp = true
+            interstitialAdsHandler.showNextAd()
         }
 
         llCheckUpdate.setOnClickListener {
-            openPlayStoreForRating(activity)
+            checkUpdate = true
+            interstitialAdsHandler.showNextAd()
         }
 
         llPrivacyPolicy.setOnClickListener {
-            goPrivacyPolicy()
+            privacyPolicy = true
+            interstitialAdsHandler.showNextAd()
         }
         ivInstagram.setOnClickListener {
             openInstagramPage(activity)
@@ -67,6 +70,19 @@ class SettingActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         setupAd()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (::interstitialAdsHandler.isInitialized) {
+            interstitialAdsHandler.onDestroy()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        interstitialAdsHandler.onDestroy()
+
     }
 
     private fun setupAd() {
@@ -91,6 +107,84 @@ class SettingActivity : BaseActivity() {
             }
         }
         settingBannerAdView.loadAd(adRequest)
+    }
+
+    fun showInterestitialAds() {
+        interstitialAdsHandler = InterstitialAdsHandler(
+            this,
+            getString(R.string.GL_Setting_Inter),
+            getString(R.string.FB_Setting_Inter)
+        )
+        interstitialAdsHandler.loadInterstitialAds()
+        interstitialAdsHandler.setAdListener(object :
+            InterstitialAdsHandler.InterstitialAdListeners {
+            override fun onAdClosed() {
+                if (myVideo) {
+                    activity.startActivity(Intent(activity, MyVideoActivity::class.java))
+
+                } else if (shareApp) {
+                    val shareAppIntent = Intent(Intent.ACTION_SEND)
+                    shareAppIntent.type = "text/plain"
+                    shareAppIntent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        "Check out this awesome app: https://play.google.com/store/apps/details?id=your.package.name"
+                    )
+
+                    val chooserIntent = Intent.createChooser(shareAppIntent, "Share via")
+                    if (shareAppIntent.resolveActivity(packageManager) != null) {
+                        startActivity(chooserIntent)
+                    }
+                } else if (rateApp) {
+                    openPlayStoreForRating(activity)
+
+                } else if (checkUpdate) {
+                    openPlayStoreForRating(activity)
+
+                } else if (privacyPolicy) {
+                    goPrivacyPolicy()
+                }
+                adVariableFalse()
+
+
+            }
+
+
+            override fun onAdDismissed() {
+                if (myVideo) {
+                    activity.startActivity(Intent(activity, MyVideoActivity::class.java))
+
+                } else if (shareApp) {
+                    val shareAppIntent = Intent(Intent.ACTION_SEND)
+                    shareAppIntent.type = "text/plain"
+                    shareAppIntent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        "Check out this awesome app: https://play.google.com/store/apps/details?id=your.package.name"
+                    )
+                    val chooserIntent = Intent.createChooser(shareAppIntent, "Share via")
+                    if (shareAppIntent.resolveActivity(packageManager) != null) {
+                        startActivity(chooserIntent)
+                    }
+                } else if (rateApp) {
+                    openPlayStoreForRating(activity)
+
+                } else if (checkUpdate) {
+                    openPlayStoreForRating(activity)
+
+                } else if (privacyPolicy) {
+                    goPrivacyPolicy()
+                }
+                adVariableFalse()
+            }
+        })
+
+    }
+
+    private fun adVariableFalse() {
+        myVideo = false
+        shareApp = false
+        rateApp = false
+        checkUpdate = false
+        privacyPolicy = false
     }
 
     private fun openPlayStoreForRating(context: Context) {
