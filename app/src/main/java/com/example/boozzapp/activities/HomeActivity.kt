@@ -9,6 +9,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.HomeCategoryAdapter
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
@@ -36,11 +37,11 @@ class HomeActivity : BaseActivity() {
     var page = 1
     lateinit var adapter: HomeTemplatesAdapter
     var homeCategoryList = ArrayList<CategoryList?>()
-
     var sortBy = "newest"
     val updatedList: MutableList<Any?> = mutableListOf()
     lateinit var interstitialAdsHandler: InterstitialAdsHandler
     var isQuoteClick = false
+    var isSwipScroll = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +49,19 @@ class HomeActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
+        val swipeRefreshLayout: SwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+        val rvCategories: RecyclerView = findViewById(R.id.rvCategories)
+
         swipeRefreshLayout.setOnRefreshListener {
             page = 1
             homeCategories()
         }
+        rvCategories.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                swipeRefreshLayout.isEnabled = newState == RecyclerView.SCROLL_STATE_IDLE
+            }
+        })
 
         tvQuotes.setOnClickListener {
             isQuoteClick = true
@@ -122,7 +132,6 @@ class HomeActivity : BaseActivity() {
                 e.printStackTrace()
             }
         }
-
         homeCategories()
         setupAd()
 
@@ -151,6 +160,7 @@ class HomeActivity : BaseActivity() {
     }
 
     fun showInterestitialAds() {
+        showInterAdsProgress()
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_DashbordTamplate_Inter),
@@ -169,6 +179,15 @@ class HomeActivity : BaseActivity() {
                 if (isQuoteClick) {
                     activity.startActivity(Intent(activity, QuotesActivity::class.java))
                 }
+            }
+
+            override fun onAdLoaded() {
+                dismissInterAdsProgress()
+            }
+
+            override fun onError() {
+                dismissInterAdsProgress()
+
             }
         })
 
@@ -266,7 +285,6 @@ class HomeActivity : BaseActivity() {
                 )
                 rvCategories.adapter = categoryAdapter
                 homeTemplateList(sortBy)
-
 
             }
 

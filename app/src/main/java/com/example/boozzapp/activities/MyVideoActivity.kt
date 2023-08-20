@@ -56,7 +56,6 @@ class MyVideoActivity : BaseActivity() {
     }
 
     private fun loadVideoList() {
-
         val externalDirectory: String =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 .toString()

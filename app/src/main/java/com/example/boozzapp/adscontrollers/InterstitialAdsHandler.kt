@@ -26,6 +26,8 @@ class InterstitialAdsHandler(
     interface InterstitialAdListeners {
         fun onAdClosed()
         fun onAdDismissed()
+        fun onAdLoaded()
+        fun onError()
     }
 
     fun setAdListener(listener: InterstitialAdListeners) {
@@ -47,16 +49,19 @@ class InterstitialAdsHandler(
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d("TAG", adError.toString())
+                    Log.i("TAG", "onAdFailedToLoadInterAd Message: ${adError.message} ")
+                    Log.i("TAG", "onAdFailedToLoadInterAd: Code ${adError.code} ")
                     loadFacebookInterstitialAd()
                 }
 
                 override fun onAdLoaded(interstitialAd: com.google.android.gms.ads.interstitial.InterstitialAd) {
                     mGoogleInterstitialAd = interstitialAd
+                    adListener?.onAdLoaded()
                     showGoogleInterstitialAd()
                 }
             })
     }
+
     fun showNextAd() {
         if (mGoogleInterstitialAd != null) {
             showGoogleInterstitialAd()
@@ -101,12 +106,16 @@ class InterstitialAdsHandler(
             // Facebook Interstitial Ad Callbacks
             override fun onError(p0: Ad?, p1: AdError?) {
                 if (p1 != null) {
+                    adListener?.onError()
                     Log.d("TAG", p1.errorMessage.toString())
+                    Log.i("TAG", "onAdFailedToLoadInterFaceBookAd Message: ${p1.errorMessage} ")
+                    Log.i("TAG", "onAdFailedToLoadInterFacebookAd: Code ${p1.errorCode} ")
                 }
 
             }
 
             override fun onAdLoaded(p0: Ad?) {
+                adListener?.onAdLoaded()
                 mFacebookInterstitialAd!!.show()
             }
 

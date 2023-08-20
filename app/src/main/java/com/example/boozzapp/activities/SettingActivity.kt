@@ -111,6 +111,7 @@ class SettingActivity : BaseActivity() {
     }
 
     fun showInterestitialAds() {
+        showInterAdsProgress()
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_Setting_Inter),
@@ -175,6 +176,14 @@ class SettingActivity : BaseActivity() {
                     goPrivacyPolicy()
                 }
                 adVariableFalse()
+            }
+
+            override fun onAdLoaded() {
+                dismissInterAdsProgress()
+            }
+
+            override fun onError() {
+                dismissInterAdsProgress()
             }
         })
 

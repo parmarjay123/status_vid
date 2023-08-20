@@ -7,6 +7,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.boozzapp.R
 import com.example.boozzapp.adapter.QuotesCategoryAdapter
 import com.example.boozzapp.adapter.QuotesTemplatesAdapter
@@ -31,6 +32,7 @@ class QuotesActivity : BaseActivity() {
     lateinit var adapter: QuotesTemplatesAdapter
     var quotesCategoryList = ArrayList<QuoteCategoryList?>()
     val list: MutableList<Any?> = mutableListOf()
+    var isSwipScroll = true
 
     var sortBy = "newest"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,12 +41,31 @@ class QuotesActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
 
-        setupAd()
+        val swipeRefreshLayout: SwipeRefreshLayout = findViewById(R.id.quotesSwipeToRefresh)
+        val rvCategories: RecyclerView = findViewById(R.id.rvQuotesCategory)
 
-        quotesSwipeToRefresh.setOnRefreshListener {
+        swipeRefreshLayout.setOnRefreshListener {
             page = 1
             quotesCategory()
         }
+
+        rvCategories.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                swipeRefreshLayout.isEnabled = newState == RecyclerView.SCROLL_STATE_IDLE
+            }
+        })
+
+        setupAd()
+
+
+
+        rvQuotesCategory.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                isSwipScroll = newState == RecyclerView.SCROLL_STATE_IDLE
+            }
+        })
 
 
         ivQuotesBack.setOnClickListener { finish() }

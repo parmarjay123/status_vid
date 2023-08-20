@@ -133,7 +133,7 @@ class PreviewActivity : BaseActivity() {
     }
 
     fun showInterestitialAds() {
-
+        showInterAdsProgress()
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_In_CatagoryTamplate_Inter_1Tap),
@@ -194,7 +194,14 @@ class PreviewActivity : BaseActivity() {
                 fromDownload = false
 
 
+            }
 
+            override fun onAdLoaded() {
+                dismissInterAdsProgress()
+            }
+
+            override fun onError() {
+                dismissInterAdsProgress()
             }
         })
 

@@ -3,6 +3,7 @@ package com.example.boozzapp.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.example.boozzapp.controls.CustomDialog
+import com.example.boozzapp.controls.CustomInterAdsProgressDialog
 import com.example.boozzapp.controls.CustomProgressDialog
 import com.example.boozzapp.utils.StoreUserData
 
@@ -11,8 +12,8 @@ open class BaseActivity : AppCompatActivity() {
     lateinit var activity: AppCompatActivity
     lateinit var storeUserData: StoreUserData
     private lateinit var progressDialog: CustomProgressDialog
+    private lateinit var progressInterAdDialog: CustomInterAdsProgressDialog
     private lateinit var alert: CustomDialog
-
     fun showAlert(message: String) {
         alert = CustomDialog(activity)
         alert.setCancelable(false)
@@ -73,10 +74,18 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun showProgress(message: String) {
-        progressDialog = CustomProgressDialog(activity)
         progressDialog.setCancelable(false)
         progressDialog.setTitle(message)
         progressDialog.show()
+    }
+
+    fun showInterAdsProgress() {
+        progressInterAdDialog = CustomInterAdsProgressDialog(this)
+        progressInterAdDialog.show()
+    }
+
+    fun dismissInterAdsProgress() {
+        progressInterAdDialog.dismiss()
     }
 
 

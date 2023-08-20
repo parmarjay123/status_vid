@@ -235,6 +235,7 @@ class DownloadTemplateActivity : BaseActivity() {
     }
 
     fun showInterestitialAds() {
+        showInterAdsProgress()
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_VideoSave_Share_Inter),
@@ -267,6 +268,14 @@ class DownloadTemplateActivity : BaseActivity() {
                     players.play()
                 }
                 goToHome = false
+            }
+
+            override fun onAdLoaded() {
+                dismissInterAdsProgress()
+            }
+
+            override fun onError() {
+                dismissInterAdsProgress()
             }
         })
 

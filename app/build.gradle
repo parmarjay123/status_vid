@@ -106,7 +106,6 @@ dependencies {
     implementation 'com.facebook.android:audience-network-sdk:6.15.0'
     implementation 'com.facebook.android:facebook-android-sdk:7.1.0'
     implementation 'com.google.ads.mediation:facebook:6.2.0.1'
-
     //Firebase
     googleServices.disableVersionCheck = true
 

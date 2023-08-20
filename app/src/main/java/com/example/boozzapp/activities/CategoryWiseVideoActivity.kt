@@ -41,6 +41,9 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
         ivCategoryBack.setOnClickListener { finish() }
 
+        showInterestitialSecondTap()
+
+
         setupAd()
 
         if (intent.getStringExtra("categoryTitle") != null && intent.getStringExtra("categoryTitle") != "") {
@@ -60,7 +63,6 @@ class CategoryWiseVideoActivity : BaseActivity() {
         Log.i("TAG", "onCreate:$categoryID ")
         categoryWiseVideo()
 
-        showInterestitialSecondTap()
     }
 
     override fun onResume() {
@@ -92,6 +94,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
 
 
     private fun showInterestitialSecondTap() {
+
         if (sessionManager.isNewSession()) {
             storeUserData.setInt(
                 com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
@@ -102,6 +105,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
         activityOpenCount =
             storeUserData.getInt(com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK)
         if (activityOpenCount == 1) {
+            showInterAdsProgress()
             interstitialAdsHandler = InterstitialAdsHandler(
                 this,
                 getString(R.string.GL_Catagory_Inter),
@@ -118,6 +122,14 @@ class CategoryWiseVideoActivity : BaseActivity() {
                 override fun onAdDismissed() {
                     Log.i("TAG", "onAdClosed: " + "closed")
                     // Called when the ad is dismissed
+                }
+
+                override fun onAdLoaded() {
+                    dismissInterAdsProgress()
+                }
+
+                override fun onError() {
+                    dismissInterAdsProgress()
                 }
             })
 

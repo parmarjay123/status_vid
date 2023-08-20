@@ -39,7 +39,7 @@ class CategoryWiseQuotesActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
         sessionManager = SessionManager(activity)
 
-
+        showInterestitialSecondTap()
         setupBannerAd()
 
         ivQuotesCategoryBack.setOnClickListener { finish() }
@@ -62,7 +62,7 @@ class CategoryWiseQuotesActivity : BaseActivity() {
 
         quotesTemplateList()
 
-        showInterestitialSecondTap()
+
 
     }
 
@@ -186,6 +186,7 @@ class CategoryWiseQuotesActivity : BaseActivity() {
         activityOpenCount =
             storeUserData.getInt(com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK)
         if (activityOpenCount == 1) {
+            showInterAdsProgress()
             interstitialAdsHandler = InterstitialAdsHandler(
                 this,
                 getString(R.string.GL_InQuote_List_Inter),
@@ -202,6 +203,16 @@ class CategoryWiseQuotesActivity : BaseActivity() {
                 override fun onAdDismissed() {
                     Log.i("TAG", "onAdClosed: " + "closed")
                     // Called when the ad is dismissed
+                }
+
+                override fun onAdLoaded() {
+                    dismissInterAdsProgress()
+
+                }
+
+                override fun onError() {
+                    dismissInterAdsProgress()
+
                 }
             })
 

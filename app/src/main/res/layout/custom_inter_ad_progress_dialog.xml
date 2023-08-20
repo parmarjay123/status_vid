@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="20dp">
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.example.boozzapp.controls.CTextView
+        android:id="@+id/tv_inter_ad_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="Loading Ad...."
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:visibility="visible" />
+
+</LinearLayout>

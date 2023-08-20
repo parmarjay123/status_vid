@@ -84,6 +84,7 @@ class PreviewQuotesActivity : BaseActivity() {
 
 
     fun showInterestitialSecondTap() {
+
         if (sessionManager.isNewSession()) {
             storeUserData.setInt(
                 com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
@@ -94,6 +95,7 @@ class PreviewQuotesActivity : BaseActivity() {
         activityOpenCount =
             storeUserData.getInt(com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK)
         if (activityOpenCount == 1) {
+            showInterAdsProgress()
             interstitialAdsHandler = InterstitialAdsHandler(
                 this,
                 getString(R.string.GL_INQuotecatagory_Inter_2TAP),
@@ -110,6 +112,14 @@ class PreviewQuotesActivity : BaseActivity() {
                 override fun onAdDismissed() {
                     Log.i("TAG", "onAdClosed: " + "closed")
                     // Called when the ad is dismissed
+                }
+
+                override fun onAdLoaded() {
+                    dismissInterAdsProgress()
+                }
+
+                override fun onError() {
+                    dismissInterAdsProgress()
                 }
             })
 
