@@ -45,7 +45,7 @@ class SearchActivity : BaseActivity() {
         setContentView(R.layout.activity_search)
         activity = this
         storeUserData = StoreUserData(activity)
-        showInterestitialAds()
+
         setupAd()
         searchCategories()
 
@@ -79,6 +79,7 @@ class SearchActivity : BaseActivity() {
 
             }
         })
+        showInterestitialAds()
     }
 
     override fun onResume() {

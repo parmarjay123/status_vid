@@ -192,7 +192,35 @@ class SettingActivity : BaseActivity() {
             }
 
             override fun onError() {
-                dismissInterAdsProgress()
+                if (myVideo) {
+                    dismissInterAdsProgress()
+                    activity.startActivity(Intent(activity, MyVideoActivity::class.java))
+
+                } else if (shareApp) {
+                    dismissInterAdsProgress()
+                    val shareAppIntent = Intent(Intent.ACTION_SEND)
+                    shareAppIntent.type = "text/plain"
+                    shareAppIntent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        "Check out this awesome app: https://play.google.com/store/apps/details?id=your.package.name"
+                    )
+                    val chooserIntent = Intent.createChooser(shareAppIntent, "Share via")
+                    if (shareAppIntent.resolveActivity(packageManager) != null) {
+                        startActivity(chooserIntent)
+                    }
+                } else if (rateApp) {
+                    dismissInterAdsProgress()
+                    openPlayStoreForRating(activity)
+
+                } else if (checkUpdate) {
+                    dismissInterAdsProgress()
+                    openPlayStoreForRating(activity)
+
+                } else if (privacyPolicy) {
+                    dismissInterAdsProgress()
+                    goPrivacyPolicy()
+                }
+                adVariableFalse()
             }
         })
 

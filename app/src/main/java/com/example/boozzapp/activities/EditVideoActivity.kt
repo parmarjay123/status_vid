@@ -109,7 +109,7 @@ class EditVideoActivity : BaseActivity() {
     var onClickListener = object : EditVideoActivityListener {
         override fun onImageChange(data: ImageCommands) {
             imageSelectedPojo = data
-            ImagePicker.Builder(activity,imageSelectedPojo.imgHeight,imageSelectedPojo.imgWidth)
+            ImagePicker.Builder(activity, imageSelectedPojo.imgHeight, imageSelectedPojo.imgWidth)
                 .directory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath)
                 .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                 .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
@@ -240,10 +240,11 @@ class EditVideoActivity : BaseActivity() {
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
             params.addRule(RelativeLayout.ALIGN_PARENT_END)
         }
-            initializeExoPlayer()
+        initializeExoPlayer()
     }
 
     private fun showRewardAds(adunitID: String) {
+        showInterAdsProgress()
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(
             this,
@@ -252,12 +253,21 @@ class EditVideoActivity : BaseActivity() {
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     Log.d("TAGS", adError.toString())
+                    dismissInterAdsProgress()
                     rewardedAd = null
+                    if (isRemoveWaterMark) {
+                        exportVideo("export")
+
+                    } else {
+                        releasePlayer()
+                        initializeExoPlayer()
+                    }
                 }
 
                 override fun onAdLoaded(ad: RewardedAd) {
                     Log.d("TAGS", "Ad was loaded.")
                     rewardedAd = ad
+                    dismissInterAdsProgress()
                     showRewardedAd() // Call the method to show the ad
                 }
             })

@@ -49,14 +49,14 @@ class DownloadTemplateActivity : BaseActivity() {
         activity = this
         storeUserData = StoreUserData(activity)
         exoDownloadPlayerView.setBackgroundColor(Color.BLACK)
-        showInterestitialAds()
+
         setupBannerAd()
 
         downloadTempBack.setOnClickListener { finish() }
 
         tvHome.setOnClickListener {
             goToHome = true
-
+            showInterAdsProgress()
             interstitialAdsHandler.showNextAd()
 
         }
@@ -203,6 +203,7 @@ class DownloadTemplateActivity : BaseActivity() {
 
 
         downloadSuggestionList()
+        showInterestitialAds()
 
     }
 
@@ -247,6 +248,7 @@ class DownloadTemplateActivity : BaseActivity() {
             InterstitialAdsHandler.InterstitialAdListeners {
             override fun onAdClosed() {
                 if (goToHome) {
+                    dismissInterAdsProgress()
                     val intent = Intent(activity, HomeActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
@@ -260,6 +262,7 @@ class DownloadTemplateActivity : BaseActivity() {
 
             override fun onAdDismissed() {
                 if (goToHome) {
+                    dismissInterAdsProgress()
                     val intent = Intent(activity, HomeActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent.putExtra("isDownload", true)

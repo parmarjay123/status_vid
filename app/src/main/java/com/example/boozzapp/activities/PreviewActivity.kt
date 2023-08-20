@@ -125,6 +125,7 @@ class PreviewActivity : BaseActivity() {
             if (videoPojo.isPremium == 1) {
                 showPremiumDialog()
             } else {
+                showInterAdsProgress()
                 interstitialAdsHandler.showNextAd()
 
             }
@@ -132,7 +133,9 @@ class PreviewActivity : BaseActivity() {
 
         previewShare.setOnClickListener {
             fromShare = true
+            showInterAdsProgress()
             interstitialAdsHandler.showNextAd()
+
         }
 
         showInterestitialAds()
@@ -141,6 +144,7 @@ class PreviewActivity : BaseActivity() {
     }
 
     private fun showRewardAds(adunitID: String) {
+        showInterAdsProgress()
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(
             this,
@@ -150,11 +154,14 @@ class PreviewActivity : BaseActivity() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     Log.d("TAGS", adError.toString())
                     rewardedAd = null
+                    dismissInterAdsProgress()
+
                 }
 
                 override fun onAdLoaded(ad: RewardedAd) {
                     Log.d("TAGS", "Ad was loaded.")
                     rewardedAd = ad
+                    dismissInterAdsProgress()
                     showRewardedAd() // Call the method to show the ad
                 }
             })
@@ -197,12 +204,14 @@ class PreviewActivity : BaseActivity() {
                 // Called when the ad is closed
                 // players.play()
                 if (fromDownload) {
+                    dismissInterAdsProgress()
                     players.pause()
                     showDownloadDialog()
                     videoPojo.let {
                         downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
                     }
                 } else if (fromShare) {
+                    dismissInterAdsProgress()
                     videoId = videoPojo.id.toString()
                     val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
                     val shareIntent = Intent(Intent.ACTION_SEND)
@@ -223,12 +232,14 @@ class PreviewActivity : BaseActivity() {
                 Log.i("TAG", "onAdClosed: " + "closed")
                 // Called when the ad is dismissed
                 if (fromDownload) {
+                    dismissInterAdsProgress()
                     players.pause()
                     showDownloadDialog()
                     videoPojo.let {
                         downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
                     }
                 } else if (fromShare) {
+                    dismissInterAdsProgress()
                     videoId = videoPojo.id.toString()
                     val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
                     val shareIntent = Intent(Intent.ACTION_SEND)
@@ -252,6 +263,25 @@ class PreviewActivity : BaseActivity() {
 
             override fun onError() {
                 dismissInterAdsProgress()
+                if (fromDownload) {
+                    dismissInterAdsProgress()
+                    players.pause()
+                    showDownloadDialog()
+                    videoPojo.let {
+                        downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
+                    }
+                } else if (fromShare) {
+                    dismissInterAdsProgress()
+                    videoId = videoPojo.id.toString()
+                    val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.type = "text/plain"
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, dynamicUrl)
+                    startActivity(Intent.createChooser(shareIntent, "Share via"))
+                } else {
+                    players.play()
+
+                }
             }
         })
 
