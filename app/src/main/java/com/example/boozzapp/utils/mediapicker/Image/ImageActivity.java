@@ -33,8 +33,7 @@ import androidx.core.content.FileProvider;
 import com.example.boozzapp.R;
 import com.example.boozzapp.utils.mediapicker.FileProcessing;
 import com.example.boozzapp.utils.mediapicker.Utility;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -60,6 +59,8 @@ public class ImageActivity extends AppCompatActivity {
     private List<String> listOfImgs;
     private AlertDialog alertDialog;
     Context activity;
+    private int width = 512;
+    private int height = 512;
 
     public static Intent getCallingIntent(Context activity, ImageConfig imageConfig) {
         Intent intent = new Intent(activity, ImageActivity.class);
@@ -74,6 +75,10 @@ public class ImageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             mImgConfig = (ImageConfig) intent.getSerializableExtra(ImageTags.Tags.IMG_CONFIG);
+            width = mImgConfig.reqWidth;
+            height = mImgConfig.reqHeight;
+            Log.i("TAG", "onCreate: " + mImgConfig.reqWidth);
+            Log.i("TAG", "onCreate: " + mImgConfig.reqHeight);
         }
 
         if (savedInstanceState == null) {
@@ -267,10 +272,13 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     private void startCropActivity(String imagePath) {
+        File cacheDir = getCacheDir();
+        String croppedFileName = System.currentTimeMillis() + ".jpg"; // Change this to the desired file name
+        File destinationFile = new File(cacheDir, croppedFileName);
+        Uri destinationUri = Uri.fromFile(destinationFile);
+
         Uri imageUri = Uri.fromFile(new File(imagePath));
-        CropImage.activity(imageUri)
-                .setAspectRatio(512,512)
-                .setGuidelines(CropImageView.Guidelines.ON)
+        UCrop.of(imageUri, destinationUri)
                 .start(this);
     }
 
@@ -292,9 +300,9 @@ public class ImageActivity extends AppCompatActivity {
                     startCropActivity(selectedImagePath);
                     break;
 
-                case ImageTags.IntentCode.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                    processOneImage(result.getUri());
+                case UCrop.REQUEST_CROP:
+                    final Uri resultUri = UCrop.getOutput(data);
+                    processOneImage(resultUri);
 
                     break;
                 default:
@@ -374,7 +382,7 @@ public class ImageActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= 33) {
                 permissionsList.add(Manifest.permission.READ_MEDIA_IMAGES);
 
-            }else{
+            } else {
                 if (!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     permissionsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 }
@@ -385,7 +393,6 @@ public class ImageActivity extends AppCompatActivity {
             ) {
                 permissionsList.add(Manifest.permission.CAMERA);
             }
-
 
 
             if (!permissionsList.isEmpty()) {

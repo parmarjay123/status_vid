@@ -26,16 +26,16 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.util.Util
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_download_template.*
 import kotlinx.android.synthetic.main.activity_edit_video.*
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.activity_preview.*
 import kotlinx.android.synthetic.main.dialog_download.*
+import kotlinx.android.synthetic.main.dialog_premium.*
 import kotlinx.android.synthetic.main.dialog_watermark.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -54,6 +54,7 @@ class PreviewActivity : BaseActivity() {
     private var fromShare = false
     private var fromDownload = false
     lateinit var interstitialAdsHandler: InterstitialAdsHandler
+    private var rewardedAd: RewardedAd? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,15 +122,64 @@ class PreviewActivity : BaseActivity() {
 
         previewEdit.setOnClickListener {
             fromDownload = true
-            interstitialAdsHandler.showNextAd()
+            if (videoPojo.isPremium == 1) {
+                showPremiumDialog()
+            } else {
+                interstitialAdsHandler.showNextAd()
+
+            }
         }
 
         previewShare.setOnClickListener {
             fromShare = true
             interstitialAdsHandler.showNextAd()
         }
+
         showInterestitialAds()
 
+
+    }
+
+    private fun showRewardAds(adunitID: String) {
+        val adRequest = AdRequest.Builder().build()
+        RewardedAd.load(
+            this,
+            adunitID,
+            adRequest,
+            object : RewardedAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d("TAGS", adError.toString())
+                    rewardedAd = null
+                }
+
+                override fun onAdLoaded(ad: RewardedAd) {
+                    Log.d("TAGS", "Ad was loaded.")
+                    rewardedAd = ad
+                    showRewardedAd() // Call the method to show the ad
+                }
+            })
+    }
+
+    private fun showRewardedAd() {
+        rewardedAd?.show(this) {
+
+        }
+
+        rewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                // Set the ad reference to null so you don't show the ad a second time.
+                Log.d("TAGS", "Ad dismissed fullscreen content.")
+                rewardedAd = null
+                players.pause()
+                showDownloadDialog()
+                videoPojo.let {
+                    downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
+                }
+
+
+            }
+        }
     }
 
     fun showInterestitialAds() {
@@ -444,6 +494,35 @@ class PreviewActivity : BaseActivity() {
             holdDialog.dismiss()
             PRDownloader.cancelAll()
 
+        }
+
+    }
+
+
+    private fun showPremiumDialog() {
+        val holdDialog = Dialog(activity)
+        holdDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        holdDialog.setContentView(R.layout.dialog_premium)
+
+        // Set the background of the dialog window to transparent
+        holdDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // Calculate the desired height of the dialog (e.g., half of the screen)
+        val windowHeight = activity.window.decorView.height
+        val dialogHeight = windowHeight / 2
+        holdDialog.setCanceledOnTouchOutside(false)
+        val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight)
+        holdDialog.window?.setLayout(layoutParams.width, layoutParams.height)
+        holdDialog.show()
+
+        holdDialog.ivCloseDialogs.setOnClickListener {
+            holdDialog.dismiss()
+
+        }
+
+        holdDialog.llUnLock.setOnClickListener {
+            holdDialog.dismiss()
+            showRewardAds(getString(R.string.GL_RewardPremium))
         }
 
 
