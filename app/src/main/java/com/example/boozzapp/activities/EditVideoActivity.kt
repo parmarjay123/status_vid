@@ -46,9 +46,9 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import kotlinx.android.synthetic.main.activity_edit_video.*
 import kotlinx.android.synthetic.main.activity_explore.*
 import kotlinx.android.synthetic.main.activity_preview.*
@@ -76,6 +76,7 @@ class EditVideoActivity : BaseActivity() {
     private var zipFileName = ""
     private var rootJsonData: JSONObject? = null
     private var isPlaying = true
+    private var fromReward = false
 
     lateinit var templateImageAdapter: TemplateImageAdapter
     private val imagesList: ArrayList<ImageCommands> = ArrayList()
@@ -99,6 +100,7 @@ class EditVideoActivity : BaseActivity() {
     private var fileName: String? = ""
     private var textDataArray: JSONArray? = null
     private lateinit var holdDialog: Dialog
+    private var rewardedAd: RewardedAd? = null
 
     interface EditVideoActivityListener {
         fun onImageChange(data: ImageCommands)
@@ -128,6 +130,7 @@ class EditVideoActivity : BaseActivity() {
         setupAd()
 
         videoPojo = intent.getParcelableExtra("videoPojo")!!
+
 
         dataSourceFactory = buildDataSourceFactory()
         mediaPlayer = MediaPlayer()
@@ -159,7 +162,7 @@ class EditVideoActivity : BaseActivity() {
         )
         set.applyTo(clPreview)
 
-        initializeExoPlayer()
+
 
         bitmap_thumb = ThumbnailUtils.createVideoThumbnail(
             outputVideo, MediaStore.Images.Thumbnails.MINI_KIND
@@ -236,6 +239,55 @@ class EditVideoActivity : BaseActivity() {
         } else if (watermark_position == "BOTTOM_RIGHT") {
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
             params.addRule(RelativeLayout.ALIGN_PARENT_END)
+        }
+        if (videoPojo.isPremium == 1) {
+            showRewardAds(getString(R.string.GL_RewardPremium))
+        } else {
+            initializeExoPlayer()
+        }
+    }
+
+    private fun showRewardAds(adunitID: String) {
+        val adRequest = AdRequest.Builder().build()
+        RewardedAd.load(
+            this,
+            adunitID,
+            adRequest,
+            object : RewardedAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d("TAGS", adError.toString())
+                    rewardedAd = null
+                }
+
+                override fun onAdLoaded(ad: RewardedAd) {
+                    Log.d("TAGS", "Ad was loaded.")
+                    rewardedAd = ad
+                    showRewardedAd() // Call the method to show the ad
+                }
+            })
+    }
+
+    private fun showRewardedAd() {
+        rewardedAd?.show(this) {
+
+        }
+
+        rewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                // Set the ad reference to null so you don't show the ad a second time.
+                Log.d("TAGS", "Ad dismissed fullscreen content.")
+                rewardedAd = null
+                if (isRemoveWaterMark) {
+                    exportVideo("export")
+
+                } else {
+                    releasePlayer()
+                    initializeExoPlayer()
+                }
+
+
+            }
         }
     }
 
@@ -470,7 +522,8 @@ class EditVideoActivity : BaseActivity() {
             llImageList.isVisible = false
             //showDownloadDialog()
             isRemoveWaterMark = true
-            exportVideo("export")
+            fromReward = true
+            showRewardAds(getString(R.string.RewardWatermark))
             holdDialog.dismiss()
 
         }
@@ -505,6 +558,8 @@ class EditVideoActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         setupAd()
+        tvExport.isVisible = true
+
         if (flagChanges) {
             exo_thumb.isVisible = true
             remove.isVisible = true
@@ -552,6 +607,7 @@ class EditVideoActivity : BaseActivity() {
                        initializeExoPlayer()
                    }
                }*/
+
 
     }
 
@@ -949,7 +1005,7 @@ class EditVideoActivity : BaseActivity() {
                         } else {
                             remove.visibility = View.GONE
                         }
-                        val file: File = File(getDownloadedPath(activity) + fileNameInstaCrop)
+                        val file = File(getDownloadedPath(activity) + fileNameInstaCrop)
                         if (file.exists()) file.delete()
                         rl_export_video.setVisibility(View.GONE)
                         cp_export_progress.setProgress(0)
@@ -984,6 +1040,7 @@ class EditVideoActivity : BaseActivity() {
                                 isPlaying = true
                             }
                         } else {
+
                             saveVideo(filePath, exportType)
                         }
                     }
@@ -1013,6 +1070,8 @@ class EditVideoActivity : BaseActivity() {
                     })
                 }
             }
+            tvExport.isVisible = true
+
         } catch (e: java.lang.Exception) {
             Log.e("FFMPEG>>>", Log.getStackTraceString(e))
         }
@@ -1047,8 +1106,10 @@ class EditVideoActivity : BaseActivity() {
     // Assuming you have defined the progress_download_video ProgressBar in your dialog layout.
     private fun saveVideo(filePath: String, exportType: String) {
         CoroutineScope(Main).launch {
+
             // Show the dialog and initialize progress to 0.
             if (isFromExport) {
+
                 showDownloadDialog()
 
                 // Simulate download progress (Replace this with your actual download logic).
@@ -1060,6 +1121,12 @@ class EditVideoActivity : BaseActivity() {
                 // After the download is complete, dismiss the dialog.
                 holdDialog.dismiss()
             }
+
+            if (fromReward) {
+                tvExport.isVisible = true
+                player?.play()
+            }
+            fromReward = false
             // Process the downloaded video and handle it as needed.
             if (fileName?.isEmpty() == true) {
                 val time = System.currentTimeMillis()

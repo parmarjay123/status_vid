@@ -4,7 +4,7 @@ import android.content.Intent
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.example.boozzapp.activities.HomeActivity
+import com.example.boozzapp.activities.MainActivity
 import com.example.boozzapp.controls.CustomDialog
 import com.example.boozzapp.controls.CustomProgressDialog
 import com.example.boozzapp.utils.StoreUserData
@@ -34,7 +34,7 @@ open class BaseFragment : Fragment() {
         alert.setPositiveButton("ok", View.OnClickListener {
             alert.dismiss()
             if (finish) {
-                startActivity(Intent(mActivity, HomeActivity::class.java))
+                startActivity(Intent(mActivity, MainActivity::class.java))
                 mActivity.finish()
             }
         })

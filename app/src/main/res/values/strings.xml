@@ -93,6 +93,12 @@
 
 
     <!--Interstitial Ads IDs-->
+
+    <!--Reward Ads IDs-->
+    <string name="GL_RewardPremium">ca-app-pub-4706162076647622/2195539720</string>
+    <string name="RewardWatermark">ca-app-pub-4706162076647622/6681579645</string>
+
+    <!--Interestitial Ads IDs-->
     <string name="GL_DashbordTamplate_Inter">ca-app-pub-4706162076647622/4650576621</string>
     <string name="GL_INQuotecatagory_Inter_2TAP">ca-app-pub-4706162076647622/3835354257</string>
     <string name="GL_In_CatagoryTamplate_Inter_1Tap">ca-app-pub-4706162076647622/8068761668</string>

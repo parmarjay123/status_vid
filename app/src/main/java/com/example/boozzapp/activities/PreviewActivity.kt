@@ -62,7 +62,7 @@ class PreviewActivity : BaseActivity() {
         storeUserData = StoreUserData(activity)
 
         setupAd()
-        showInterestitialAds()
+
 
         val intent = intent
         hasShareVideo = intent?.extras?.getString("videoId") != null
@@ -128,7 +128,7 @@ class PreviewActivity : BaseActivity() {
             fromShare = true
             interstitialAdsHandler.showNextAd()
         }
-
+        showInterestitialAds()
 
     }
 
