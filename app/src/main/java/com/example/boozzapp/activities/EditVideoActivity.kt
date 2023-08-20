@@ -109,7 +109,7 @@ class EditVideoActivity : BaseActivity() {
     var onClickListener = object : EditVideoActivityListener {
         override fun onImageChange(data: ImageCommands) {
             imageSelectedPojo = data
-            ImagePicker.Builder(activity)
+            ImagePicker.Builder(activity,imageSelectedPojo.imgHeight,imageSelectedPojo.imgWidth)
                 .directory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath)
                 .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                 .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
@@ -240,11 +240,7 @@ class EditVideoActivity : BaseActivity() {
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
             params.addRule(RelativeLayout.ALIGN_PARENT_END)
         }
-        if (videoPojo.isPremium == 1) {
-            showRewardAds(getString(R.string.GL_RewardPremium))
-        } else {
             initializeExoPlayer()
-        }
     }
 
     private fun showRewardAds(adunitID: String) {

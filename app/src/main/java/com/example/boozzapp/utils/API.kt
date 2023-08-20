@@ -9,6 +9,13 @@ import retrofit2.http.*
 
 interface API {
 
+    @FormUrlEncoded
+    @POST("addDeviceToken")
+    fun addDeviceToken(
+        @Field("device_token") Token: String?,
+        @Field("type") type: String?
+    ): Call<ResponseBody>
+
     @GET("/api/v1/categories")
     fun homeCategories(
         @Header("Authorization") Authorization: String,

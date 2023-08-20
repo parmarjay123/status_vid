@@ -56,9 +56,12 @@ public class ImagePicker {
          *
          * @param context the context
          */
-        public Builder(Activity context) {
+        public Builder(Activity context,int height,int weight) {
             this.context = new WeakReference<>(context);
-            this.imageConfig = new ImageConfig();
+            ImageConfig imageConfig = new ImageConfig();
+            imageConfig.reqHeight=height;
+            imageConfig.reqWidth=weight;
+            this.imageConfig =imageConfig;
         }
 
         @Override

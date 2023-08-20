@@ -69,7 +69,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         intent.putExtra("isNotification", true)
         val modelVideoList: ExploreTemplatesItem =
             Gson().fromJson(bundleData, ExploreTemplatesItem::class.java)
-        intent.putExtra("videoPojo", Gson().toJson(modelVideoList))
+        intent.putExtra("videoId", modelVideoList.id.toString())
         val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(
                 mContext,

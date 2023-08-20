@@ -9,8 +9,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.boozzapp.R
 import com.example.boozzapp.utils.Constants
+import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
 import com.google.firebase.iid.FirebaseInstanceId
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Response
 
 class SplashActivity : BaseActivity() {
     private var isActivityFinishing = false
@@ -25,7 +29,9 @@ class SplashActivity : BaseActivity() {
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(activity) { instanceIdResult ->
             val newToken = instanceIdResult.token
             Log.e("newToken", newToken)
+            addDeviceToken(newToken)
             storeUserData.setString(Constants.USER_FCM, newToken)
+
         }
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -58,4 +64,28 @@ class SplashActivity : BaseActivity() {
         isActivityFinishing = true
         super.onDestroy()
     }
+
+
+    private fun addDeviceToken(token: String) {
+        val retrofitHelper = RetrofitHelper(activity)
+        val call: Call<ResponseBody> =
+            retrofitHelper.api().addDeviceToken(
+                token, ""
+            )
+
+        retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
+            override fun onSuccess(body: Response<ResponseBody>) {
+                val responseString = body.body()!!.string()
+                Log.i("TAG", "homeTemplateList$responseString")
+
+            }
+
+            override fun onError(code: Int, error: String) {
+                dismissProgress()
+                Log.i("error", error)
+
+            }
+        })
+    }
+
 }
