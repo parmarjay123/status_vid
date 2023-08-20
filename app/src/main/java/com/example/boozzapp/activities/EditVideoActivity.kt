@@ -579,32 +579,6 @@ class EditVideoActivity : BaseActivity() {
         }
 
 
-        /*   if (flagIsFirstTime) {
-               flagIsFirstTime = false
-           } else {
-               if (flagChanges) {
-                   mBinding.exoThumb.setVisibility(View.VISIBLE)
-                   mBinding.exoThumb.setImageBitmap(bitmap_thumb)
-                   if (!flagExporting) {
-                       if (notificationManagerCompat != null) notificationManagerCompat.cancel(
-                           PartyGlobals.video_noti_id
-                       )
-                       mBinding.previewControls.rlPreviewControl.setVisibility(View.VISIBLE)
-                   }
-               } else {
-                   if (!isPlaying) {
-                       mBinding.exoThumb.setVisibility(View.VISIBLE)
-                       mBinding.exoThumb.setImageBitmap(bitmap_thumb)
-                       playPausePlayer(false)
-                   } else {
-                       playPausePlayer(true)
-                   }
-                   if (!flagExporting) {
-                       initializeExoPlayer()
-                   }
-               }*/
-
-
     }
 
     //endregion

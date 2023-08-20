@@ -83,6 +83,16 @@ class PreviewQuotesActivity : BaseActivity() {
     }
 
 
+    override fun onBackPressed() {
+        if (intent.getBooleanExtra("isNotification", false)) {
+            startActivity(Intent(activity, HomeActivity::class.java))
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+
+    }
+
     fun showInterestitialSecondTap() {
 
         if (sessionManager.isNewSession()) {

@@ -14,13 +14,17 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.FutureTarget
 import com.example.boozzapp.R
 import com.example.boozzapp.activities.PreviewActivity
+import com.example.boozzapp.activities.PreviewQuotesActivity
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
+import org.json.JSONArray
 import java.util.concurrent.ExecutionException
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+    var imageUrl = ""
+
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
@@ -52,24 +56,49 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.i("TAG", "onMessageReceived: $data")
         val title = remoteMessage.data["title"]
         val desc = remoteMessage.data["message"]
-        val bundleData = remoteMessage.data["template"]
-        sendVideoNotification(applicationContext, title, desc, bundleData)
+        val type = remoteMessage.data["type"]
+
+        if (!type.equals("video")){
+            val jsonArray = JSONArray(remoteMessage.data) // Assuming `value` contains the JSON array as a string
+            val jsonObject = jsonArray.getJSONObject(0)
+
+            val image = jsonObject.getString("image")
+             imageUrl = jsonObject.getString("image_url")
+        }
+        val bundleData =
+            if (type.equals("video")) remoteMessage.data["template"] else imageUrl
+
+        type?.let { sendVideoNotification(applicationContext, title, desc, bundleData, it) }
     }
 
     private fun sendVideoNotification(
         mContext: Context,
         title: String?,
         description: String?,
-        bundleData: String?
+        bundleData: String?,
+        type: String
     ) {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val intent: Intent
+        lateinit var intent: Intent
+
+// Initialize the intent with a default value
         intent = Intent(applicationContext, PreviewActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         intent.putExtra("isNotification", true)
-        val modelVideoList: ExploreTemplatesItem =
-            Gson().fromJson(bundleData, ExploreTemplatesItem::class.java)
-        intent.putExtra("videoId", modelVideoList.id.toString())
+
+        if (type == "video") {
+            val modelVideoList: ExploreTemplatesItem =
+                Gson().fromJson(bundleData, ExploreTemplatesItem::class.java)
+            imageUrl = modelVideoList.thumbnailUrl.toString()
+            intent.putExtra("videoId", modelVideoList.id.toString())
+        } else {
+            imageUrl = bundleData.toString()
+            intent = Intent(applicationContext, PreviewQuotesActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            intent.putExtra("isNotification", true)
+            intent.putExtra("imageURL", bundleData)
+        }
+
         val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(
                 mContext,
@@ -93,7 +122,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         val futureTarget: FutureTarget<Bitmap> = Glide.with(this)
             .asBitmap()
-            .load(modelVideoList.thumbnailUrl)
+            .load(imageUrl)
             .submit()
         var notificationBuilder: NotificationCompat.Builder? = null
         try {
