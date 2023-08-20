@@ -37,27 +37,31 @@ class SettingActivity : BaseActivity() {
 
         llMyVideo.setOnClickListener {
             myVideo = true
+            showInterAdsProgress()
             interstitialAdsHandler.showNextAd()
         }
 
         llShareApp.setOnClickListener {
             shareApp = true
+            showInterAdsProgress()
             interstitialAdsHandler.showNextAd()
         }
 
         llRateApp.setOnClickListener {
             rateApp = true
-            showProgress()
+            showInterAdsProgress()
             interstitialAdsHandler.showNextAd()
         }
 
         llCheckUpdate.setOnClickListener {
             checkUpdate = true
+            showInterAdsProgress()
             interstitialAdsHandler.showNextAd()
         }
 
         llPrivacyPolicy.setOnClickListener {
             privacyPolicy = true
+            showInterAdsProgress()
             interstitialAdsHandler.showNextAd()
         }
         ivInstagram.setOnClickListener {
@@ -153,9 +157,11 @@ class SettingActivity : BaseActivity() {
 
             override fun onAdDismissed() {
                 if (myVideo) {
+                    dismissInterAdsProgress()
                     activity.startActivity(Intent(activity, MyVideoActivity::class.java))
 
                 } else if (shareApp) {
+                    dismissInterAdsProgress()
                     val shareAppIntent = Intent(Intent.ACTION_SEND)
                     shareAppIntent.type = "text/plain"
                     shareAppIntent.putExtra(
@@ -167,12 +173,15 @@ class SettingActivity : BaseActivity() {
                         startActivity(chooserIntent)
                     }
                 } else if (rateApp) {
+                    dismissInterAdsProgress()
                     openPlayStoreForRating(activity)
 
                 } else if (checkUpdate) {
+                    dismissInterAdsProgress()
                     openPlayStoreForRating(activity)
 
                 } else if (privacyPolicy) {
+                    dismissInterAdsProgress()
                     goPrivacyPolicy()
                 }
                 adVariableFalse()

@@ -42,7 +42,6 @@ class InterstitialAdsHandler(
 
     private fun loadGoogleInterstitialAd() {
         val adRequest = AdRequest.Builder().build()
-
         GoogleInterstitialAd.load(
             context,
             googleAdId,

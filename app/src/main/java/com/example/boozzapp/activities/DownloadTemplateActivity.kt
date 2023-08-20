@@ -56,6 +56,7 @@ class DownloadTemplateActivity : BaseActivity() {
 
         tvHome.setOnClickListener {
             goToHome = true
+
             interstitialAdsHandler.showNextAd()
 
         }

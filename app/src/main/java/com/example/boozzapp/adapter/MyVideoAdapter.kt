@@ -13,7 +13,7 @@ import com.example.boozzapp.R
 import com.example.boozzapp.activities.MyVideoPlayActivity
 import com.google.android.gms.ads.nativead.MediaView
 import kotlinx.android.synthetic.main.raw_video_native.view.*
-import kotlinx.android.synthetic.main.row_explore_quote_list.view.*
+import kotlinx.android.synthetic.main.row_my_video.view.*
 import java.io.File
 
 
@@ -33,7 +33,7 @@ class MyVideoAdapter(
             VIEW_TYPE_ITEM -> {
                 ViewHolder(
                     LayoutInflater.from(activity).inflate(
-                        R.layout.row_explore_quote_list,
+                        R.layout.row_my_video,
                         parent,
                         false
                     )
@@ -70,7 +70,7 @@ class MyVideoAdapter(
                 val retriever = MediaMetadataRetriever()
                 retriever.setDataSource(pojo.absolutePath)
                 val thumbnail = retriever.frameAtTime
-                holder.itemView.ivExploreItem.setImageBitmap(thumbnail)
+                holder.itemView.ivMyVideoItem.setImageBitmap(thumbnail)
                 retriever.release()
 
                 holder.itemView.setOnClickListener {
@@ -81,6 +81,8 @@ class MyVideoAdapter(
                         ).putExtra("videoPath", pojo.absolutePath)
                     )
                 }
+
+
             }
             is NativeAdsHolder -> {
                 val nativeAdItem = itemsWithAds[position] as NativeAdItem
