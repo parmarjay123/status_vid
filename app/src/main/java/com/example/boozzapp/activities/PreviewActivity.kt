@@ -520,6 +520,7 @@ class PreviewActivity : BaseActivity() {
 
         }
 
+
         holdDialog.llUnLock.setOnClickListener {
             holdDialog.dismiss()
             showRewardAds(getString(R.string.GL_RewardPremium))
