@@ -279,7 +279,17 @@ class DownloadTemplateActivity : BaseActivity() {
             }
 
             override fun onError() {
-                dismissInterAdsProgress()
+                if (goToHome) {
+                    dismissInterAdsProgress()
+                    val intent = Intent(activity, HomeActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.putExtra("isDownload", true)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    players.play()
+                }
+                goToHome = false
             }
         })
 

@@ -187,6 +187,9 @@ class HomeActivity : BaseActivity() {
 
             override fun onError() {
                 dismissInterAdsProgress()
+                if (isQuoteClick) {
+                    activity.startActivity(Intent(activity, QuotesActivity::class.java))
+                }
 
             }
         })

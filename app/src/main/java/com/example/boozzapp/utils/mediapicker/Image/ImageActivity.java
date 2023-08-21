@@ -77,8 +77,8 @@ public class ImageActivity extends AppCompatActivity {
             mImgConfig = (ImageConfig) intent.getSerializableExtra(ImageTags.Tags.IMG_CONFIG);
             width = mImgConfig.reqWidth;
             height = mImgConfig.reqHeight;
-            Log.i("TAG", "onCreate: " + mImgConfig.reqWidth);
-            Log.i("TAG", "onCreate: " + mImgConfig.reqHeight);
+            Log.i("TAG", "onCreate: wwwww" + mImgConfig.reqWidth);
+            Log.i("TAG", "onCreate: hhhhh" + mImgConfig.reqHeight);
         }
 
         if (savedInstanceState == null) {
@@ -276,10 +276,18 @@ public class ImageActivity extends AppCompatActivity {
         String croppedFileName = System.currentTimeMillis() + ".jpg"; // Change this to the desired file name
         File destinationFile = new File(cacheDir, croppedFileName);
         Uri destinationUri = Uri.fromFile(destinationFile);
-
         Uri imageUri = Uri.fromFile(new File(imagePath));
-        UCrop.of(imageUri, destinationUri)
-                .start(this);
+
+        if (height > width) {
+            UCrop.Options options = new UCrop.Options();
+            options.withAspectRatio(width, height);
+            UCrop.of(imageUri, destinationUri).withOptions(options)
+                    .start(this);
+        } else {
+            UCrop.of(imageUri, destinationUri)
+                    .start(this);
+        }
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
