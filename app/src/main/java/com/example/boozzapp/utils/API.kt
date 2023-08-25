@@ -16,6 +16,12 @@ interface API {
         @Field("type") type: String?
     ): Call<ResponseBody>
 
+    @FormUrlEncoded
+    @POST("addCount")
+    fun addCount(
+        @Field("template_id") template_id: String?,
+    ): Call<ResponseBody>
+
     @GET("/api/v1/categories")
     fun homeCategories(
         @Header("Authorization") Authorization: String,

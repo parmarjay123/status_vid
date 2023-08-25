@@ -408,17 +408,7 @@ class PreviewActivity : BaseActivity() {
                 override fun onDownloadComplete() {
                     Log.i("TAG", "onDownloadComplete:  after" + getZipDirectoryPath()!!)
                     holdDialog.dismiss()
-                    val unzipTask = UnZipFileFromURLs(zipFilePath!!, getZipDirectoryPath()!!) {
-                        // This block will be executed after unzipping is completed
-                        // Start the EditVideoActivity here
-                        activity.startActivity(
-                            Intent(activity, EditVideoActivity::class.java)
-                                .putExtra("videoPojo", videoPojo)
-                        )
-                    }
-                    unzipTask.execute()
-
-
+                    addCount()
                 }
 
                 override fun onError(error: Error) {
@@ -432,6 +422,45 @@ class PreviewActivity : BaseActivity() {
                 }
             })
     }
+
+    private fun addCount() {
+        Log.i("TAG", "addCount: ${videoPojo.id}")
+        val retrofitHelper = RetrofitHelper(activity)
+        val call: Call<ResponseBody> =
+            retrofitHelper.api().addCount(videoPojo.id.toString())
+        retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
+            override fun onSuccess(body: Response<ResponseBody>) {
+                val responseString = body.body()!!.string()
+                Log.i("TAG", "addCount$responseString")
+                val unzipTask = UnZipFileFromURLs(zipFilePath!!, getZipDirectoryPath()!!) {
+                    // This block will be executed after unzipping is completed
+                    // Start the EditVideoActivity here
+                    activity.startActivity(
+                        Intent(activity, EditVideoActivity::class.java)
+                            .putExtra("videoPojo", videoPojo)
+                    )
+                }
+                unzipTask.execute()
+
+            }
+
+            override fun onError(code: Int, error: String) {
+                Log.i("Error", error)
+                val unzipTask = UnZipFileFromURLs(zipFilePath!!, getZipDirectoryPath()!!) {
+                    // This block will be executed after unzipping is completed
+                    // Start the EditVideoActivity here
+                    activity.startActivity(
+                        Intent(activity, EditVideoActivity::class.java)
+                            .putExtra("videoPojo", videoPojo)
+                    )
+                }
+                unzipTask.execute()
+            }
+
+
+        })
+    }
+
 
     private class UnZipFileFromURLs(
         private val zipFilePath: String,
@@ -555,7 +584,6 @@ class PreviewActivity : BaseActivity() {
             holdDialog.dismiss()
             showRewardAds(getString(R.string.GL_RewardPremium))
         }
-
 
     }
 

@@ -21,4 +21,11 @@
     <color name="ad_color">#EEE</color>
     <color name="grey">#AAA</color>
 
+    <color name="colorPrimary">#FDB44E</color>
+    <color name="colorPrimaryDark">#000</color>
+    <color name="colorAccent">#333333</color>
+    <color name="main_color">#ed3b94</color>
+    <item name="darkgreen" type="color">#FF669900</item>
+
+
 </resources>
