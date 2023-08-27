@@ -18,6 +18,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -176,7 +177,9 @@ class EditVideoActivity : BaseActivity() {
         )
 
         editBack.setOnClickListener { finish() }
-        tvEditSongName.text = videoPojo.title
+        tvEditSongName.text = videoPojo.title;
+        tvEditSongName.maxLines = 1;
+        tvEditSongName.ellipsize = TextUtils.TruncateAt.END;
 
         ivCloseWatermark.setOnClickListener {
             if (flagChanges) {

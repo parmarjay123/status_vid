@@ -465,6 +465,7 @@ class HomeActivity : BaseActivity() {
                 val permissionsList: MutableList<String> = java.util.ArrayList()
                 if (Build.VERSION.SDK_INT >= 33) {
                     permissionsList.add(Manifest.permission.READ_MEDIA_IMAGES)
+                    permissionsList.add(Manifest.permission.POST_NOTIFICATIONS)
                 } else {
                     if (!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                         permissionsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
