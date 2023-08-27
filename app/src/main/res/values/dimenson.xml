@@ -2,5 +2,6 @@
 <resources>
 
     <dimen name="banner_height">75dp</dimen>
+    <dimen name="separator_height">1.5dp</dimen>
 
 </resources>

@@ -3,8 +3,10 @@ package com.example.boozzapp.activities
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -38,7 +40,8 @@ import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.ImageCommands
 import com.example.boozzapp.pojo.StaticInputs
 import com.example.boozzapp.utils.StoreUserData
-import com.example.boozzapp.utils.mediapicker.Image.ImagePicker
+import com.example.boozzapp.utils.gallery_custom.PartyGalleryAlbumActivity
+import com.example.boozzapp.utils.gallery_custom.gallery.PartyModelCommandImages
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
@@ -49,11 +52,14 @@ import com.google.android.exoplayer2.util.Util
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_edit_video.*
 import kotlinx.android.synthetic.main.activity_explore.*
 import kotlinx.android.synthetic.main.activity_preview.*
 import kotlinx.android.synthetic.main.dialog_download.*
 import kotlinx.android.synthetic.main.dialog_watermark.*
+import kotlinx.android.synthetic.main.row_images.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
 import org.json.JSONArray
@@ -101,21 +107,22 @@ class EditVideoActivity : BaseActivity() {
     private var textDataArray: JSONArray? = null
     private lateinit var holdDialog: Dialog
     private var rewardedAd: RewardedAd? = null
+    private var brRefresh: BroadcastReceiver? = null
 
     interface EditVideoActivityListener {
-        fun onImageChange(data: ImageCommands)
+        fun onImageChange(data: ImageCommands, position: Int)
     }
 
     var onClickListener = object : EditVideoActivityListener {
-        override fun onImageChange(data: ImageCommands) {
+        override fun onImageChange(data: ImageCommands, position: Int) {
             imageSelectedPojo = data
-            ImagePicker.Builder(activity, imageSelectedPojo.imgHeight, imageSelectedPojo.imgWidth)
-                .directory(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath)
-                .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                .allowMultipleImages(false)
-                .enableDebuggingMode(true)
-                .build()
+            val intent = Intent(activity, PartyGalleryAlbumActivity::class.java)
+            intent.putExtra("ImageList", Gson().toJson(imagesList))
+            intent.putExtra("ImagePos", position)
+            intent.putExtra("TemplateVideo", outputVideo)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
+
         }
 
     }
@@ -240,6 +247,85 @@ class EditVideoActivity : BaseActivity() {
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
             params.addRule(RelativeLayout.ALIGN_PARENT_END)
         }
+
+
+
+        brRefresh = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (intent != null && intent.action === "BR_REMOVE_WATERMARK") {
+                    isRemoveWaterMark = true
+                    runOnUiThread {
+                        remove.visibility = View.GONE
+                    }
+                    if (intent.hasExtra("filepath")) {
+                        outputVideo = intent.getStringExtra("filepath")!!
+                    }
+                } else {
+                    if (intent != null) {
+                        flagChanges = true
+                        if (!intent.getBooleanExtra("IsTextPicker", false)) {
+                            val json = intent.getStringExtra("ImageList")
+                            val type =
+                                object : TypeToken<ArrayList<PartyModelCommandImages?>?>() {}.type
+                            val tempList: ArrayList<PartyModelCommandImages> =
+                                Gson().fromJson(json, type)
+                            if (tempList.size > 0) {
+                                Log.i("TAG", "onReceive: " + tempList.get(0).imgName)
+                                Log.i("TAG", "onReceive: " + tempList.get(0).imgPath)
+                                isCreated = false
+                                //imagesList.clear()
+
+
+                                for (index in tempList.indices) {
+                                    if (tempList[index].isChangesOccurs) {
+                                        val newImageCommands = ImageCommands(
+                                            tempList[index].imgName,
+                                            tempList[index].imgHeight,
+                                            tempList[index].imgWidth,
+                                            tempList[index].imgPathExtra,
+                                            tempList[index].prefix,
+                                            tempList[index].postfix
+                                        )
+
+                                        if (imagesList.size > index) {
+                                            imagesList[index] = newImageCommands
+                                            templateImageAdapter.notifyItemChanged(index)
+                                        } else {
+                                            imagesList.add(newImageCommands)
+                                            templateImageAdapter.notifyItemInserted(index)
+                                        }
+                                    }
+                                }
+
+                                refreshImageAdapter()
+                                isPlaying = false
+                                playPausePlayer(isPlaying)
+                                progressBar_exoplayer.visibility = View.GONE
+                                exoPlayerView.visibility = View.VISIBLE
+
+                                rl_preview_control.setVisibility(View.VISIBLE)
+                                processmessage.text = "Crafting your video… Please wait a moment!"
+                                flagChanges = true
+
+                            }
+                        } else {
+                            try {
+                                textDataArray = JSONArray(intent.getStringExtra("TextValues"))
+                                isCreated = false
+                            } catch (e: JSONException) {
+                                Log.e("textJson>>>", Log.getStackTraceString(e))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        val filterRefreshUpdate = IntentFilter()
+        filterRefreshUpdate.addAction("com.example.boozzapp.BR_NEW_IMAGE_CHANGE")
+        filterRefreshUpdate.addAction("BR_REMOVE_WATERMARK")
+        registerReceiver(brRefresh, filterRefreshUpdate)
+
         initializeExoPlayer()
     }
 
@@ -295,6 +381,12 @@ class EditVideoActivity : BaseActivity() {
 
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(brRefresh)
+
     }
 
     private fun setupAd() {
@@ -392,8 +484,8 @@ class EditVideoActivity : BaseActivity() {
                 imagesList.add(
                     ImageCommands(
                         image_obj.getString("name"),
-                        image_obj.getInt("w"),
                         image_obj.getInt("h"),
+                        image_obj.getInt("w"),
                         imagePath,
                         image_obj.getJSONArray("prefix"),
                         image_obj.getJSONArray("postfix")
@@ -705,45 +797,6 @@ class EditVideoActivity : BaseActivity() {
 
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val mPaths: ArrayList<String> =
-                data!!.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH)!!
-            if (!mPaths.isNullOrEmpty()) {
-                val imagePath = mPaths[0]
-
-                val updatedImageList = imagesList.mapNotNull {
-                    if (imageSelectedPojo == it) {
-                        val imageName = imagePath.let { path -> File(path).name }
-                        imageName.let { name -> it.copy(imgName = name, imgPath = imagePath) }
-                    } else {
-                        it
-                    }
-                }.toList()
-
-                imagesList.clear()
-                imagesList.addAll(updatedImageList)
-
-                refreshImageAdapter()
-                isPlaying = false
-                playPausePlayer(isPlaying)
-                progressBar_exoplayer.visibility = View.GONE
-                exoPlayerView.visibility = View.VISIBLE
-
-
-//                                                loadingAnimationUtils.dismiss();
-                //                                                loadingAnimationUtils.dismiss();
-                rl_preview_control.setVisibility(View.VISIBLE)
-                processmessage.text = "Crafting your video… Please wait a moment!"
-                flagChanges = true
-
-            }
-        }
-
-    }
 
 
     private fun exportVideo(exportType: String) {
@@ -1076,14 +1129,14 @@ class EditVideoActivity : BaseActivity() {
 
 
     //Save video with different option...
-    /* private fun saveVideo(filePath: String, exportType: String) {
-         val file = File(getDownloadedPath(activity) + fileName)
-         if (!file.exists()) {
-             finalSaveVideo(filePath, file.path, exportType)
+/* private fun saveVideo(filePath: String, exportType: String) {
+     val file = File(getDownloadedPath(activity) + fileName)
+     if (!file.exists()) {
+         finalSaveVideo(filePath, file.path, exportType)
 
-         }
-     }*/
-    // Assuming you have defined the progress_download_video ProgressBar in your dialog layout.
+     }
+ }*/
+// Assuming you have defined the progress_download_video ProgressBar in your dialog layout.
     private fun saveVideo(filePath: String, exportType: String) {
         CoroutineScope(Main).launch {
 
@@ -1169,7 +1222,7 @@ class EditVideoActivity : BaseActivity() {
     }
 
     //endregion
-    //region Get and check zone...
+//region Get and check zone...
     private fun getFileDirectoryPath(mContext: Activity): String {
         val externalDirectory = mContext.filesDir.absolutePath
         val dir = File(

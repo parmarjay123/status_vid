@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clipChildren="false">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false">
+
+            <RelativeLayout
+                android:id="@+id/rate_tip_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/rate_emoji"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/lib_rate_emoji_star_0" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rate_emoji"
+                    android:layout_marginTop="8dp">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/rate_tip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:maxLines="4"
+                        android:text="@string/lib_rate_dialog_tip"
+                        android:textColor="@color/black"
+                        android:textSize="19sp"
+                        android:visibility="invisible"
+                        app:autoSizeMaxTextSize="19sp"
+                        app:autoSizeMinTextSize="10sp"
+                        app:autoSizeStepGranularity="1sp"
+                        app:autoSizeTextType="uniform" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/rate_result_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:text="@string/lib_rate_love_it"
+                            android:textColor="@color/black_light"
+                            android:textSize="19sp"
+                            android:textStyle="bold"
+                            app:autoSizeMaxTextSize="19sp"
+                            app:autoSizeMinTextSize="10sp"
+                            app:autoSizeStepGranularity="1sp"
+                            app:autoSizeTextType="uniform" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/rate_result_tip"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/rate_result_title"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:text="@string/lib_rate_five_stars_tip"
+                            android:textColor="@color/black_light"
+                            android:textSize="19sp"
+                            app:autoSizeMaxTextSize="19sp"
+                            app:autoSizeMinTextSize="10sp"
+                            app:autoSizeStepGranularity="1sp"
+                            app:autoSizeTextType="uniform" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/star_layout"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_below="@+id/rate_tip_layout"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:clipChildren="false"
+                android:orientation="horizontal">
+
+                <com.example.boozzapp.rateView.rateView.PartyStarCheckView
+                    android:id="@+id/rate_star_1"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/_12sdp"
+                    android:src="@drawable/lib_rate_star" />
+
+                <com.example.boozzapp.rateView.rateView.PartyStarCheckView
+                    android:id="@+id/rate_star_2"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/_12sdp"
+                    android:src="@drawable/lib_rate_star" />
+
+                <com.example.boozzapp.rateView.rateView.PartyStarCheckView
+                    android:id="@+id/rate_star_3"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/_12sdp"
+                    android:src="@drawable/lib_rate_star" />
+
+                <com.example.boozzapp.rateView.rateView.PartyStarCheckView
+                    android:id="@+id/rate_star_4"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/lib_rate_star" />
+
+                <RelativeLayout
+                    android:layout_width="@dimen/_22sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clipChildren="false">
+
+                    <com.example.boozzapp.rateView.rateView.PartyStarCheckView
+                        android:id="@+id/rate_star_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="@dimen/_12sdp"
+                        android:src="@drawable/lib_rate_star" />
+
+                    <com.example.boozzapp.rateView.rateView.PartyStarCheckView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/lib_rate_shining_right" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rate_hand_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/star_layout"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="4"
+                    android:gravity="end"
+                    android:maxLines="2"
+                    android:text="@string/lib_rate_five_stars_tip"
+                    android:textColor="@color/lib_rate_dialog_five_star_tip_color"
+                    android:textSize="16sp"
+                    app:autoSizeMaxTextSize="18sp"
+                    app:autoSizeMinTextSize="10sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/lib_rate_five_star_arrow" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lib_rate_button_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rate_hand_layout"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/lib_rate_button_bg"
+                android:gravity="right|center_vertical|center_horizontal|center|end"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/lib_rate_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:minHeight="48dp"
+                    android:text="@string/lib_rate_btn_rate"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:autoSizeMaxTextSize="18sp"
+                    app:autoSizeMinTextSize="10sp"
+                    app:autoSizeStepGranularity="1sp"
+                    app:autoSizeTextType="uniform" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

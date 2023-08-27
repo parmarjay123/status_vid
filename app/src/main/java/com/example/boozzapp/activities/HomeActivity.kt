@@ -1,13 +1,26 @@
 package com.example.boozzapp.activities
 
 import NativeAdItem
+import android.Manifest
+import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.*
+import android.text.style.ImageSpan
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.boozzapp.R
@@ -15,9 +28,11 @@ import com.example.boozzapp.adapter.HomeCategoryAdapter
 import com.example.boozzapp.adapter.HomeTemplatesAdapter
 import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.controls.CustomDialog
+import com.example.boozzapp.databinding.DialogPrivacyPolicyBinding
 import com.example.boozzapp.pojo.CategoryList
 import com.example.boozzapp.pojo.HomeCategoryPojo
 import com.example.boozzapp.pojo.HomeTemplate
+import com.example.boozzapp.rateView.PartyRateDialog
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
@@ -30,6 +45,7 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class HomeActivity : BaseActivity() {
@@ -41,13 +57,17 @@ class HomeActivity : BaseActivity() {
     val updatedList: MutableList<Any?> = mutableListOf()
     lateinit var interstitialAdsHandler: InterstitialAdsHandler
     var isQuoteClick = false
-    var isSwipScroll = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         activity = this
         storeUserData = StoreUserData(activity)
+
+        if (!storeUserData.getBoolean(Constants.PRIVACY_AGREEMENT)) {
+            showPolicyDialog()
+        }
+
 
         val swipeRefreshLayout: SwipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         val rvCategories: RecyclerView = findViewById(R.id.rvCategories)
@@ -65,7 +85,18 @@ class HomeActivity : BaseActivity() {
 
         tvQuotes.setOnClickListener {
             isQuoteClick = true
-            interstitialAdsHandler.showNextAd()
+            showInterAdsProgress()
+            if (intent.getBooleanExtra(
+                    "isDownload",
+                    false
+                ) && storeUserData.getBoolean(Constants.PRIVACY_AGREEMENT)
+            ) {
+                showInterestitialAds()
+            } else {
+                interstitialAdsHandler.showNextAd()
+            }
+
+
         }
 
         llFilter.setOnClickListener {
@@ -135,21 +166,44 @@ class HomeActivity : BaseActivity() {
         homeCategories()
         setupAd()
 
-        if (!intent.getBooleanExtra("isDownload", false)) {
+        if (!intent.getBooleanExtra(
+                "isDownload",
+                false
+            ) && storeUserData.getBoolean(Constants.PRIVACY_AGREEMENT)
+        ) {
             showInterestitialAds()
+        }
+
+        if (intent.getBooleanExtra(
+                "isDownload",
+                false
+            ) && !storeUserData.getBoolean(Constants.IS_RATE)
+        ) {
+            storeUserData.setBoolean(Constants.IS_RATE, true)
+            rateUsDialog()
         }
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        interstitialAdsHandler.onDestroy()
+        if (::interstitialAdsHandler.isInitialized) {
+
+            interstitialAdsHandler.onDestroy()
+        }
 
     }
 
     override fun onResume() {
         super.onResume()
         setupAd()
+    }
+
+    private fun hasPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onPause() {
@@ -379,4 +433,109 @@ class HomeActivity : BaseActivity() {
     }
 
 
+    //endregion
+    private fun showPolicyDialog() {
+        val binding: DialogPrivacyPolicyBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(activity),
+            R.layout.dialog_privacy_policy, null, false
+        )
+        val dialogPolicy = Dialog(activity, R.style.PolicyDialog)
+        dialogPolicy.setCancelable(false)
+        dialogPolicy.setContentView(binding.getRoot())
+        if (!isFinishing) dialogPolicy.show()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            binding.tvTerm1.justificationMode = Layout.JUSTIFICATION_MODE_INTER_WORD
+            binding.tvTerm2.justificationMode = Layout.JUSTIFICATION_MODE_INTER_WORD
+            binding.tvTerm3.justificationMode = Layout.JUSTIFICATION_MODE_INTER_WORD
+            binding.tvTerm4.justificationMode = Layout.JUSTIFICATION_MODE_INTER_WORD
+        } else {
+            justifyText(binding.tvTerm1)
+            justifyText(binding.tvTerm3)
+            justifyText(binding.tvTerm4)
+        }
+        binding.layoutCloseDialog.setOnClickListener(null)
+        binding.layoutMain.setOnClickListener(null)
+        binding.tvDecline.setOnClickListener { v ->
+            dialogPolicy.dismiss()
+            super.onBackPressed()
+        }
+        binding.tvAgree.setOnClickListener { v ->
+            storeUserData.setBoolean(Constants.PRIVACY_AGREEMENT, true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val permissionsList: MutableList<String> = java.util.ArrayList()
+                if (Build.VERSION.SDK_INT >= 33) {
+                    permissionsList.add(Manifest.permission.READ_MEDIA_IMAGES)
+                } else {
+                    if (!hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        permissionsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    }
+                }
+                if (!permissionsList.isEmpty()) {
+                    requestPermissions(
+                        permissionsList.toTypedArray(),
+                        123
+                    )
+                }
+            }
+
+            dialogPolicy.dismiss()
+        }
+    }
+
+    private fun justifyText(textView: TextView) {
+        val isJustify = AtomicBoolean(false)
+        val textString = textView.text.toString()
+        val textPaint = textView.paint
+        val builder = SpannableStringBuilder()
+        textView.post {
+            if (!isJustify.get()) {
+                val lineCount = textView.lineCount
+                val textViewWidth = textView.width
+                for (i in 0 until lineCount) {
+                    val lineStart = textView.layout.getLineStart(i)
+                    val lineEnd = textView.layout.getLineEnd(i)
+                    val lineString = textString.substring(lineStart, lineEnd)
+                    if (i == lineCount - 1) {
+                        builder.append(SpannableString(lineString))
+                        break
+                    }
+                    val trimSpaceText = lineString.trim { it <= ' ' }
+                    val removeSpaceText = lineString.replace(" ".toRegex(), "")
+                    val removeSpaceWidth = textPaint.measureText(removeSpaceText)
+                    val spaceCount =
+                        (trimSpaceText.length - removeSpaceText.length).toFloat()
+                    val eachSpaceWidth = (textViewWidth - removeSpaceWidth) / spaceCount
+                    val spannableString = SpannableString(lineString)
+                    for (j in 0 until trimSpaceText.length) {
+                        val c = trimSpaceText[j]
+                        if (c == ' ') {
+                            val drawable: Drawable = ColorDrawable(0x00ffffff)
+                            drawable.setBounds(0, 0, eachSpaceWidth.toInt(), 0)
+                            val span = ImageSpan(drawable)
+                            try {
+                                spannableString.setSpan(
+                                    span,
+                                    j,
+                                    j + 1,
+                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                )
+                            } catch (e: Exception) {
+                            }
+                        }
+                    }
+                    builder.append(spannableString)
+                }
+                textView.text = builder
+                isJustify.set(true)
+            }
+        }
+    }
+
+    private fun rateUsDialog() {
+        val languageDialogClass = PartyRateDialog(this)
+        languageDialogClass.setOnCancelListener(DialogInterface.OnCancelListener {
+
+        })
+        languageDialogClass.show()
+    }
 }

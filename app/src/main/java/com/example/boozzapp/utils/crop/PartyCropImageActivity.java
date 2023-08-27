@@ -1,7 +1,5 @@
 package com.example.boozzapp.utils.crop;
 
-import static com.facebook.ads.AdSize.BANNER_HEIGHT_50;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,18 +16,14 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -37,25 +31,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
-import com.facebook.ads.AdOptionsView;
-import com.facebook.ads.MediaView;
-import com.facebook.ads.NativeAdListener;
-import com.facebook.ads.NativeBannerAd;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
+import com.example.boozzapp.R;
+import com.example.boozzapp.databinding.ActivityCropImageBinding;
+import com.example.boozzapp.showty_stickerView.PartyDrawableSticker;
+import com.example.boozzapp.utils.gallery_custom.gallery.ImageBlurUtil;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.LoadAdError;
-
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PartyCropImageActivity extends AppCompatActivity {
     ActivityCropImageBinding mBinding;
@@ -76,7 +60,7 @@ public class PartyCropImageActivity extends AppCompatActivity {
     private AdView adView;
 
 
-    private final String strBRLoadImage = "com.statusmaker.showty.BRLoadImage";
+    private final String strBRLoadImage = "BRLoadImage";
     private BroadcastReceiver brLoadImage;
     com.facebook.ads.AdView facebookadview;
 
@@ -88,7 +72,7 @@ public class PartyCropImageActivity extends AppCompatActivity {
 
 
         mBinding.ibBack.setOnClickListener(v -> {
-          
+
             onBackPressed();
         });
 
@@ -143,17 +127,17 @@ public class PartyCropImageActivity extends AppCompatActivity {
         setCurrentCrop(1);
 
         mBinding.tvCrop.setOnClickListener(v -> {
-          
+
             setCurrentCrop(1);
         });
 
         mBinding.tvNoCrop.setOnClickListener(v -> {
-          
+
             setCurrentCrop(2);
         });
 
         mBinding.ivDone.setOnClickListener(v -> {
-          
+
             if (tabPos == 2)
                 saveAndUseImage(mBinding.llContainerLayout);
             else {
@@ -463,7 +447,7 @@ public class PartyCropImageActivity extends AppCompatActivity {
             case 1:
                 mBinding.cropView.setVisibility(View.VISIBLE);
                 mBinding.llContainerLayout.setVisibility(View.GONE);
-                mBinding.tvCrop.setTextColor(Color.WHITE);
+                mBinding.tvCrop.setTextColor(Color.BLACK);
                 mBinding.tvCrop.setBackground(getResources().getDrawable(R.drawable.border_active_tab));
                 mBinding.tvNoCrop.setTextColor(getResources().getColor(R.color.grey));
                 mBinding.tvNoCrop.setBackground(getResources().getDrawable(R.drawable.border_inactive_tab));
@@ -473,7 +457,7 @@ public class PartyCropImageActivity extends AppCompatActivity {
                 mBinding.llContainerLayout.setVisibility(View.VISIBLE);
                 mBinding.tvCrop.setTextColor(getResources().getColor(R.color.grey));
                 mBinding.tvCrop.setBackground(getResources().getDrawable(R.drawable.border_inactive_tab));
-                mBinding.tvNoCrop.setTextColor(Color.WHITE);
+                mBinding.tvNoCrop.setTextColor(Color.BLACK);
                 mBinding.tvNoCrop.setBackground(getResources().getDrawable(R.drawable.border_active_tab));
                 if (!flagStickerAdded) {
                     flagStickerAdded = true;
@@ -505,10 +489,16 @@ public class PartyCropImageActivity extends AppCompatActivity {
 
                                 PartyDrawableSticker sticker = new PartyDrawableSticker(resource);
                                 mBinding.stickerView.addSticker(sticker, targetWidth, targetHeight);
-
                                 try {
-                                    Bitmap bitmap = BlurImage.with(mContext).load(drawableToBitmap(resource)).intensity(10f).Async(true).getImageBlur();
-                                    mBinding.ivBlurImage.setImageBitmap(bitmap);
+                                    // Convert the Drawable to a Bitmap
+                                    Bitmap originalBitmap = drawableToBitmap(resource);
+                                    float blurRadius = 10f; // Adjust this value to control the intensity of blur
+
+                                    // Apply Gaussian blur to the Bitmap
+                                    Bitmap blurredBitmap = ImageBlurUtil.applyGaussianBlur(PartyCropImageActivity.this, originalBitmap, blurRadius);
+
+                                    // Set the blurred Bitmap to the ImageView
+                                    mBinding.ivBlurImage.setImageBitmap(blurredBitmap);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

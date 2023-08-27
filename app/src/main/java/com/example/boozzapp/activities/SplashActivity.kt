@@ -34,9 +34,6 @@ class SplashActivity : BaseActivity() {
 
         }
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-
         if (intent.data != null) {
             val uri = Uri.parse(intent.data?.toString())
             if (uri.host == "template" && uri.getQueryParameter("id") != null) {
@@ -56,7 +53,6 @@ class SplashActivity : BaseActivity() {
                 }
             }, 1500)
         }
-
 
     }
 

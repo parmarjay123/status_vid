@@ -1,6 +1,7 @@
 package com.example.boozzapp.activities
 
 import android.content.ActivityNotFoundException
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -16,6 +17,7 @@ import com.example.boozzapp.adapter.SuggestedVideoAdapter
 import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.ExploreVideoPojo
+import com.example.boozzapp.rateView.PartyRateDialog
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
@@ -203,7 +205,9 @@ class DownloadTemplateActivity : BaseActivity() {
 
 
         downloadSuggestionList()
-        showInterestitialAds()
+
+            showInterestitialAds()
+
 
     }
 
@@ -440,4 +444,7 @@ class DownloadTemplateActivity : BaseActivity() {
 
         })
     }
+
+
+
 }

@@ -45,7 +45,8 @@ class TemplateImageAdapter(
             holder.itemView.ivPick.visibility = View.GONE
             holder.itemView.tvPick.visibility = View.GONE
             holder.itemView.cv_parent_layout.setCardBackgroundColor(Color.parseColor("#EEEEEE"))
-            if (pojo.imgPath == null) {
+
+            if (pojo.imgPathExtra == null) {
                 Glide.with(activity)
                     .load(pojo.imgPath)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -55,16 +56,16 @@ class TemplateImageAdapter(
                 holder.itemView.iv_plus.visibility = View.VISIBLE
             } else {
                 Glide.with(activity)
-                    .load(pojo.imgPath)
+                    .load(pojo.imgPathExtra)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .transform(RoundedCorners(10))
                     .into(holder.itemView.iv_video_image)
-                holder.itemView.iv_plus.visibility = View.VISIBLE
+                holder.itemView.iv_plus.visibility = View.GONE
             }
 
             holder.itemView.cv_parent_layout.setOnClickListener {
-                listener.onImageChange(pojo)
+                listener.onImageChange(pojo, position)
             }
         } else {
             holder.itemView.iv_video_image.visibility = View.GONE

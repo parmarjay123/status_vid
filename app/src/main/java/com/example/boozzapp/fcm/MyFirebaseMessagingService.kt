@@ -19,7 +19,7 @@ import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
-import org.json.JSONArray
+import org.json.JSONObject
 import java.util.concurrent.ExecutionException
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -57,18 +57,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val title = remoteMessage.data["title"]
         val desc = remoteMessage.data["message"]
         val type = remoteMessage.data["type"]
-
-        if (!type.equals("video")){
-            val jsonArray = JSONArray(remoteMessage.data) // Assuming `value` contains the JSON array as a string
-            val jsonObject = jsonArray.getJSONObject(0)
-
-            val image = jsonObject.getString("image")
-             imageUrl = jsonObject.getString("image_url")
-        }
-        val bundleData =
-            if (type.equals("video")) remoteMessage.data["template"] else imageUrl
-
-        type?.let { sendVideoNotification(applicationContext, title, desc, bundleData, it) }
+        sendVideoNotification(applicationContext, title, desc, remoteMessage.data["template"], type)
     }
 
     private fun sendVideoNotification(
@@ -76,7 +65,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         title: String?,
         description: String?,
         bundleData: String?,
-        type: String
+        type: String?
     ) {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         lateinit var intent: Intent
@@ -92,11 +81,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             imageUrl = modelVideoList.thumbnailUrl.toString()
             intent.putExtra("videoId", modelVideoList.id.toString())
         } else {
-            imageUrl = bundleData.toString()
+            val templateJson = JSONObject(bundleData) // Parse the "template" value as a JSON object
+            imageUrl = templateJson.getString("image_url")
             intent = Intent(applicationContext, PreviewQuotesActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             intent.putExtra("isNotification", true)
-            intent.putExtra("imageURL", bundleData)
+            intent.putExtra("imageURL", imageUrl)
         }
 
         val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -125,18 +115,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .load(imageUrl)
             .submit()
         var notificationBuilder: NotificationCompat.Builder? = null
-        try {
-            notificationBuilder = NotificationCompat.Builder(this, "Video")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setStyle(
-                    NotificationCompat.BigPictureStyle(
-                        NotificationCompat.Builder(
-                            mContext,
-                            "Video"
-                        )
+        try {   notificationBuilder = NotificationCompat.Builder(this, "Video")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setStyle(
+                NotificationCompat.BigPictureStyle(
+                    NotificationCompat.Builder(
+                        mContext,
+                        "Video"
                     )
-                        .bigPicture(futureTarget.get())
                 )
+                    .bigPicture(futureTarget.get())
+            )
+
                 .setColor(Color.parseColor("#1B5BA8"))
                 .setContentTitle(title)
                 .setContentText(description)

@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".app.MyApplication"
@@ -67,14 +68,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".utils.mediapicker.Image.ImageActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity
             android:name=".activities.ExploreActivity"
             android:exported="false"
             android:screenOrientation="portrait">
@@ -86,6 +79,22 @@
             android:name=".activities.PreviewQuotesActivity"
             android:exported="false"
             android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".utils.gallery_custom.PartyGalleryAlbumActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".utils.crop.PartyCropImageActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

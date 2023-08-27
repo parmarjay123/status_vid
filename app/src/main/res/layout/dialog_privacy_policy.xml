@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#88000000"
+        android:orientation="vertical"
+        android:weightSum="100">
+
+        <View
+            android:id="@+id/layout_close_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="75" />
+
+        <LinearLayout
+            android:id="@+id/layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="25"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <com.example.boozzapp.controls.CTextView
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:text="@string/terms_conditions"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/black_light" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#CCC" />
+
+            <ScrollView
+                android:id="@+id/wvPolicy"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                tools:ignore="NestedWeights">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:orientation="vertical">
+
+                    <com.example.boozzapp.controls.CTextView
+                        android:id="@+id/tvTerm1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:lineSpacingExtra="4dp"
+                        android:padding="5dp"
+                        android:text="@string/terms1"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="@color/black_light" />
+
+                    <com.example.boozzapp.controls.CTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Disclaimer:"
+                        android:textAppearance="?android:textAppearanceMedium"
+                        android:textColor="@color/black_light"
+                        tools:ignore="HardcodedText" />
+
+                    <com.example.boozzapp.controls.CTextView
+                        android:id="@+id/tvTerm2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="4dp"
+                        android:padding="5dp"
+                        android:text="@string/terms2"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="@color/black_light" />
+
+                    <com.example.boozzapp.controls.CTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="Required Permissions:"
+                        android:textAppearance="?android:textAppearanceMedium"
+                        android:textColor="@color/black_light"
+                        tools:ignore="HardcodedText" />
+
+                    <com.example.boozzapp.controls.CTextView
+                        android:id="@+id/tvTerm3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="4dp"
+                        android:padding="5dp"
+                        android:text="@string/terms3"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="@color/black_light" />
+
+                    <com.example.boozzapp.controls.CTextView
+                        android:id="@+id/tvTerm4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="@string/terms4"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:textColor="@color/black_light" />
+                </LinearLayout>
+            </ScrollView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="#CCC" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+
+                <com.example.boozzapp.controls.CTextView
+                    android:id="@+id/tv_decline"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/tv_decline_policy"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/black_light" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="#CCC" />
+
+                <TextView
+                    android:id="@+id/tv_agree"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/cv_accept_policy"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</layout>

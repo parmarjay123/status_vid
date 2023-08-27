@@ -20,12 +20,16 @@
     <color name="black_light">#333333</color>
     <color name="ad_color">#EEE</color>
     <color name="grey">#AAA</color>
+    <color name="transparent">#00000000</color>
+    <color name="lib_rate_dialog_five_star_tip_color">#eb9200</color>
+    <color name="lib_rate_button_bg_color">#fff5a623</color>
 
     <color name="colorPrimary">#FDB44E</color>
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#333333</color>
     <color name="main_color">#ed3b94</color>
     <item name="darkgreen" type="color">#FF669900</item>
+    <color name="separator_color">#A9A9A9</color>
 
 
 </resources>

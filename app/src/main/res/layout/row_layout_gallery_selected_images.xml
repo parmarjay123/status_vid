@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:background="#00000000">
+
+        <RelativeLayout
+            android:id="@+id/layout_border"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp">
+
+            <ImageView
+                android:id="@+id/iv_selected_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/iv_plus_selected"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="2dp"
+                android:background="#55000000"
+                android:contentDescription="@string/app_name"
+                android:padding="25dp"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_gallery" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/app_name"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_close_image" />
+    </RelativeLayout>
+</layout>

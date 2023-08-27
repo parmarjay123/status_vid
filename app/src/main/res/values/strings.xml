@@ -50,6 +50,29 @@
     <string name="insta_page_url">https://instagram.com/boozz.app?igshid=MzRlODBiNWFlZA==</string>
     <string name="fb_page_url">https://www.facebook.com/boozzzv?mibextid=D4KYlr</string>
     <string name="my_videos_new">My Videos</string>
+    <string name="terms_conditions"><![CDATA[Terms & Conditions]]></string>
+    <!-- Privacy Policy Dialog-->
+    <string name="tv_decline_policy">Disagree</string>
+    <string name="cv_accept_policy">Agree</string>
+    <string name="terms1">Dear users, we are just a platform to make variety of templates, we are not liable for any misuse or misconduct from any of the user, we are not bound by any legal aspects or liability, user will be responsible and liable for all the uses.</string>
+    <string name="terms2">We believe our security steps are at least as stringent as yours would be. As a matter of practical business necessity, we can not be responsible for any damage caused by any problems that may arise as a result of your or anyone\'s use of our app or the services we provide whether or not we are at fault unless such problem is caused by our intentional misconduct as outlined by this disclaimer which is written by our lawyers.</string>
+    <string name="terms3">This app only asks for the storage permission to ready your image files and save videos created by you and this app won\'t use this permission for any other purpose than mentioned</string>
+    <string name="terms4">Clicking on AGREE button you agree to the above mentioned conditions.</string>
+
+
+
+
+    <string name="lib_rate_dialog_tip">We are working hard for a better user experience.\n We’d greatly appreciate if you can rate us.</string>
+    <string name="lib_rate_like_you">We like you too!</string>
+    <string name="lib_rate_love_it">Loved it</string>
+    <string name="lib_rate_oh_no">Oh, no!</string>
+    <string name="lib_rate_five_stars_tip">The best we can get :)</string>
+    <string name="lib_rate_btn_rate">Rate Now</string>
+    <string name="lib_rate_leave_feedback">Please leave us some feedback.</string>
+    <string name="lib_rate_thanks_feedback">Thanks for your feedback.</string>
+    <string name="lib_rate_btn_go_market">Rate on Google play</string>
+
+
 
     <!--Here Facebook Interstitial Ads IDs-->
     <string name="fb_app_id">511315357511616</string>

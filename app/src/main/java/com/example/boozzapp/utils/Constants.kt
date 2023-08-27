@@ -30,6 +30,8 @@ object Constants {
     const val AMOUNT = "AMOUNT"
     const val PROFILE_IMG = "PROFILE_IMG"
     const val ADS_COUNT_DASHBOARD_CLICK = "ADS_COUNT"
+    const val PRIVACY_AGREEMENT = "PRIVACY_AGREEMENT"
+    const val IS_RATE = "IS_RATE"
 }
 
 /**
