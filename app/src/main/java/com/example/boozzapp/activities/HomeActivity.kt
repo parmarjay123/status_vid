@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.text.LineBreaker
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -93,7 +94,12 @@ class HomeActivity : BaseActivity() {
             ) {
                 showInterestitialAds()
             } else {
-                interstitialAdsHandler.showNextAd()
+                if (::interstitialAdsHandler.isInitialized) {
+                    interstitialAdsHandler.showNextAd()
+                } else {
+                    showInterestitialAds()
+                }
+
             }
 
 
@@ -444,10 +450,10 @@ class HomeActivity : BaseActivity() {
         dialogPolicy.setContentView(binding.getRoot())
         if (!isFinishing) dialogPolicy.show()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            binding.tvTerm1.justificationMode = Layout.JUSTIFICATION_MODE_INTER_WORD
-            binding.tvTerm2.justificationMode = Layout.JUSTIFICATION_MODE_INTER_WORD
-            binding.tvTerm3.justificationMode = Layout.JUSTIFICATION_MODE_INTER_WORD
-            binding.tvTerm4.justificationMode = Layout.JUSTIFICATION_MODE_INTER_WORD
+            binding.tvTerm1.justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
+            binding.tvTerm2.justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
+            binding.tvTerm3.justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
+            binding.tvTerm4.justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
         } else {
             justifyText(binding.tvTerm1)
             justifyText(binding.tvTerm3)
