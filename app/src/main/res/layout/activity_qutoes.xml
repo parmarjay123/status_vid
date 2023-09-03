@@ -20,7 +20,7 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_gravity="center"
                 android:background="@color/app_background_color"
                 android:orientation="horizontal">
@@ -47,15 +47,51 @@
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvQuotesCategory"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_12sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="25"
-                tools:listitem="@layout/row_quotes_category" />
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/llQuotesExplore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_rounded_white"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:paddingHorizontal="@dimen/_20sdp"
+                    android:paddingVertical="@dimen/_7sdp">
+
+
+                    <com.example.boozzapp.controls.CTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Explore"
+                        android:textColor="@color/blue_text"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/_2sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:background="@color/light_black" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvQuotesCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="25"
+                    tools:listitem="@layout/row_quotes_category" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvQuotesList"

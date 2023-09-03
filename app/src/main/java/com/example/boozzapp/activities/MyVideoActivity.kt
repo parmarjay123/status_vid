@@ -29,8 +29,7 @@ class MyVideoActivity : BaseActivity() {
     }
 
     override fun onResume() {
-        super.onResume()
-        setupAd()
+       super.onResume()
     }
 
     private fun setupAd() {

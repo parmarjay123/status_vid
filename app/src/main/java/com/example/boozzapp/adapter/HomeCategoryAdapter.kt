@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.boozzapp.R
 import com.example.boozzapp.activities.CategoryWiseVideoActivity
-import com.example.boozzapp.activities.ExploreActivity
 import com.example.boozzapp.pojo.CategoryList
 import kotlinx.android.synthetic.main.row_category.view.*
 
@@ -37,24 +36,15 @@ class HomeCategoryAdapter(
         val pojo = data[position]
         holder.itemView.tvCategoryTitle.text = pojo!!.name
 
-        if (position == 0) {
-            Glide.with(activity).load(R.drawable.explore_icon).into(holder.itemView.ivCategoryImage)
-
-        } else {
-            Glide.with(activity).load(pojo!!.imageUrl).into(holder.itemView.ivCategoryImage)
-
-        }
+        Glide.with(activity).load(pojo!!.imageUrl).into(holder.itemView.ivCategoryImage)
 
         holder.itemView.setOnClickListener {
-            if (position == 0) {
-              activity.startActivity(Intent(activity,ExploreActivity::class.java).putExtra("sortBy", sort_by))
-            } else {
-                activity.startActivity(
-                    Intent(activity, CategoryWiseVideoActivity::class.java)
-                        .putExtra("sortBy", sort_by).putExtra("categoryId", pojo.id.toString())
-                        .putExtra("categoryTitle", pojo.name.toString())
-                )
-            }
+            activity.startActivity(
+                Intent(activity, CategoryWiseVideoActivity::class.java)
+                    .putExtra("sortBy", sort_by).putExtra("categoryId", pojo.id.toString())
+                    .putExtra("categoryTitle", pojo.name.toString())
+            )
+
         }
     }
 

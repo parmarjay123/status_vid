@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded_white"
         android:gravity="center"
-        android:paddingHorizontal="@dimen/_20sdp"
+        android:paddingHorizontal="@dimen/_15sdp"
         android:paddingVertical="@dimen/_7sdp">
 
 

@@ -44,7 +44,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="@dimen/_80sdp"
+                    android:layout_width="@dimen/_60sdp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:src="@drawable/boozz_title" />
@@ -66,44 +66,102 @@
                         android:src="@drawable/setting_icon" />
                 </LinearLayout>
 
-
             </FrameLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvCategories"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="25"
-                tools:listitem="@layout/row_category" />
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llHomeExplore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_rounded_white"
+                        android:gravity="center"
+                        android:paddingHorizontal="@dimen/_20sdp"
+                        android:paddingVertical="@dimen/_5sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/explore_icon" />
+                    </LinearLayout>
+
+                    <com.example.boozzapp.controls.CTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:gravity="center"
+                        android:text="Explore"
+                        android:textColor="@color/blue_text"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <View
+                    android:layout_width="@dimen/_2sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:background="@color/light_black"/>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/row_category" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_25sdp"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="horizontal">
 
                 <com.example.boozzapp.controls.CTextView
                     android:id="@+id/tvVideos"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_rounded_explore"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_10sdp"
                     android:text="@string/videos"
                     android:textColor="@color/blue_text"
-                    android:textSize="@dimen/_20sdp"
+                    android:textSize="@dimen/_16sdp"
                     android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
                 <com.example.boozzapp.controls.CTextView
                     android:id="@+id/tvQuotes"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:background="@drawable/bg_rounded_explore"
+                    android:paddingHorizontal="@dimen/_10sdp"
                     android:text="@string/quotes"
-                    android:textColor="@color/light_blue_text"
-                    android:textSize="@dimen/_20sdp"
+                    android:textColor="@color/blue_text"
+                    android:textSize="@dimen/_16sdp"
                     android:textStyle="bold" />
 
 
@@ -196,7 +254,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone"
-                     app:adSize="SMART_BANNER"
+                    app:adSize="SMART_BANNER"
                     app:adUnitId="@string/GL_Dashbord_Banner" />
 
                 <TextView

@@ -130,6 +130,10 @@ class HomeActivity : BaseActivity() {
             startActivity(Intent(activity, SettingActivity::class.java))
         }
 
+        llHomeExplore.setOnClickListener {
+            startActivity(Intent(activity,ExploreActivity::class.java).putExtra("sortBy", sortBy))
+        }
+
         llRandom.setOnClickListener {
             sortBy = "random"
             page = 1
@@ -198,11 +202,6 @@ class HomeActivity : BaseActivity() {
             interstitialAdsHandler.onDestroy()
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupAd()
     }
 
     private fun hasPermission(permission: String): Boolean {
@@ -338,7 +337,6 @@ class HomeActivity : BaseActivity() {
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
                 val categoryPojo = Gson().fromJson(responseString, HomeCategoryPojo::class.java)
-                homeCategoryList.add(CategoryList("", "Explore", 0))
                 categoryPojo.data?.let { homeCategoryList.addAll(it) }
 
                 val categoryAdapter = HomeCategoryAdapter(

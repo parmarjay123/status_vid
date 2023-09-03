@@ -83,8 +83,7 @@ class SearchActivity : BaseActivity() {
     }
 
     override fun onResume() {
-        super.onResume()
-        setupAd()
+       super.onResume()
     }
 
     override fun onPause() {

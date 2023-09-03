@@ -362,13 +362,10 @@ class PreviewActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        setupAd()
         if (Util.SDK_INT > 23) {
             if (player != null) {
                 player.onResume()
             }
-
         }
     }
 

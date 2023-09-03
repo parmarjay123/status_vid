@@ -68,7 +68,6 @@ class CategoryWiseQuotesActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        setupBannerAd()
     }
 
     private fun setupBannerAd() {

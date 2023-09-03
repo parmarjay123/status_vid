@@ -1,6 +1,7 @@
 package com.example.boozzapp.activities
 
 import NativeAdItem
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -70,6 +71,11 @@ class QuotesActivity : BaseActivity() {
 
         ivQuotesBack.setOnClickListener { finish() }
 
+        llQuotesExplore.setOnClickListener {
+            startActivity(Intent(activity, ExploreQuotesActivity::class.java))
+
+        }
+
         llQuotesFilter.setOnClickListener {
             flQuotesBottom.isVisible = false
             llQuotesBottom.isVisible = true
@@ -88,11 +94,6 @@ class QuotesActivity : BaseActivity() {
             llQuotesBottom.isVisible = false
         }
         quotesCategory()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupAd()
     }
 
     private fun setupAd() {
@@ -132,9 +133,7 @@ class QuotesActivity : BaseActivity() {
                 val responseString = body.body()!!.string()
                 Log.i("TAG", "HomeCategories$responseString")
                 val categoryPojo = Gson().fromJson(responseString, QuotesCategory::class.java)
-                quotesCategoryList.add(QuoteCategoryList("", "Explore", 0))
                 categoryPojo.data?.let { quotesCategoryList.addAll(it) }
-
 
                 val categoryAdapter = QuotesCategoryAdapter(
                     activity,

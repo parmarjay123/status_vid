@@ -39,13 +39,11 @@ class QuotesCategoryAdapter(
 
 
         holder.itemView.setOnClickListener {
-            if (position == 0) {
-                activity.startActivity(Intent(activity, ExploreQuotesActivity::class.java))
-            }else{
+
                 activity.startActivity(Intent(activity,CategoryWiseQuotesActivity::class.java)
                     .putExtra("sortBy",sort_by).putExtra("categoryId",pojo.id.toString())
                     .putExtra("categoryTitle",pojo.name.toString()))
-            }
+
         }
     }
 

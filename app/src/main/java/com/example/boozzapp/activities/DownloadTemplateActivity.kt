@@ -213,7 +213,6 @@ class DownloadTemplateActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        setupBannerAd()
         if (Util.SDK_INT > 23) {
             if (exoDownloadPlayerView != null) {
                 exoDownloadPlayerView.onResume()

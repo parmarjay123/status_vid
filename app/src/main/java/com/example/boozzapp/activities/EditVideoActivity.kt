@@ -657,8 +657,7 @@ class EditVideoActivity : BaseActivity() {
     }
 
     override fun onResume() {
-        super.onResume()
-        setupAd()
+       super.onResume()
         tvExport.isVisible = true
 
         if (flagChanges) {
