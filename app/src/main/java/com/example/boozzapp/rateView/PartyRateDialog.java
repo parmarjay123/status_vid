@@ -3,6 +3,7 @@ package com.example.boozzapp.rateView;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -233,13 +234,26 @@ public class PartyRateDialog extends Dialog implements View.OnClickListener {
             if (task.isSuccessful()) {
                 ReviewInfo reviewInfo = task.getResult();
                 com.google.android.play.core.tasks.Task<Void> launchReviewFlow = manager.launchReviewFlow(c, reviewInfo);
-                launchReviewFlow.addOnCompleteListener((com.google.android.play.core.tasks.OnCompleteListener<Void>) task1 -> {
+                launchReviewFlow.addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
                         Toast.makeText(c, "Thanks for your rating!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Handle launchReviewFlow failure
+                        Exception exception = task1.getException();
+                        if (exception != null) {
+                            Log.e("ReviewFlow", "Error launching review flow", exception);
+                        }
                     }
                 });
+            } else {
+                // Handle requestReviewFlow failure
+                Exception exception = task.getException();
+                if (exception != null) {
+                    Log.e("ReviewFlow", "Error requesting review flow", exception);
+                }
             }
         });
     }
+
 }
 

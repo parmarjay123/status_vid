@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_300sdp"
+    android:layout_height="@dimen/_200sdp"
     android:layout_gravity="center"
     android:layout_marginHorizontal="@dimen/_30sdp"
     android:background="@drawable/bg_background"
@@ -46,6 +46,7 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:max="100"
             android:progressDrawable="@drawable/progress_bar_fill" />
+<!--
 
         <com.google.android.gms.ads.nativead.NativeAdView
             android:id="@+id/nativeADs"
@@ -53,6 +54,7 @@
             android:layout_height="@dimen/_120sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:visibility="gone" />
+-->
 
         <com.example.boozzapp.controls.CTextView
             android:id="@+id/tvLoad"

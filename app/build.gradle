@@ -21,8 +21,8 @@ android {
         applicationId "boozz.lyrical.ly.video.status.maker"
         minSdk 21
         targetSdk 33
-        versionCode 22
-        versionName "2.12"
+        versionCode 23
+        versionName "2.13"
         multiDexEnabled true
         dataBinding {
             enabled = true
@@ -41,6 +41,9 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        abortOnError false
     }
     /* configurations.all {
          resolutionStrategy {

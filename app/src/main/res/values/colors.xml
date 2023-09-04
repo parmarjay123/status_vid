@@ -12,6 +12,7 @@
     <color name="primary">#8CC63F</color>
     <color name="vw_BgToolBar">#373B3E</color>
     <color name="app_background_color">#BDBDF2</color>
+    <color name="app_background_color_transparent">#80BDBDF2</color>
     <color name="blue_text">#0C134F</color>
     <color name="light_blue_text">#800C134F</color>
     <color name="white_twenty">#80BDBDF2</color>

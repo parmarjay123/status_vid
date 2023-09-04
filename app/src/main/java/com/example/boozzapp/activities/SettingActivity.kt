@@ -20,49 +20,46 @@ import kotlinx.android.synthetic.main.activity_setting.*
 class SettingActivity : BaseActivity() {
     lateinit var interstitialAdsHandler: InterstitialAdsHandler
     var myVideo = false
-    var shareApp = false
-    var rateApp = false
-    var checkUpdate = false
-    var privacyPolicy = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
         activity = this
         storeUserData = StoreUserData(activity)
-
         ivSettingBack.setOnClickListener { finish() }
-        showInterestitialAds()
         setupAd()
 
         llMyVideo.setOnClickListener {
             myVideo = true
-            showInterAdsProgress()
-            interstitialAdsHandler.showNextAd()
+            showInterestitialAds()
         }
 
         llShareApp.setOnClickListener {
-            shareApp = true
-            showInterAdsProgress()
-            interstitialAdsHandler.showNextAd()
+            val shareAppIntent = Intent(Intent.ACTION_SEND)
+            shareAppIntent.type = "text/plain"
+            shareAppIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                "Check out this awesome app: https://play.google.com/store/apps/details?id=your.package.name"
+            )
+
+            val chooserIntent = Intent.createChooser(shareAppIntent, "Share via")
+            if (shareAppIntent.resolveActivity(packageManager) != null) {
+                startActivity(chooserIntent)
+            }
         }
 
         llRateApp.setOnClickListener {
-            rateApp = true
-            showInterAdsProgress()
-            interstitialAdsHandler.showNextAd()
+            openPlayStoreForRating(activity)
+
         }
 
         llCheckUpdate.setOnClickListener {
-            checkUpdate = true
-            showInterAdsProgress()
-            interstitialAdsHandler.showNextAd()
+            openPlayStoreForRating(activity)
+
         }
 
         llPrivacyPolicy.setOnClickListener {
-            privacyPolicy = true
-            showInterAdsProgress()
-            interstitialAdsHandler.showNextAd()
+            goPrivacyPolicy()
         }
         ivInstagram.setOnClickListener {
             openInstagramPage(activity)
@@ -85,8 +82,9 @@ class SettingActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        interstitialAdsHandler.onDestroy()
-
+        if (::interstitialAdsHandler.isInitialized) {
+            interstitialAdsHandler.onDestroy()
+        }
     }
 
     private fun setupAd() {
@@ -126,31 +124,8 @@ class SettingActivity : BaseActivity() {
             override fun onAdClosed() {
                 if (myVideo) {
                     activity.startActivity(Intent(activity, MyVideoActivity::class.java))
-
-                } else if (shareApp) {
-                    val shareAppIntent = Intent(Intent.ACTION_SEND)
-                    shareAppIntent.type = "text/plain"
-                    shareAppIntent.putExtra(
-                        Intent.EXTRA_TEXT,
-                        "Check out this awesome app: https://play.google.com/store/apps/details?id=your.package.name"
-                    )
-
-                    val chooserIntent = Intent.createChooser(shareAppIntent, "Share via")
-                    if (shareAppIntent.resolveActivity(packageManager) != null) {
-                        startActivity(chooserIntent)
-                    }
-                } else if (rateApp) {
-                    openPlayStoreForRating(activity)
-
-                } else if (checkUpdate) {
-                    openPlayStoreForRating(activity)
-
-                } else if (privacyPolicy) {
-                    goPrivacyPolicy()
                 }
                 adVariableFalse()
-
-
             }
 
 
@@ -158,30 +133,6 @@ class SettingActivity : BaseActivity() {
                 if (myVideo) {
                     dismissInterAdsProgress()
                     activity.startActivity(Intent(activity, MyVideoActivity::class.java))
-
-                } else if (shareApp) {
-                    dismissInterAdsProgress()
-                    val shareAppIntent = Intent(Intent.ACTION_SEND)
-                    shareAppIntent.type = "text/plain"
-                    shareAppIntent.putExtra(
-                        Intent.EXTRA_TEXT,
-                        "Check out this awesome app: https://play.google.com/store/apps/details?id=your.package.name"
-                    )
-                    val chooserIntent = Intent.createChooser(shareAppIntent, "Share via")
-                    if (shareAppIntent.resolveActivity(packageManager) != null) {
-                        startActivity(chooserIntent)
-                    }
-                } else if (rateApp) {
-                    dismissInterAdsProgress()
-                    openPlayStoreForRating(activity)
-
-                } else if (checkUpdate) {
-                    dismissInterAdsProgress()
-                    openPlayStoreForRating(activity)
-
-                } else if (privacyPolicy) {
-                    dismissInterAdsProgress()
-                    goPrivacyPolicy()
                 }
                 adVariableFalse()
             }
@@ -194,30 +145,6 @@ class SettingActivity : BaseActivity() {
                 if (myVideo) {
                     dismissInterAdsProgress()
                     activity.startActivity(Intent(activity, MyVideoActivity::class.java))
-
-                } else if (shareApp) {
-                    dismissInterAdsProgress()
-                    val shareAppIntent = Intent(Intent.ACTION_SEND)
-                    shareAppIntent.type = "text/plain"
-                    shareAppIntent.putExtra(
-                        Intent.EXTRA_TEXT,
-                        "Check out this awesome app: https://play.google.com/store/apps/details?id=your.package.name"
-                    )
-                    val chooserIntent = Intent.createChooser(shareAppIntent, "Share via")
-                    if (shareAppIntent.resolveActivity(packageManager) != null) {
-                        startActivity(chooserIntent)
-                    }
-                } else if (rateApp) {
-                    dismissInterAdsProgress()
-                    openPlayStoreForRating(activity)
-
-                } else if (checkUpdate) {
-                    dismissInterAdsProgress()
-                    openPlayStoreForRating(activity)
-
-                } else if (privacyPolicy) {
-                    dismissInterAdsProgress()
-                    goPrivacyPolicy()
                 }
                 adVariableFalse()
             }
@@ -227,10 +154,6 @@ class SettingActivity : BaseActivity() {
 
     private fun adVariableFalse() {
         myVideo = false
-        shareApp = false
-        rateApp = false
-        checkUpdate = false
-        privacyPolicy = false
     }
 
     private fun openPlayStoreForRating(context: Context) {

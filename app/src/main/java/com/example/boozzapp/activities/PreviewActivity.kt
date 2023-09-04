@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.util.Util
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.rewarded.RewardedAd
@@ -69,6 +70,7 @@ class PreviewActivity : BaseActivity() {
         hasShareVideo = intent?.extras?.getString("videoId") != null
 
         players = SimpleExoPlayer.Builder(activity).build()
+        player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT;
         player.player = players
         player.useController = false
         players.addListener(object : Player.EventListener {
@@ -312,6 +314,9 @@ class PreviewActivity : BaseActivity() {
 
     fun setPlayerData() {
         tvSongName.text = videoPojo.title
+        if (videoPojo.isPremium==1){
+            ivPremium.isVisible=true
+        }
         val firstItem: MediaItem =
             MediaItem.fromUri(Uri.parse(videoPojo.videoUrl))
         player.player!!.setMediaItem(firstItem)
@@ -508,7 +513,8 @@ class PreviewActivity : BaseActivity() {
         val windowHeight = activity.window.decorView.height
         val dialogHeight = windowHeight / 2
         holdDialog.setCanceledOnTouchOutside(false)
-        holdDialog.nativeADs.isVisible = true
+       // holdDialog.nativeADs.isVisible = true
+/*
 
         val adUnitId = getString(R.string.GL_Tamplate_Create_Native)
 
@@ -538,6 +544,7 @@ class PreviewActivity : BaseActivity() {
             .build()
         val adRequest = AdRequest.Builder().build()
         adLoader.loadAd(adRequest)
+*/
 
         // Set the dialog's window layout parameters
         val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight)
@@ -546,7 +553,7 @@ class PreviewActivity : BaseActivity() {
         holdDialog.show()
 
         holdDialog.btnCancel.setOnClickListener {
-            holdDialog.nativeADs.removeAllViews()
+        //    holdDialog.nativeADs.removeAllViews()
             holdDialog.dismiss()
             PRDownloader.cancelAll()
 

@@ -184,14 +184,6 @@ class HomeActivity : BaseActivity() {
             showInterestitialAds()
         }
 
-        if (intent.getBooleanExtra(
-                "isDownload",
-                false
-            ) && !storeUserData.getBoolean(Constants.IS_RATE)
-        ) {
-            storeUserData.setBoolean(Constants.IS_RATE, true)
-            rateUsDialog()
-        }
 
     }
 
@@ -277,6 +269,8 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
+
+
         val alert = CustomDialog(activity)
         alert.setCancelable(false)
         alert.show()
@@ -288,6 +282,15 @@ class HomeActivity : BaseActivity() {
         }
         alert.setNegativeButton("No") {
             alert.dismiss()
+        }
+
+        if (intent.getBooleanExtra(
+                "isDownload",
+                false
+            ) && !storeUserData.getBoolean(Constants.IS_RATE)
+        ) {
+            storeUserData.setBoolean(Constants.IS_RATE, true)
+            rateUsDialog()
         }
 
 

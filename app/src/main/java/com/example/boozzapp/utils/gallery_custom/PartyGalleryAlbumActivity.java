@@ -40,6 +40,10 @@ import com.example.boozzapp.utils.gallery_custom.gallery.PartyMediaReader;
 import com.example.boozzapp.utils.gallery_custom.gallery.PartyModelCommandImages;
 import com.example.boozzapp.utils.gallery_custom.gallery.PhonePhoto;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -80,7 +84,7 @@ public class PartyGalleryAlbumActivity extends AppCompatActivity implements Part
 
 //        loadingAnimationUtils = new LoadingAnimationUtils(this);
 
-
+        setupAd();
         Type type = new TypeToken<ArrayList<PartyModelCommandImages>>() {
         }.getType();
         String json = getIntent().getStringExtra("ImageList");
@@ -199,6 +203,31 @@ public class PartyGalleryAlbumActivity extends AppCompatActivity implements Part
         fetchGalleryImages();
 
 
+    }
+
+    private void setupAd() {
+        AdView myVideoBannerAdView = findViewById(R.id.galleryBannerAdView);
+        TextView adMyVideoLoadingText = findViewById(R.id.adGalleryLoadingText);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        myVideoBannerAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                adMyVideoLoadingText.setVisibility(View.INVISIBLE);
+                myVideoBannerAdView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Log.i("TAG", "onAdFailedToLoad: MyVideo" + loadAdError.getMessage());
+                Log.i("TAG", "onAdFailedToLoad: MyVideo" + loadAdError.getCode());
+
+                adMyVideoLoadingText.setVisibility(View.VISIBLE);
+                myVideoBannerAdView.setVisibility(View.INVISIBLE);
+            }
+        });
+        myVideoBannerAdView.loadAd(adRequest);
     }
 
     @SuppressLint("SetTextI18n")

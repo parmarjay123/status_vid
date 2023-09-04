@@ -4,8 +4,7 @@
     android:id="@+id/llparent"
     android:layout_width="match_parent"
     android:layout_height="230dp"
-    android:layout_margin="10dp"
-    android:background="@color/white"
+    android:layout_margin="@dimen/_10sdp"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -16,7 +15,7 @@
         android:padding="10dp"
         android:visibility="visible"
         app:cardBackgroundColor="#fff"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="@dimen/_22sdp"
         app:cardElevation="6dp">
 
         <com.google.android.gms.ads.nativead.NativeAdView
@@ -47,6 +46,8 @@
                         android:id="@+id/rladtext"
                         android:layout_width="20dp"
                         android:layout_height="15dp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_alignParentTop="true"
                         android:layout_gravity="start"
                         android:background="@drawable/ad_mark" />
@@ -208,9 +209,8 @@
                 <RelativeLayout
                     android:id="@+id/rlNoadView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                   android:layout_marginHorizontal="@dimen/_8sdp"
                     android:background="@drawable/bg_video_list_no_ad"
                     android:gravity="center"
                     android:minHeight="100dp"

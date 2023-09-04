@@ -103,7 +103,7 @@ class PreviewQuotesActivity : BaseActivity() {
         }
         activityOpenCount =
             storeUserData.getInt(com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK)
-        if (activityOpenCount == 1) {
+        if (activityOpenCount == 4) {
             showInterAdsProgress()
             interstitialAdsHandler = InterstitialAdsHandler(
                 this,

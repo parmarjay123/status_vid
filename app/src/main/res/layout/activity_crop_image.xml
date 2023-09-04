@@ -147,34 +147,31 @@
                 android:visibility="gone" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/lladzone"
+
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/banner_height"
             android:layout_alignParentBottom="true"
-            android:background="#F9F9F9"
-            android:orientation="vertical">
+            android:layout_gravity="bottom"
+            android:background="@color/white">
 
-            <View
-                android:id="@+id/separator"
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/cropAdview"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/separator_height"
-                android:background="@color/separator_color"
-                android:visibility="gone" />
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:adSize="SMART_BANNER"
+                app:adUnitId="@string/GL_Image_crop_Banner" />
 
-            <LinearLayout
-                android:id="@+id/adZone"
+            <TextView
+                android:id="@+id/adCropLoadingText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/ad_color"
-                android:orientation="vertical" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Loading ad..."
+                android:visibility="visible" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-            <com.facebook.ads.NativeAdLayout
-                android:id="@+id/native_banner_ad_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-        </LinearLayout>
     </RelativeLayout>
 </layout>

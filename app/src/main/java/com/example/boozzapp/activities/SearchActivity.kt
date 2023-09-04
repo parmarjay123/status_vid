@@ -30,7 +30,6 @@ import retrofit2.Call
 import retrofit2.Response
 
 class SearchActivity : BaseActivity() {
-    lateinit var interstitialAdsHandler: InterstitialAdsHandler
     var homeCategoryList = ArrayList<CategoryList?>()
     var sortBy = "newest"
     var totalPage = 1
@@ -79,25 +78,13 @@ class SearchActivity : BaseActivity() {
 
             }
         })
-        showInterestitialAds()
+       // showInterestitialAds()
     }
 
     override fun onResume() {
        super.onResume()
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (::interstitialAdsHandler.isInitialized) {
-            interstitialAdsHandler.onDestroy()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        interstitialAdsHandler.onDestroy()
-
-    }
 
     private fun setupAd() {
         val adRequest = AdRequest.Builder().build()
@@ -121,6 +108,7 @@ class SearchActivity : BaseActivity() {
         SearchBannerAdView.loadAd(adRequest)
     }
 
+/*
     fun showInterestitialAds() {
         showInterAdsProgress()
         interstitialAdsHandler = InterstitialAdsHandler(
@@ -147,6 +135,7 @@ class SearchActivity : BaseActivity() {
         })
 
     }
+*/
 
 
     private fun searchCategories() {

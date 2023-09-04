@@ -15,12 +15,6 @@ class CustomInterAdsProgressDialog(context: Context) : Dialog(context) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.custom_inter_ad_progress_dialog)
 
-        // Adjust dialog size to match screen size
-        val layoutParams = WindowManager.LayoutParams()
-        layoutParams.copyFrom(window?.attributes)
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-        window?.attributes = layoutParams
     }
 
 

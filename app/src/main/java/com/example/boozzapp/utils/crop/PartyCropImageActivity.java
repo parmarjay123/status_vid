@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -35,7 +36,10 @@ import com.example.boozzapp.R;
 import com.example.boozzapp.databinding.ActivityCropImageBinding;
 import com.example.boozzapp.showty_stickerView.PartyDrawableSticker;
 import com.example.boozzapp.utils.gallery_custom.gallery.ImageBlurUtil;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,7 +73,7 @@ public class PartyCropImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_crop_image);
         mContext = this;
-
+        setupAd();
 
         mBinding.ibBack.setOnClickListener(v -> {
 
@@ -159,6 +163,31 @@ public class PartyCropImageActivity extends AppCompatActivity {
 
 
         //  showAdsSettings();
+    }
+
+    private void setupAd() {
+        AdView myVideoBannerAdView = findViewById(R.id.cropAdview);
+        TextView adMyVideoLoadingText = findViewById(R.id.adCropLoadingText);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        myVideoBannerAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                adMyVideoLoadingText.setVisibility(View.INVISIBLE);
+                myVideoBannerAdView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
+                Log.i("TAG", "onAdFailedToLoad: MyVideo" + loadAdError.getMessage());
+                Log.i("TAG", "onAdFailedToLoad: MyVideo" + loadAdError.getCode());
+
+                adMyVideoLoadingText.setVisibility(View.VISIBLE);
+                myVideoBannerAdView.setVisibility(View.INVISIBLE);
+            }
+        });
+        myVideoBannerAdView.loadAd(adRequest);
     }
 
     @Override
