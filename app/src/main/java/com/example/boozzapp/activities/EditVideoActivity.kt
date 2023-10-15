@@ -652,7 +652,7 @@ class EditVideoActivity : BaseActivity() {
     }
 
     private fun buildDataSourceFactory(): DataSource.Factory {
-        val userAgent = Util.getUserAgent(this, "Boozz_Status_Maker")
+        val userAgent = Util.getUserAgent(this, "Magical.ly_Status_Maker")
         return DefaultDataSourceFactory(this, userAgent)
     }
 
@@ -803,8 +803,8 @@ class EditVideoActivity : BaseActivity() {
 
     private fun exportVideo(exportType: String) {
         val time = System.currentTimeMillis()
-        fileName = "Boozz_$time.mp4"
-        fileNameInstaCrop = "Boozz_Insta$time.mp4"
+        fileName = "Magical.ly_$time.mp4"
+        fileNameInstaCrop = "Magical.ly_Insta$time.mp4"
         val newVideoPath = getFileDirectoryPath(activity) + fileName
         File(newVideoPath)
         // makwithoutwatercommand()

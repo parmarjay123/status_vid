@@ -189,7 +189,7 @@ class CategoryWiseQuotesActivity : BaseActivity() {
             interstitialAdsHandler = InterstitialAdsHandler(
                 this,
                 getString(R.string.GL_InQuote_List_Inter),
-                getString(R.string.FB_InQuote_List_Inter)
+                ""
             )
             interstitialAdsHandler.loadInterstitialAds()
             interstitialAdsHandler.setAdListener(object :
@@ -209,7 +209,7 @@ class CategoryWiseQuotesActivity : BaseActivity() {
 
                 }
 
-                override fun onError() {
+                override fun onErrorAds() {
                     dismissInterAdsProgress()
 
                 }

@@ -2,6 +2,7 @@ package com.example.boozzapp.activities
 
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.boozzapp.R
 import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
+import com.example.boozzapp.rateView.PartyRateDialog
 import com.example.boozzapp.utils.StoreUserData
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -50,7 +52,6 @@ class SettingActivity : BaseActivity() {
 
         llRateApp.setOnClickListener {
             openPlayStoreForRating(activity)
-
         }
 
         llCheckUpdate.setOnClickListener {
@@ -67,10 +68,6 @@ class SettingActivity : BaseActivity() {
         ivFacebook.setOnClickListener {
             openFacebookPage(activity)
         }
-    }
-
-    override fun onResume() {
-       super.onResume()
     }
 
     override fun onPause() {
@@ -116,7 +113,7 @@ class SettingActivity : BaseActivity() {
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_Setting_Inter),
-            getString(R.string.FB_Setting_Inter)
+            ""
         )
         interstitialAdsHandler.loadInterstitialAds()
         interstitialAdsHandler.setAdListener(object :
@@ -141,7 +138,7 @@ class SettingActivity : BaseActivity() {
                 dismissInterAdsProgress()
             }
 
-            override fun onError() {
+            override fun onErrorAds() {
                 if (myVideo) {
                     dismissInterAdsProgress()
                     activity.startActivity(Intent(activity, MyVideoActivity::class.java))
@@ -173,6 +170,8 @@ class SettingActivity : BaseActivity() {
         }
 
     }
+
+
 
     private fun goPrivacyPolicy() {
         try {

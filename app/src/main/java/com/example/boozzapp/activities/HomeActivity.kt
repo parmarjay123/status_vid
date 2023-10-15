@@ -215,7 +215,7 @@ class HomeActivity : BaseActivity() {
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_DashbordTamplate_Inter),
-            getString(R.string.FB_DashbordTamplate_Inter)
+            ""
         )
         interstitialAdsHandler.loadInterstitialAds()
         interstitialAdsHandler.setAdListener(object :
@@ -236,11 +236,16 @@ class HomeActivity : BaseActivity() {
                 dismissInterAdsProgress()
             }
 
-            override fun onError() {
-                dismissInterAdsProgress()
+            override fun onErrorAds() {
                 if (isQuoteClick) {
+                    dismissInterAdsProgress()
+
                     activity.startActivity(Intent(activity, QuotesActivity::class.java))
+                }else{
+                    dismissInterAdsProgress()
+
                 }
+                isQuoteClick=false
 
             }
         })
@@ -294,6 +299,14 @@ class HomeActivity : BaseActivity() {
         }
 
 
+    }
+
+    private fun rateUsDialog() {
+        val languageDialogClass = PartyRateDialog(this)
+        languageDialogClass.setOnCancelListener(DialogInterface.OnCancelListener {
+
+        })
+        languageDialogClass.show()
     }
 
     @Throws(IOException::class)
@@ -539,11 +552,5 @@ class HomeActivity : BaseActivity() {
         }
     }
 
-    private fun rateUsDialog() {
-        val languageDialogClass = PartyRateDialog(this)
-        languageDialogClass.setOnCancelListener(DialogInterface.OnCancelListener {
 
-        })
-        languageDialogClass.show()
-    }
 }

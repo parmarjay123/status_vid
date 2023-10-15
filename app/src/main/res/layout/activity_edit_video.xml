@@ -23,7 +23,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:background="@android:color/transparent"
             android:src="@drawable/back_icon"
-            app:tint="@color/white" />
+            app:tint="@color/black" />
 
         <com.example.boozzapp.controls.CTextView
             android:id="@+id/tvEditSongName"
@@ -34,7 +34,7 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 
@@ -225,7 +225,7 @@
                                     android:layout_width="@dimen/_40sdp"
                                     android:layout_height="@dimen/_30sdp"
                                     android:layout_gravity="center"
-                                    android:src="@drawable/boozz_white"
+                                    android:src="@drawable/buzo_app_icon"
                                     android:visibility="gone" />
 
 

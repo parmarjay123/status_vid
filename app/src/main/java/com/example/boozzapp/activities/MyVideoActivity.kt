@@ -59,7 +59,7 @@ class MyVideoActivity : BaseActivity() {
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                 .toString()
 
-        val videoDirectoryName = "Boozz_Status_Maker"
+        val videoDirectoryName = "Magical.ly_Status_Maker"
         val videoDirectory = File(externalDirectory, videoDirectoryName)
 
         try {

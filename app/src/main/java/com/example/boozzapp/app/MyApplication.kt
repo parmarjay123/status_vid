@@ -5,6 +5,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.os.Build
 import android.os.Bundle
@@ -23,7 +24,10 @@ import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
+import java.security.MessageDigest
 import java.util.*
+import android.util.Base64
+
 
 class MyApplication : MultiDexApplication(), Application.ActivityLifecycleCallbacks,
     LifecycleObserver {
@@ -35,6 +39,7 @@ class MyApplication : MultiDexApplication(), Application.ActivityLifecycleCallba
         super.onCreate()
         registerActivityLifecycleCallbacks(this)
 
+        printHashKey(applicationContext)
         val config = PRDownloaderConfig.newBuilder()
             .setReadTimeout(30000)
             .setConnectTimeout(30000)
@@ -92,9 +97,9 @@ class MyApplication : MultiDexApplication(), Application.ActivityLifecycleCallba
         try {
             FirebaseApp.initializeApp(this)
             //            FirebaseMessaging.getInstance().subscribeToTopic("test_noti").addOnCompleteListener(task -> {
-            FirebaseMessaging.getInstance().subscribeToTopic("boozz")
+            FirebaseMessaging.getInstance().subscribeToTopic("StoryVid")
                 .addOnCompleteListener { task: Task<Void?> ->
-                    var msg = "boozz" + " subscribed"
+                    var msg = "StoryVid" + " subscribed"
                     if (!task.isSuccessful) {
                         msg = "Not subscribed!"
                     }
@@ -313,5 +318,21 @@ class MyApplication : MultiDexApplication(), Application.ActivityLifecycleCallba
     override fun onActivityDestroyed(p0: Activity) {
     }
 
+    fun printHashKey(context: Context) {
+        try {
+            val info = context.packageManager.getPackageInfo(
+                context.packageName,
+                PackageManager.GET_SIGNATURES
+            )
+            for (signature in info.signatures) {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                val hashKey: String = String(Base64.encode(md.digest(), 0))
+                Log.i("AppLog", "key:$hashKey=")
+            }
+        } catch (e: java.lang.Exception) {
+            Log.e("AppLog", "error:", e)
+        }
+    }
 
 }

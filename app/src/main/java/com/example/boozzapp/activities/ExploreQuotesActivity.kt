@@ -66,7 +66,7 @@ class ExploreQuotesActivity : BaseActivity() {
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_Explore_Quotes_Inter),
-            getString(R.string.FB_Explore_Quotes_Inter)
+            ""
         )
         interstitialAdsHandler.loadInterstitialAds()
         interstitialAdsHandler.setAdListener(object :
@@ -81,7 +81,7 @@ class ExploreQuotesActivity : BaseActivity() {
                 dismissInterAdsProgress()
             }
 
-            override fun onError() {
+            override fun onErrorAds() {
                 dismissInterAdsProgress()
             }
         })

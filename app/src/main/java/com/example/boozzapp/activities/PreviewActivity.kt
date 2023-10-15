@@ -20,6 +20,7 @@ import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.TemplateDetailsPojo
 import com.example.boozzapp.utils.PartyZipFileManager
 import com.example.boozzapp.utils.RetrofitHelper
+import com.example.boozzapp.utils.SessionManager
 import com.example.boozzapp.utils.StoreUserData
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -57,11 +58,14 @@ class PreviewActivity : BaseActivity() {
     lateinit var interstitialAdsHandler: InterstitialAdsHandler
     private var rewardedAd: RewardedAd? = null
 
+    private var activityOpenCount: Int = 0
+    private lateinit var sessionManager: SessionManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preview)
         activity = this
         storeUserData = StoreUserData(activity)
+        sessionManager = SessionManager(activity)
 
         setupAd()
 
@@ -140,7 +144,7 @@ class PreviewActivity : BaseActivity() {
 
         }
 
-        showInterestitialAds()
+        showInterestitialFiveTap()
 
 
     }
@@ -191,12 +195,135 @@ class PreviewActivity : BaseActivity() {
         }
     }
 
-    fun showInterestitialAds() {
+    fun showInterestitialFiveTap() {
+        if (sessionManager.isNewSession()) {
+            storeUserData.setInt(
+                com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
+                0
+            )
+            sessionManager.updateSessionStartTime()
+        }
+        interstitialAdsHandler = InterstitialAdsHandler(
+            this,
+            getString(R.string.GL_In_CatagoryTamplate_Inter_1Tap),
+            ""
+        )
+        interstitialAdsHandler.setAdListener(object :
+            InterstitialAdsHandler.InterstitialAdListeners {
+            override fun onAdClosed() {
+                Log.i("TAG", "onAdClosed: " + "closed")
+                // Called when the ad is closed
+                // players.play()
+                if (fromDownload) {
+                    dismissInterAdsProgress()
+                    players.pause()
+                    showDownloadDialog()
+                    videoPojo.let {
+                        downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
+                    }
+                } else if (fromShare) {
+                    dismissInterAdsProgress()
+                    videoId = videoPojo.id.toString()
+                    val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.type = "text/plain"
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, dynamicUrl)
+                    startActivity(Intent.createChooser(shareIntent, "Share via"))
+                } else {
+                    dismissInterAdsProgress()
+                    players.play()
+
+                }
+
+                fromShare = false
+                fromDownload = false
+            }
+
+            override fun onAdDismissed() {
+                Log.i("TAG", "onAdClosed: " + "closed")
+                // Called when the ad is dismissed
+                if (fromDownload) {
+                    dismissInterAdsProgress()
+                    players.pause()
+                    showDownloadDialog()
+                    videoPojo.let {
+                        downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
+                    }
+                } else if (fromShare) {
+                    dismissInterAdsProgress()
+                    videoId = videoPojo.id.toString()
+                    val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.type = "text/plain"
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, dynamicUrl)
+                    startActivity(Intent.createChooser(shareIntent, "Share via"))
+                } else {
+                    dismissInterAdsProgress()
+                    players.play()
+
+                }
+
+                fromShare = false
+                fromDownload = false
+
+            }
+
+            override fun onAdLoaded() {
+                dismissInterAdsProgress()
+            }
+
+            override fun onErrorAds() {
+                dismissInterAdsProgress()
+                if (fromDownload) {
+                    dismissInterAdsProgress()
+                    players.pause()
+                    showDownloadDialog()
+                    videoPojo.let {
+                        downloadCacheTemplateZip(it.zipUrl!!, it.zip!!)
+                    }
+                } else if (fromShare) {
+                    dismissInterAdsProgress()
+                    videoId = videoPojo.id.toString()
+                    val dynamicUrl = "https://buzzoo.in/share/template/$videoId"
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    shareIntent.type = "text/plain"
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, dynamicUrl)
+                    startActivity(Intent.createChooser(shareIntent, "Share via"))
+                } else {
+                    players.play()
+
+                }
+            }
+        })
+        activityOpenCount =
+            storeUserData.getInt(com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK)
+        if (activityOpenCount == 4) {
+            showInterAdsProgress()
+            interstitialAdsHandler.loadInterstitialAds()
+
+
+            storeUserData.setInt(
+                com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
+                0
+            )
+
+        } else {
+            activityOpenCount++
+            storeUserData.setInt(
+                com.example.boozzapp.utils.Constants.ADS_COUNT_DASHBOARD_CLICK,
+                activityOpenCount
+            )
+        }
+    }
+
+
+
+/*    fun showInterestitialAds() {
         showInterAdsProgress()
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_In_CatagoryTamplate_Inter_1Tap),
-            getString(R.string.FB_In_CatagoryTamplate_Inter_1Tap)
+           ""
         )
         interstitialAdsHandler.loadInterstitialAds()
         interstitialAdsHandler.setAdListener(object :
@@ -287,7 +414,7 @@ class PreviewActivity : BaseActivity() {
             }
         })
 
-    }
+    }*/
 
 
     private fun setupAd() {

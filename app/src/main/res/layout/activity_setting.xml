@@ -166,6 +166,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_50sdp"
             android:gravity="center"
+            android:visibility="gone"
             android:text="@string/follow_us_on"
             android:textColor="@color/blue_text"
             android:textSize="@dimen/_20sdp" />
@@ -175,6 +176,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <ImageView

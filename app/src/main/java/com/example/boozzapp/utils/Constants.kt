@@ -1,7 +1,7 @@
 package com.example.boozzapp.utils
 
 object Constants {
-    const val URL = "https://buzzoo.in/api/v1/"
+    const val URL = "https://magically.website/api/v1/"
 // const val USER_ID = "USER_ID"
     const val USER_TYPE = "USER_TYPE"
     const val SHOP_ID = "SHOP_ID"

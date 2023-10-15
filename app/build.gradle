@@ -8,21 +8,21 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
     signingConfigs {
         create("release") {
             storeFile = rootProject.file("keystore.jks")
-            storePassword = "123456"
-            keyAlias = "BoozzApp"
-            keyPassword = "123456"
+            storePassword = "storyvid007"
+            keyAlias = "storyvid"
+            keyPassword = "storyvid007"
         }
     }
     defaultConfig {
-        applicationId "boozz.lyrical.ly.video.status.maker"
+        applicationId "storyvid.video.status.maker"
         minSdk 21
-        targetSdk 33
-        versionCode 23
-        versionName "2.13"
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
         multiDexEnabled true
         dataBinding {
             enabled = true

@@ -77,7 +77,7 @@ class SplashActivity : BaseActivity() {
             }
 
             override fun onError(code: Int, error: String) {
-                dismissProgress()
+               // dismissProgress()
                 Log.i("error", error)
 
             }

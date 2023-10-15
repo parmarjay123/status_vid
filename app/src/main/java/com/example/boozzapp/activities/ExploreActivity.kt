@@ -70,7 +70,7 @@ class ExploreActivity : BaseActivity() {
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_Explore_Inter),
-            getString(R.string.FB_Explore_Inter)
+            ""
         )
         interstitialAdsHandler.loadInterstitialAds()
         interstitialAdsHandler.setAdListener(object :
@@ -85,7 +85,7 @@ class ExploreActivity : BaseActivity() {
                 dismissInterAdsProgress()
             }
 
-            override fun onError() {
+            override fun onErrorAds() {
                dismissInterAdsProgress()
             }
         })
@@ -176,6 +176,8 @@ class ExploreActivity : BaseActivity() {
             }
 
             override fun onError(code: Int, error: String) {
+                dismissProgress()
+
                 Log.i("Error", error)
             }
 

@@ -2,10 +2,6 @@ package com.example.boozzapp.adscontrollers
 
 import android.app.Activity
 import android.util.Log
-import com.facebook.ads.Ad
-import com.facebook.ads.AdError
-import com.facebook.ads.InterstitialAd
-import com.facebook.ads.InterstitialAdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
@@ -19,7 +15,7 @@ class InterstitialAdsHandler(
 ) {
 
     private var mGoogleInterstitialAd: GoogleInterstitialAd? = null
-    private var mFacebookInterstitialAd: InterstitialAd? = null
+   // private var mFacebookInterstitialAd: InterstitialAd? = null
 
     private var adListener: InterstitialAdListeners? = null
 
@@ -27,7 +23,7 @@ class InterstitialAdsHandler(
         fun onAdClosed()
         fun onAdDismissed()
         fun onAdLoaded()
-        fun onError()
+        fun onErrorAds()
     }
 
     fun setAdListener(listener: InterstitialAdListeners) {
@@ -50,7 +46,9 @@ class InterstitialAdsHandler(
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     Log.i("TAG", "onAdFailedToLoadInterAd Message: ${adError.message} ")
                     Log.i("TAG", "onAdFailedToLoadInterAd: Code ${adError.code} ")
-                    loadFacebookInterstitialAd()
+                   // loadFacebookInterstitialAd()
+                    adListener?.onErrorAds()
+
                 }
 
                 override fun onAdLoaded(interstitialAd: com.google.android.gms.ads.interstitial.InterstitialAd) {
@@ -64,9 +62,7 @@ class InterstitialAdsHandler(
     fun showNextAd() {
         if (mGoogleInterstitialAd != null) {
             showGoogleInterstitialAd()
-        } else if (mFacebookInterstitialAd != null) {
-            mFacebookInterstitialAd!!.show()
-        } else {
+        }  else {
             loadInterstitialAds()
         }
     }
@@ -99,7 +95,7 @@ class InterstitialAdsHandler(
         }
     }
 
-    private fun loadFacebookInterstitialAd() {
+   /* private fun loadFacebookInterstitialAd() {
         mFacebookInterstitialAd = InterstitialAd(context, facebookAdId)
         val interstitialAdListener: InterstitialAdListener = object : InterstitialAdListener {
             // Facebook Interstitial Ad Callbacks
@@ -139,11 +135,11 @@ class InterstitialAdsHandler(
                 .withAdListener(interstitialAdListener)
                 .build()
         )
-    }
+    }*/
 
     fun onDestroy() {
         // Clean up resources if needed
         mGoogleInterstitialAd = null
-        mFacebookInterstitialAd = null
+       // mFacebookInterstitialAd = null
     }
 }

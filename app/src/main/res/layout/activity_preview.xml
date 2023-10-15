@@ -107,7 +107,8 @@
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_10sdp"
-                android:src="@drawable/share_white_icon" />
+                android:src="@drawable/share_white_icon"
+                app:tint="@color/black" />
         </LinearLayout>
 
         <LinearLayout
@@ -122,6 +123,7 @@
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
+                app:tint="@color/black"
                 android:src="@drawable/edit_white_icon" />
         </LinearLayout>
 

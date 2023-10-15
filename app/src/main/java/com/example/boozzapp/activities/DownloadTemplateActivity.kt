@@ -1,7 +1,6 @@
 package com.example.boozzapp.activities
 
 import android.content.ActivityNotFoundException
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -17,7 +16,6 @@ import com.example.boozzapp.adapter.SuggestedVideoAdapter
 import com.example.boozzapp.adscontrollers.InterstitialAdsHandler
 import com.example.boozzapp.pojo.ExploreTemplatesItem
 import com.example.boozzapp.pojo.ExploreVideoPojo
-import com.example.boozzapp.rateView.PartyRateDialog
 import com.example.boozzapp.utils.Constants
 import com.example.boozzapp.utils.RetrofitHelper
 import com.example.boozzapp.utils.StoreUserData
@@ -244,7 +242,7 @@ class DownloadTemplateActivity : BaseActivity() {
         interstitialAdsHandler = InterstitialAdsHandler(
             this,
             getString(R.string.GL_VideoSave_Share_Inter),
-            getString(R.string.FB_VideoSave_Share_Inter)
+            ""
         )
         interstitialAdsHandler.loadInterstitialAds()
         interstitialAdsHandler.setAdListener(object :
@@ -281,9 +279,10 @@ class DownloadTemplateActivity : BaseActivity() {
                 dismissInterAdsProgress()
             }
 
-            override fun onError() {
+            override fun onErrorAds() {
+                dismissInterAdsProgress()
+
                 if (goToHome) {
-                    dismissInterAdsProgress()
                     val intent = Intent(activity, HomeActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     intent.putExtra("isDownload", true)

@@ -108,7 +108,7 @@ class PreviewQuotesActivity : BaseActivity() {
             interstitialAdsHandler = InterstitialAdsHandler(
                 this,
                 getString(R.string.GL_INQuotecatagory_Inter_2TAP),
-                getString(R.string.FB_INQuotecatagory_Inter_2Tap)
+                ""
             )
             interstitialAdsHandler.loadInterstitialAds()
             interstitialAdsHandler.setAdListener(object :
@@ -127,7 +127,7 @@ class PreviewQuotesActivity : BaseActivity() {
                     dismissInterAdsProgress()
                 }
 
-                override fun onError() {
+                override fun onErrorAds() {
                     dismissInterAdsProgress()
                 }
             })
@@ -234,7 +234,7 @@ class PreviewQuotesActivity : BaseActivity() {
                 .toString()
         // }
         val dir = File(
-            externalDirectory + File.separator + "boozz_quotes"
+            externalDirectory + File.separator + "Buzo_quotes"
         )
         if (!dir.exists()) dir.mkdirs()
         return dir.absolutePath + File.separator

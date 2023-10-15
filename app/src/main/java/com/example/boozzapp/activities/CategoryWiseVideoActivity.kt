@@ -108,7 +108,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
             interstitialAdsHandler = InterstitialAdsHandler(
                 this,
                 getString(R.string.GL_Catagory_Inter),
-                getString(R.string.FB_Catagory_Inter)
+                ""
             )
             interstitialAdsHandler.loadInterstitialAds()
             interstitialAdsHandler.setAdListener(object :
@@ -127,7 +127,7 @@ class CategoryWiseVideoActivity : BaseActivity() {
                     dismissInterAdsProgress()
                 }
 
-                override fun onError() {
+                override fun onErrorAds() {
                     dismissInterAdsProgress()
                 }
             })
