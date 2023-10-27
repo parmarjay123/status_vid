@@ -66,7 +66,7 @@ class SplashActivity : BaseActivity() {
         val retrofitHelper = RetrofitHelper(activity)
         val call: Call<ResponseBody> =
             retrofitHelper.api().addDeviceToken(
-                token, ""
+                token, "storyvid"
             )
 
         retrofitHelper.callApi(activity, call, object : RetrofitHelper.ConnectionCallBack {
